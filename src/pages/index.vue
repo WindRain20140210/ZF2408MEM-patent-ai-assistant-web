@@ -1,5 +1,5 @@
 <template>
-  <HelloWorld />
+  <PatentReport />
 </template>
 
 <script setup>
