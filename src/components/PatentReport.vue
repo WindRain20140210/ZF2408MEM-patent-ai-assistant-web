@@ -1,66 +1,13 @@
+<script setup>
+
+</script>
+
 <template>
-  <v-app id="inspire">
-
-    <v-app-bar flat height="150">
-
-      <v-container style="background-color: #005FAF">
-        <v-row>
-          <v-col>
-            <v-img src="@/assets/buaa_logo.png"
-                   max-height="100"
-                   max-width="200"
-            >
-
-            </v-img>
-
-          </v-col>
-
-          <v-col>
-
-            <v-responsive max-width="300" class="float-right">
-              <!-- Login Button -->
-              <v-btn text="登录" class="float-right" color="white"></v-btn>
-              <!-- Search -->
-              <v-text-field
-                class="float-right"
-                density="comfortable"
-                label="Search"
-                rounded="lg"
-                variant="solo-filled"
-                flat
-                hide-details
-                single-line
-              ></v-text-field>
-              <!-- Advanced Search Button -->
-              <v-btn text="标准高级检索" class="float-right" color="white"
-              ></v-btn>
-            </v-responsive>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <v-container class="mx-auto d-flex align-center justify-center">
-              <!-- Tab -->
-              <v-btn
-                v-for="link in links"
-                :key="link"
-                :text="link"
-                variant="text"
-                color="white"
-              ></v-btn>
-            </v-container>
-
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-app-bar>
-
     <v-main class="bg-grey-lighten-3">
       <v-container>
         <v-row>
           <v-col cols="3">
-            <!-- right side sheet -->
+            <!-- left side sheet -->
             <v-sheet rounded="lg">
               <v-list rounded="lg">
 
@@ -75,12 +22,11 @@
             </v-sheet>
           </v-col>
 
-          <!-- right side blank -->
           <v-col>
+            <!-- right side blank -->
             <v-sheet
               min-height="80vh"
-              rounded="lg"
-            >
+              rounded="lg">
 
               <!-- main content -->
               <v-card flat>
@@ -109,13 +55,11 @@
                 <v-data-table
                   v-model:search="search"
                   :items="items"
-                  :headers="headers"
-                >
+                  :headers="headers">
 
                   <template v-slot:header.stock>
                     <div class="text-end">Stock</div>
                   </template>
-
 
                   <template v-slot:item.rating="{ item }">
                     <v-rating
@@ -128,16 +72,9 @@
                   </template>
 
                   <template v-slot:item.stock="{ item }">
-                    <div class="text-end">
-                      <v-chip
-                        :color="item.stock ? 'green' : 'red'"
-                        :text="item.stock ? 'In stock' : 'Out of stock'"
-                        class="text-uppercase"
-                        size="small"
-                        label
-                      ></v-chip>
-                    </div>
+                    <div class="text-end"></div>
                   </template>
+
                 </v-data-table>
               </v-card>
 
@@ -146,37 +83,11 @@
         </v-row>
       </v-container>
     </v-main>
-
-  </v-app>
 </template>
 
-<script setup>
-
-const links = [
-  '首页',
-  '标准',
-  '技术',
-  '专利',
-  '企业',
-  '专家',
-  '报告'
-]
-</script>
-
 <script>
-
 export default {
   data: () => ({
-    links: [
-      '首页',
-      '标准',
-      '技术',
-      '专利',
-      '企业',
-      '专家',
-      '报告'
-    ],
-
     // left - list mock tab
     left_tabs: [
       "生成报告",
@@ -306,10 +217,7 @@ export default {
         rating: 4,
         stock: false,
       },
-    ],
-
-
+    ]
   }),
 }
-
 </script>

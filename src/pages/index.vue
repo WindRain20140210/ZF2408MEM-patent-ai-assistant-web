@@ -1,7 +1,9 @@
 <template>
-  <PatentReport />
+  <v-app>
+    <PatentReport/>
+  </v-app>
 </template>
 
 <script setup>
-  //
+
 </script>
