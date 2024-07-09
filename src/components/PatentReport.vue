@@ -6,24 +6,9 @@
     <v-main class="bg-grey-lighten-3">
       <v-container>
         <v-row>
-          <v-col cols="3">
-            <!-- left side sheet -->
-            <v-sheet rounded="lg">
-              <v-list rounded="lg">
 
-                <v-list-item
-                  v-for="n in left_tabs"
-                  :key="n"
-                  :title="`${n}`"
-                  link
-                ></v-list-item>
-
-              </v-list>
-            </v-sheet>
-          </v-col>
-
+          <!-- left side blank -->
           <v-col>
-            <!-- right side blank -->
             <v-sheet
               min-height="80vh"
               rounded="lg">
@@ -80,6 +65,22 @@
 
             </v-sheet>
           </v-col>
+
+          <!-- right side sheet -->
+          <v-col cols="3">
+            <v-sheet rounded="lg">
+              <v-list rounded="lg">
+
+                <v-list-item
+                  v-for="n in left_tabs"
+                  :key="n"
+                  :title="`${n}`"
+                  link
+                ></v-list-item>
+              </v-list>
+            </v-sheet>
+          </v-col>
+
         </v-row>
       </v-container>
     </v-main>

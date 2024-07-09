@@ -1,6 +1,7 @@
 {
   "name": "ZF2408MEM-patent-ai-assistant-web",
   "version": "0.0.0",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
