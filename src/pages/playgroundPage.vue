@@ -5,12 +5,12 @@
 
 <template>
   <v-app>
-    <PatentSearch />
+    <Playground />
   </v-app>
 </template>
 
 <script>
 export default {
-  name: 'patentSearchPage',
+  name: 'playgroundPage',
 }
 </script>

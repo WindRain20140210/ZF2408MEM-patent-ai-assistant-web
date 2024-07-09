@@ -6,20 +6,35 @@
 
 // Composables
 import {createRouter, createWebHistory} from 'vue-router' // do not use auto router
-// import {setupLayouts} from 'virtual:generated-layouts'
 
-import PatentReportPage from "@/pages/patentReportPage.vue";
+import patentReportPage from "@/pages/patentReportPage.vue";
 import patentSearchPage from "@/pages/patentSearchPage.vue";
+import playgroundPage from "@/pages/playgroundPage.vue";
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  // extendRoutes: setupLayouts // what is real do ??
 
   routes: [
-    {path: '/', redirect: '/report'},  // index
-    {path: '/report', name: "PatentReportPage", component: PatentReportPage},
-
-    {path: '/search', name: "PatentSearchPage", component: patentSearchPage},
+    {
+      path: '/',
+      redirect: '/report'
+    },
+    {
+      path: '/report',
+      name: "patentReportPage",
+      component: patentReportPage
+    },
+    {
+      path: '/search',
+      name: "patentSearchPage",
+      component: patentSearchPage
+    },
+    {
+      path: '/playground',
+      name: "playground",
+      component: playgroundPage
+    },
   ]
 })
 

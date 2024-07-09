@@ -3,73 +3,96 @@
 </script>
 
 <template>
-    <v-main class="bg-grey-lighten-3">
-      <v-container>
-        <v-row>
-          <v-col cols="3">
-            <!-- left side sheet -->
-            <v-sheet rounded="lg">
-              <v-list rounded="lg">
+  <v-main class="bg-grey-lighten-3">
+    <v-container>
+      <v-row>
+        <v-col cols="3">
+          <!-- left side sheet -->
+          <v-sheet rounded="lg">
+            <v-list rounded="lg">
 
-                <v-list-item
-                  v-for="n in left_tabs"
-                  :key="n"
-                  :title="`${n}`"
-                  link
-                ></v-list-item>
+              <v-list-item
+                v-for="n in left_tabs"
+                :key="n"
+                :title="`${n}`"
+                link
+              ></v-list-item>
 
-              </v-list>
-            </v-sheet>
-          </v-col>
+            </v-list>
+          </v-sheet>
+        </v-col>
 
-          <v-col>
-            <!-- right side blank -->
-            <v-sheet
-              min-height="80vh"
-              rounded="lg">
+        <v-col>
+          <!-- right side blank -->
+          <v-sheet
+            min-height="80vh"
+            rounded="lg">
 
-              <!-- main content -->
-              <v-card flat>
-                <!-- title -->
-                <v-card-title class="d-flex align-center pe-2">
-                  &nbsp;
-                  我的检索
+            <!-- main content -->
+            <v-card flat>
+              <!-- title -->
+              <v-card-title class="d-flex align-center pe-2">
+                &nbsp;
+                报告图表生成测试
 
-                  <v-spacer></v-spacer>
+                <v-spacer></v-spacer>
 
-                  <v-text-field
-                    v-model="search"
-                    density="compact"
-                    label="Search"
-                    prepend-inner-icon="mdi-magnify"
-                    variant="solo-filled"
-                    flat
-                    hide-details
-                    single-line
-                  ></v-text-field>
-                </v-card-title>
+                <v-text-field
+                  v-model="search"
+                  density="compact"
+                  label="Search"
+                  prepend-inner-icon="mdi-magnify"
+                  variant="solo-filled"
+                  flat
+                  hide-details
+                  single-line
+                ></v-text-field>
+              </v-card-title>
 
-                <v-divider></v-divider>
+              <v-divider></v-divider>
 
-                <!-- main data table -->
-                <h1> 组件开发中 </h1>
+              <!-- !!!! table area !!!! -->
+              <v-bar-chart />
+              <v-line-chart />
+              <v-circle-chart />
+              <v-relationship-chart />
+              <v-gantt-chart />
 
-              </v-card>
+              <!-- !!!! table area !!!! -->
+            </v-card>
 
-            </v-sheet>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
+          </v-sheet>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
 </template>
 
 <script>
+
+// import my custom components
+import vBarChart from "./echarts/BarChart.vue";
+import vLineChart from "./echarts/LineChart.vue";
+import vCircleChart from "./echarts/CircleChart.vue";
+import vRelationshipChart from "./echarts/RelationshipChart.vue"
+import vGanttChart from "./gantt/GanttChart.vue"
+
+// export default
 export default {
+  // export custom component ...
+  components: {
+    vBarChart,
+    vLineChart,
+    vCircleChart,
+    vRelationshipChart,
+    vGanttChart
+  },
+  // export data
   data: () => ({
     // left - list mock tab
     left_tabs: [
-      "生成报告",
-      "我的报告",
+      "Playground",
+      "Playground",
       "mock 1",
       "mock 2",
       "mock 3",

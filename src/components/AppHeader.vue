@@ -70,11 +70,11 @@ export default {
   data: () => ({
     links: [
       '/search',
-      '标准',
-      '技术',
-      '专利',
-      '企业',
-      '专家',
+      '/playground',
+      '/playground',
+      '/playground',
+      '/playground',
+      '/playground',
       '/report'
     ],
   }),
