@@ -1,17 +1,16 @@
+
 <script setup>
 
 </script>
 
 <template>
-  <h1>Hello ...</h1>
+  <v-app>
+    <PatentSearch />
+  </v-app>
 </template>
-
-<style scoped>
-
-</style>
 
 <script>
 export default {
-  name: "hello"
+  name: 'PatentSearchPage',
 }
 </script>

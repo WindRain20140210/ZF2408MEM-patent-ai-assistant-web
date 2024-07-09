@@ -33,7 +33,7 @@
                 <!-- title -->
                 <v-card-title class="d-flex align-center pe-2">
                   &nbsp;
-                  我的报告
+                  我的检索
 
                   <v-spacer></v-spacer>
 
@@ -52,30 +52,7 @@
                 <v-divider></v-divider>
 
                 <!-- main data table -->
-                <v-data-table
-                  v-model:search="search"
-                  :items="items"
-                  :headers="headers">
 
-                  <template v-slot:header.stock>
-                    <div class="text-end">Stock</div>
-                  </template>
-
-                  <template v-slot:item.rating="{ item }">
-                    <v-rating
-                      :model-value="item.rating"
-                      color="orange-darken-2"
-                      density="compact"
-                      size="small"
-                      readonly
-                    ></v-rating>
-                  </template>
-
-                  <template v-slot:item.stock="{ item }">
-                    <div class="text-end"></div>
-                  </template>
-
-                </v-data-table>
               </v-card>
 
             </v-sheet>

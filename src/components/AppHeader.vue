@@ -69,13 +69,13 @@ const links = [
 export default {
   data: () => ({
     links: [
-      '/hello',
+      '/search',
       '标准',
       '技术',
       '专利',
       '企业',
       '专家',
-      '报告'
+      '/report'
     ],
   }),
 }
