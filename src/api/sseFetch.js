@@ -27,24 +27,30 @@ const sseFetch =  async () => {
     class RetriableError extends Error { }
     class FatalError extends Error { }
     const url = 'http://110.42.103.198:23837/v1/chat-messages';
+    // const url = 'https://api.dify.ai/v1/chat-messages';
 
-    // const apiKey = ref('app-Agp9QZQWtA8GsB0GdbrPekT3')
-    const apiKey = ref('app-TVD5Ms2KWOVnmqZVeI8QBmj2')
+    const apiKey = ref('app-Agp9QZQWtA8GsB0GdbrPekT3')
+    // const apiKey = ref('app-TVD5Ms2KWOVnmqZVeI8QBmj2')
 
     const headers = {
-        Authorization: `Bearer ${apiKey.value}`,
+        'Authorization': `Bearer ${apiKey.value}`,
         'Content-Type': 'application/json'
     }
+    // const fetchData = {
+    //     "inputs": {},
+    //     "query": "玄凤鹦鹉和小黄鸡",
+    //     "response_mode": "streaming", 
+    //     "conversation_id": "", 
+    //     "user": "test"
+    // }
     const fetchData = {
-    //     inputs: {
-    //         "conditions":
-    //         "{\"time\":\"\",\"industry\":\"\",\"keyWord\":\"\",\"r	egion\":\"\",\"territory\":\"\",\"dataType\":\"patentC	ount\"}"
-    // }, // 参数变量
-    //     query: '专利报告分析', // 用户对话框中输入的内容
-        inputs: {},
-        query: '小黄鸡',
-        response_mode: 'streaming', // 固定传
-        conversation_id: '1', // currentConversationId.value, // 会话id, 第一次请求后获取
+        inputs: {
+            "conditions":
+            "{\"time\":\"\",\"industry\":\"\",\"keyWord\":\"\",\"r	egion\":\"\",\"territory\":\"\",\"dataType\":\"patentC	ount\"}"
+    }, // 参数变量
+        query: '专利报告分析', // 用户对话框中输入的内容
+        response_mode: 'streaming', // 'blocking',// 固定传
+        conversation_id: '', // currentConversationId.value, // 会话id, 第一次请求后获取
         user: 'test' // userName.value, // 用户名，区分请求用户
     }
     await fetchEventSource(url, {
