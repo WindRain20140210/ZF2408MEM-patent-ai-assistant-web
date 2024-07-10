@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import sseFetch from '../api/sseFetch';
+
 export default {
   data: () => ({
     // left - list mock tab
@@ -200,4 +202,8 @@ export default {
     ]
   }),
 }
+</script>
+
+<script setup>
+  const msg = await sseFetch();
 </script>
