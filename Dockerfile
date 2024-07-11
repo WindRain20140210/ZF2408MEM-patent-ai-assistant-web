@@ -13,4 +13,6 @@ COPY . .
 # slow speed. deploy OK ...
 CMD ["yarn", "dev", "--debug"]
 
+# prot = 9050 !!!
+
 EXPOSE 9050
