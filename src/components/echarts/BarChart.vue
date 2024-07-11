@@ -1,50 +1,99 @@
-<script setup>
-
-import {onMounted} from 'vue'
-import * as echarts from 'echarts';
-
-// mock data
-function generate_years() {
-  let arr = [10]
-  for (let i = 0; i < 10; i++) {
-    arr[i] = i + 2015;
-  }
-  return arr
-}
-
-function generate_data() {
-  let arr = [10]
-  for (let i = 0; i < 10; i++) {
-    let number = Math.random() * 1000
-    arr[i] = parseInt(number.toString(10));
-  }
-  return arr
-}
-
-// Vue lifecycle hook ...
-onMounted(() => {
-  let myChart = echarts.init(document.getElementById('main'));
-  // config chart
-  myChart.setOption({
-    title: {
-      text: '专利趋势'
-    },
-    tooltip: {},
-    xAxis: {
-      data: generate_years()
-    },
-    yAxis: {},
-    series: [
-      {
-        name: '专利数量',
-        type: 'bar',
-        data: generate_data()
-      }
-    ]
-  })
-})
-</script>
-
 <template>
-  <div id="main" style="width: 600px;height:400px;"></div>
+  <div ref="echartsRef" :style="{ width, height }"></div>
 </template>
+
+<script>
+import {onMounted, onUnmounted, ref, watch} from "vue";
+import * as echarts from "echarts";
+
+export default {
+  name: "EChartsComponent",
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+    width: {
+      type: String,
+      default: "100%",
+    },
+    height: {
+      type: String,
+      default: "400px",
+    },
+  },
+
+  setup(props) {
+    const echartsRef = ref(null);
+    let chartInstance = null;
+
+    const xArray = props.data.x;
+    const yArray = props.data.y;
+
+    // build Bar chart dataSet
+    let seriesDataSet = new Array(0)
+    yArray.forEach(function (item) {
+      seriesDataSet.push({
+        name: "专利数量",
+        type: "bar",
+        data: item
+      })
+    });
+
+    const initChart = () => {
+      const option = {
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          data: props.data.x,
+          name: '年份',
+          nameTextStyle: {
+            fontWeight: 600,
+            fontSize: 18
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: '专利申请',   // y轴名称
+          nameTextStyle: {
+            fontWeight: 600,
+            fontSize: 18
+          }
+        },
+        series: [
+          {
+            name: "专利数量",
+            type: "bar",
+            data: props.data.y
+          },
+        ],
+      };
+
+      if (echartsRef.value) {
+        chartInstance = echarts.init(echartsRef.value);
+        chartInstance.setOption(option);
+      }
+    };
+
+    onMounted(() => {
+      initChart();
+    });
+
+    watch(
+      () => props.option, // ???
+      (newOption) => {
+        if (chartInstance) {
+          chartInstance.setOption(newOption);
+        }
+      }
+    );
+
+    onUnmounted(() => {
+      chartInstance && chartInstance.dispose();
+    });
+
+    return {echartsRef};
+  },
+};
+</script>

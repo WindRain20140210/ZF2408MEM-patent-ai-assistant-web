@@ -1,5 +1,107 @@
 <script setup>
 
+import {onMounted, ref} from "vue";
+import {UserService} from "/src/http/api.js";
+
+const leftTabs = [
+  "Playground 1",
+  "Playground 2",
+  "mock 3",
+  "mock 4",
+  "mock 5",
+  "mock 6",
+  "mock 7",
+  "mock 8"
+]
+
+// BarChart
+const barChartRef = ref(null)
+const barLoading = ref(true);
+const barError = ref(true);
+
+const xBar = ref([]);
+const yBar = ref([]);
+
+// LineChart
+const lineChartRef = ref(null);
+const lineLoading = ref(true);
+const lineError = ref(false);
+
+const xLine = ref([]);
+const yLine = ref([]);
+
+// ....
+const search = ref('')
+
+// Network requests
+const initBarchart = async () => {
+  const res = await UserService.barchart();
+  if (res.status === 200) {
+    const data = res.data.data;
+    barError.value = false;
+    barLoading.value = false;
+
+    data.forEach((item) => {
+      xBar.value.push(item.name);
+      yBar.value.push(item.value);
+    });
+
+  } else {
+    barLoading.value = false;
+    barError.value = true;
+  }
+};
+
+const initLineChart = async () => {
+  const res = await UserService.linechart();
+  if (res.status === 200) {
+    const data = res.data.data;
+    lineError.value = false;
+    lineLoading.value = false;
+
+    data.forEach(function (item) {
+      xLine.value.push(item.name)
+      yLine.value.push(item.arr)
+    });
+
+
+  } else {
+    lineLoading.value = false;
+    lineError.value = true;
+  }
+};
+
+// lifecycle method ...
+onMounted(() => {
+  // page observer
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          console.log(entry.target.id, "is in viewport");
+
+          if (entry.target.id === "barChart" && xBar.value.length === 0) {
+            initBarchart();
+
+          } else if (entry.target.id === "lineChart" && xLine.value.length === 0) {
+            initLineChart();
+
+          } else return false;
+        }
+      });
+    },
+    {
+      rootMargin: "0px",
+      threshold: 0.1,
+    }
+  );
+
+  // bar chart
+  observer.observe(barChartRef.value);
+  // line chart
+  observer.observe(lineChartRef.value);
+});
+
 </script>
 
 <template>
@@ -37,12 +139,47 @@
               <v-divider></v-divider>
 
               <!-- !!!! table area !!!! -->
-              <v-bar-chart/>
-              <v-line-chart/>
+              <!-- BarChart -->
+              <div id="barChart" ref="barChartRef">
+                <v-bar-chart
+                  :data="{x:xBar, y:yBar}"
+                  v-if="barError === false && barLoading === false"
+                />
+                <div v-else class="nodata">
+                  <div v-if="barLoading === true">
+                    <img src="../assets/loading.jpg" alt="" class="loading"/>
+                    <div class="loadingText">加载中</div>
+                  </div>
+                  <div v-if="barLoading === false && barError === true">请求失败</div>
+                </div>
+              </div>
+
+              <!-- CircleChart -->
               <v-circle-chart/>
+
+              <!-- RelationshipChart -->
               <v-relationship-chart/>
+
+              <!-- GanttChart -->
               <v-gantt-chart/>
 
+              <!-- LineChart -->
+              <!-- mock loading cost time, when view in viewport auto net request -->
+              <div id="lineChart" ref="lineChartRef">
+                <v-line-chart
+                  :data="{ x:xLine, y:yLine}"
+                  v-if="lineError === false && lineLoading === false"
+                />
+                <div v-else class="nodata">
+                  <div v-if="lineLoading === true">
+                    <img src="../assets/loading.jpg" alt="" class="loading"/>
+                    <div class="loadingText">加载中</div>
+                  </div>
+                  <div v-if="lineLoading === false && lineError === true">
+                    请求失败
+                  </div>
+                </div>
+              </div>
               <!-- !!!! table area !!!! -->
             </v-card>
 
@@ -55,7 +192,7 @@
             <v-list rounded="lg">
 
               <v-list-item
-                v-for="n in left_tabs"
+                v-for="n in leftTabs"
                 :key="n"
                 :title="`${n}`"
                 link
@@ -71,8 +208,7 @@
 </template>
 
 <script>
-
-// import my custom components
+// my custom components
 import vBarChart from "./echarts/BarChart.vue";
 import vLineChart from "./echarts/LineChart.vue";
 import vCircleChart from "./echarts/CircleChart.vue";
@@ -81,146 +217,16 @@ import vGanttChart from "./gantt/GanttChart.vue"
 
 // export default
 export default {
-  // export custom component ...
   components: {
     vBarChart,
     vLineChart,
     vCircleChart,
     vRelationshipChart,
     vGanttChart
-  },
-  // export data
-  data: () => ({
-    // left - list mock tab
-    left_tabs: [
-      "Playground",
-      "Playground",
-      "mock 1",
-      "mock 2",
-      "mock 3",
-      "mock 4",
-      "mock 5",
-      "mock 6",
-    ],
-
-    // sheet - mock data
-    search: '',
-    headers: [
-      {
-        title: '专利标题',
-        align: 'start',
-        key: 'name'
-      },
-      {
-        title: '专利价值',
-        align: 'end',
-        key: 'price'
-      },
-      {
-        title: '专利热度',
-        align: 'start',
-        key: 'rating'
-      },
-      {title: '描述信息'},
-    ],
-    items: [
-      {
-        name: '锂离子电池能量密度增长',
-        price: 699.99,
-        rating: 5,
-        stock: true,
-      },
-      {
-        name: '邻苯二甲酸二烯丙酯树脂改性化合物',
-        price: 799.99,
-        rating: 4,
-        stock: false,
-      },
-      {
-        name: '网络交换机的人工智能功能技术',
-        price: 649.99,
-        rating: 3,
-        stock: true,
-      },
-      {
-        name: '塑料土工格室条带排水孔制造模具',
-        price: 1499.99,
-        rating: 4,
-        stock: true,
-      },
-      {
-        name: '石墨电极双螺纹梳加工机床',
-        price: 299.99,
-        rating: 4,
-        stock: false,
-      },
-      {
-        name: '多元醇苯甲酸酯增塑剂',
-        price: 699.99,
-        rating: 5,
-        stock: true,
-      },
-      {
-        name: '一种在线修理方法及其专用组合机床',
-        price: 799.99,
-        rating: 4,
-        stock: false,
-      },
-      {
-        name: '二乙二醇二苯甲酸矾',
-        price: 649.99,
-        rating: 3,
-        stock: true,
-      },
-      {
-        name: '塑料土工格室条带排水孔制造模具',
-        price: 1499.99,
-        rating: 4,
-        stock: true,
-      },
-      {
-        name: '石墨电极双螺纹梳加工机床',
-        price: 299.99,
-        rating: 4,
-        stock: false,
-      },
-      {
-        name: '多元醇苯甲酸酯增塑剂',
-        price: 699.99,
-        rating: 5,
-        stock: true,
-      },
-      {
-        name: '一种在线修理方法及其专用组合机床',
-        price: 799.99,
-        rating: 4,
-        stock: false,
-      },
-      {
-        name: '二乙二醇二苯甲酸矾',
-        price: 649.99,
-        rating: 3,
-        stock: true,
-      },
-      {
-        name: '二乙二醇二苯甲酸矾',
-        price: 649.99,
-        rating: 3,
-        stock: true,
-      },
-      {
-        name: '塑料土工格室条带排水孔制造模具',
-        price: 1499.99,
-        rating: 4,
-        stock: true,
-      },
-      {
-        name: '石墨电极双螺纹梳加工机床',
-        price: 299.99,
-        rating: 4,
-        stock: false,
-      },
-    ]
-  }),
+  }
 }
 </script>
+
+<style scoped>
+@import "../styles/loading.css";
+</style>

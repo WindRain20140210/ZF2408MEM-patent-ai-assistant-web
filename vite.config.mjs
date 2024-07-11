@@ -64,6 +64,15 @@ export default defineConfig({
         ],
     },
     server: {
-        port: 3000
+        // local debug use
+        port: 3000,
+
+        // Docker image use
+        // watch: {
+        //     usePolling: true,
+        // },
+        // host: true, // Here
+        // strictPort: true,
+        // port: 9050,
     }
 })

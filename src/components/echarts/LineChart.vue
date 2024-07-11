@@ -1,67 +1,106 @@
+<template>
+  <div ref="echartsRef" :style="{ width, height }"></div>
+</template>
 
-<script setup>
-
-import {onMounted} from 'vue'
-import * as echarts from 'echarts';
-
-let countries = ["中国", "美国", "日本", "德国", "法国", "韩国", "阿根廷", "意大利", "南极", "不丹", "英国", "阿拉伯", "中东", "印度尼西亚", "菲律宾", "缅甸", "泰国", "印度", "越南", "其他"]
+<script>
+import {onMounted, onUnmounted, ref, watch} from "vue";
+import * as echarts from "echarts";
+import {chunkArray} from "@/utils/utils";
 
 let colors = ['#EEE', '#FFA', '#DEB', '#1E9']
 
-// mock data len = 5
-function generate_name() {
-  let arr = []
-  while (arr.length < 5) {
-    let random = parseInt((Math.random() * 10).toString(10))
-    let country = countries[random]
-    if (arr.indexOf(country) === -1) {
-      arr.push(country)
-    }
-  }
-  return arr
-}
-
-function generate_value() {
-  let arr = []
-  for (let i = 0; i < 5; i++) {
-    let number = Math.random() * 1000
-    arr[i] = parseInt(number.toString(10));
-  }
-  return arr
-}
-
-function get_color() {
-  let random = parseInt((Math.random() * 10).toString(10))
-  return colors[random]
-}
-
-function create_mock_data() {
-  let array = []
-  for (let i = 0; i < 5; i++) {
-    let data = {
-      data: generate_value(), type: 'line', areaStyle: {
-        color: get_color(), opacity: 0.5
-      }, smooth: true
-    }
-    array.push(data)
-  }
-  return array
-}
-
-// Vue life cycle hook ...
-onMounted(() => {
-  const myChart = echarts.init(document.getElementById('main3'));
-  myChart.setOption({
-    xAxis: {
-      data: generate_name()
+export default {
+  name: "EChartsComponent",
+  props: {
+    data: {
+      type: Object,
+      required: true,
     },
-    yAxis: {},
-    series: create_mock_data()
-  })
-})
-</script>
+    width: {
+      type: String,
+      default: "100%",
+    },
+    height: {
+      type: String,
+      default: "400px",
+    }
+  },
 
-<template>
-  <h3>折线图</h3>
-  <div id="main3" style="width: 600px;height:400px;"></div>
-</template>
+  setup(props) {
+    const echartsRef = ref(null);
+    let chartInstance = null;
+
+    const xArray = props.data.x;
+    const yArray = props.data.y;
+
+    // [ [], [], [], [], [] ]
+    // current data structure ...
+    const yArrays = chunkArray(yArray, 5); // len=5
+
+    // build line chart dataSet
+    const series = new Array(0);
+    for (let i = 0; i < yArrays.length; i++) {
+      series.push({
+        data: yArrays[i],
+        type: 'line',
+        areaStyle: {color: colors[i], opacity: 0.3},
+        smooth: true
+      })
+    }
+
+    // init chart
+    const initChart = () => {
+      const option = {
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category',
+          data: xArray, // data: ['2019', '2020', '2021', '2022', '2023'],   // x轴数据 years
+          name: '年份',
+          nameTextStyle: {
+            fontWeight: 600,
+            fontSize: 18
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: '申请数量',   // y轴名称
+          nameTextStyle: {
+            fontWeight: 600,
+            fontSize: 18
+          }
+        },
+        series: series
+      };
+
+      if (echartsRef.value) {
+        chartInstance = echarts.init(echartsRef.value);
+        chartInstance.setOption(option);
+      }
+    };
+
+    // onMounted
+    onMounted(() => {
+      initChart();
+    });
+
+    // watch
+    watch(
+      () => props.option, // ????
+      (newOption) => {
+        if (chartInstance) {
+          chartInstance.setOption(newOption);
+        }
+      }
+    );
+
+    // onUnmounted
+    onUnmounted(() => {
+      chartInstance && chartInstance.dispose();
+    });
+
+    return {echartsRef};
+  },
+};
+</script>

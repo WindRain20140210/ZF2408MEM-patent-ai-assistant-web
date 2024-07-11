@@ -1,14 +1,16 @@
 
 FROM node
 
-USER root
-
 WORKDIR /app
 
+COPY package.json .
+
+RUN yarn
+
+# copy all files
 COPY . .
 
-RUN yarn install --development && yarn cache clean
+# slow speed. deploy OK ...
+CMD ["yarn", "dev", "--debug"]
 
-EXPOSE 4173
-
-CMD ["yarn", "preview"]
+EXPOSE 9050
