@@ -11,56 +11,39 @@ const links = [
 </script>
 
 <template>
-  <v-app-bar flat height="150" id="inspire" class="bg-grey-lighten-3">
-    <v-container style="background-color: #005FAF">
+  <!-- <v-app-bar flat height="150" id="inspire" class="bg-grey-lighten-3"> -->
+  <v-app-bar flat height="150" class="header">
+    <v-container style="background-color: #0586fd">
       <v-row>
-        <v-col>
-          <v-img src="@/assets/buaa_logo.png"
-                 max-height="100"
-                 max-width="200">
-          </v-img>
+        <v-col class="logo-wrap">
+          <img src="@/assets/my_logo.png" class="logo"/>
+          <span class="logo-p">FT-AGENT-SPACE</span>
         </v-col>
-
         <v-col>
-          <v-responsive max-width="300" class="float-right">
-            <!-- Login Button -->
-            <v-btn text="登录" class="float-right" color="white"></v-btn>
-
-            <!-- Search -->
-            <v-text-field
-              class="float-right"
-              density="comfortable"
-              label="Search"
-              rounded="lg"
-              variant="solo-filled"
-              flat
-              hide-details
-              single-line
-            ></v-text-field>
-
-            <!-- Advanced Search Button -->
-            <v-btn text="标准高级检索" class="float-right" color="white"
-            ></v-btn>
-          </v-responsive>
+            <v-row>
+              <v-col class="btn-wrap">
+                <v-card-text>
+                  <v-btn text="标准高级检索" class="float-right search-btn"></v-btn>
+                </v-card-text>
+              </v-col>
+              <v-col>
+                <v-card-text>
+                  <v-text-field
+                    :loading="loading"
+                    append-inner-icon="mdi-magnify"
+                    density="compact"
+                    label="请输入关键词"
+                    variant="solo"
+                    hide-details
+                    single-line
+                    @click:append-inner="onClick"
+                  ></v-text-field>
+                </v-card-text>
+              </v-col>
+            </v-row>
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-col>
-          <v-container class="mx-auto d-flex align-center justify-center">
-            <!-- Top Tab -->
-            <v-btn
-              v-for="(link, index) in links"
-              :key="link"
-              :text="link"
-              variant="text"
-              color="white"
-              @click="$router.push($data.links[index])"
-            ></v-btn>
-          </v-container>
-
-        </v-col>
-      </v-row>
     </v-container>
   </v-app-bar>
 </template>
@@ -82,5 +65,32 @@ export default {
 </script>
 
 <style scoped>
-
+  .header {
+      background-color: #0586fd!important;
+  }
+  header .logo {
+    display: inline-block;
+    width: 100px;
+    height: auto;
+    vertical-align: middle;
+    margin-top: -13px;
+  }
+  header .logo-p {
+    color: #ffffff;
+    font-weight: bolder;
+    line-height: 80px;
+    font-size: 28px;
+    font-family: emoji;
+  }
+  .search-btn {
+    background-color: #0858fd;
+    color: #ffffff;
+  }
+  .logo-wrap {
+    width: 300px;
+  }
+  .btn-wrap {
+    margin-right: -40px;
+    margin-top: 3px;
+  }
 </style>
