@@ -27,31 +27,18 @@ export default {
     const echartsRef = ref(null);
     let chartInstance = null;
 
-    const xArray = props.data.x;
-    const yArray = props.data.y;
-
-    // build Bar chart dataSet
-    let seriesDataSet = new Array(0)
-    yArray.forEach(function (item) {
-      seriesDataSet.push({
-        name: "专利数量",
-        type: "bar",
-        data: item
-      })
-    });
-
     const initChart = () => {
       const option = {
         tooltip: {
           trigger: 'axis'
         },
         xAxis: {
-          data: props.data.x,
           name: '年份',
           nameTextStyle: {
             fontWeight: 600,
             fontSize: 18
-          }
+          },
+          data: props.data.x, // years
         },
         yAxis: {
           type: 'value',
@@ -65,7 +52,7 @@ export default {
           {
             name: "专利数量",
             type: "bar",
-            data: props.data.y
+            data: props.data.y // values
           },
         ],
       };
