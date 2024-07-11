@@ -30,11 +30,22 @@ const lineError = ref(false);
 const xLine = ref([]);
 const yLine = ref([]);
 
+// CircleChart
+const circleChartRef = ref(null);
+const circleLoading = ref(true);
+const circleError = ref(false);
+
+const xNamesCircle = ref([]);
+const yValsCircle = ref([]);
+
 // ....
 const search = ref('')
 
-// Network requests
-const initBarchart = async () => {
+/**
+ * BarChart data net request
+ * @returns {Promise<void>}
+ */
+const initBarChart = async () => {
   const res = await UserService.barchart();
   if (res.status === 200) {
     const data = res.data.data;
@@ -52,6 +63,32 @@ const initBarchart = async () => {
   }
 };
 
+/**
+ * CircleChart data net request
+ * @returns {Promise<void>}
+ */
+const initCircleChart = async () => {
+  const res = await UserService.barchart();
+  if (res.status === 200) {
+    const data = res.data.data;
+    circleError.value = false;
+    circleLoading.value = false;
+
+    data.forEach((item) => {
+      xNamesCircle.value.push(item.name);
+      yValsCircle.value.push(item.value);
+    });
+
+  } else {
+    circleLoading.value = false;
+    circleError.value = true;
+  }
+};
+
+/**
+ * LineChart data net request
+ * @returns {Promise<void>}
+ */
 const initLineChart = async () => {
   const res = await UserService.linechart();
   if (res.status === 200) {
@@ -64,14 +101,14 @@ const initLineChart = async () => {
       yLine.value.push(item.arr)
     });
 
-
   } else {
     lineLoading.value = false;
     lineError.value = true;
   }
 };
 
-// lifecycle method ...
+
+// ... lifecycle hook ...
 onMounted(() => {
   // page observer
   const observer = new IntersectionObserver(
@@ -81,12 +118,17 @@ onMounted(() => {
           console.log(entry.target.id, "is in viewport");
 
           if (entry.target.id === "barChart" && xBar.value.length === 0) {
-            initBarchart();
+            initBarChart();
 
           } else if (entry.target.id === "lineChart" && xLine.value.length === 0) {
             initLineChart();
 
-          } else return false;
+          } else if (entry.target.id === "circleChart" && xNamesCircle.value.length === 0) {
+            initCircleChart();
+
+          } else {
+            return false;
+          }
         }
       });
     },
@@ -96,10 +138,11 @@ onMounted(() => {
     }
   );
 
-  // bar chart
+  // observe elements
   observer.observe(barChartRef.value);
-  // line chart
+  observer.observe(circleChartRef.value);
   observer.observe(lineChartRef.value);
+
 });
 
 </script>
@@ -142,9 +185,10 @@ onMounted(() => {
               <!-- BarChart -->
               <div id="barChart" ref="barChartRef">
                 <v-bar-chart
-                  :data="{x:xBar, y:yBar}"
+                  :data="{ x:xBar, y:yBar }"
                   v-if="barError === false && barLoading === false"
                 />
+
                 <div v-else class="nodata">
                   <div v-if="barLoading === true">
                     <img src="../assets/loading.jpg" alt="" class="loading"/>
@@ -155,21 +199,35 @@ onMounted(() => {
               </div>
 
               <!-- CircleChart -->
-              <v-circle-chart/>
+              <div id="circleChart" ref="circleChartRef">
+                <v-circle-chart
+                  :data="{ names:xNamesCircle, values:yValsCircle }"
+                  v-if="circleError === false && circleLoading === false"
+                />
 
-              <!-- RelationshipChart -->
+                <div v-else class="nodata">
+                  <div v-if="circleLoading === true">
+                    <img src="../assets/loading.jpg" alt="" class="loading"/>
+                    <div class="loadingText">加载中</div>
+                  </div>
+                  <div v-if="circleLoading === false && circleError === true">请求失败</div>
+                </div>
+              </div>
+
+              <!-- ****** RelationshipChart ***** -->
               <v-relationship-chart/>
 
-              <!-- GanttChart -->
+              <!-- ****** GanttChart **** -->
               <v-gantt-chart/>
 
               <!-- LineChart -->
               <!-- mock loading cost time, when view in viewport auto net request -->
               <div id="lineChart" ref="lineChartRef">
                 <v-line-chart
-                  :data="{ x:xLine, y:yLine}"
+                  :data="{ x:xLine, y:yLine }"
                   v-if="lineError === false && lineLoading === false"
                 />
+
                 <div v-else class="nodata">
                   <div v-if="lineLoading === true">
                     <img src="../assets/loading.jpg" alt="" class="loading"/>
