@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import sseFetch from '../api/sseFetch';
+// import sseFetch from '../api/sseFetch';
 
 export default {
   data: () => ({
@@ -205,5 +205,5 @@ export default {
 </script>
 
 <script setup>
-  const msg = await sseFetch();
+  // const msg = await sseFetch();
 </script>

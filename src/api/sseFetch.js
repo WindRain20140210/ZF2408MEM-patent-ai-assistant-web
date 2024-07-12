@@ -1,49 +1,24 @@
 import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source';
 import { ref } from 'vue';
 
-const sseFetch =  async () => {
-
-// this.riskNum = 0
-
-//  var that =this
-
-//  let data={}
-// this.controller = new AbortController()
-// const signal = this.controller.signal
- 
-
-// const ctrl = new AbortController();
-// fetchEventSource('/api/sse', {
-//     method: 'POST',
-//     headers: {
-//         'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({
-//         foo: 'bar'
-//     }),
-//     signal: ctrl.signal,
-// });
+const sseFetch =  async (fetchData2) => {
 
     class RetriableError extends Error { }
     class FatalError extends Error { }
-    const url = 'http://110.42.103.198:23837/v1/chat-messages';
-    // const url = 'https://api.dify.ai/v1/chat-messages';
+    // const url = 'http://110.42.103.198:23837/v1/chat-messages';
+    const url = 'https://api.dify.ai/v1/chat-messages';
+    // const url = '';
+    // const apiKey = ref('app-Agp9QZQWtA8GsB0GdbrPekT3')
+    const apiKey = ref('app-TVD5Ms2KWOVnmqZVeI8QBmj2')
 
-    const apiKey = ref('app-Agp9QZQWtA8GsB0GdbrPekT3')
-    // const apiKey = ref('app-TVD5Ms2KWOVnmqZVeI8QBmj2')
+    // const apiKey = 'app-v08ygzkVa9q7JSA4uCqToITH'; // 李欣欣
 
     const headers = {
         'Authorization': `Bearer ${apiKey.value}`,
         'Content-Type': 'application/json'
     }
-    // const fetchData = {
-    //     "inputs": {},
-    //     "query": "玄凤鹦鹉和小黄鸡",
-    //     "response_mode": "streaming", 
-    //     "conversation_id": "", 
-    //     "user": "test"
-    // }
-    const fetchData = {
+
+    let fetchData1 = {
         inputs: {
             "conditions":
             "{\"time\":\"\",\"industry\":\"\",\"keyWord\":\"\",\"r	egion\":\"\",\"territory\":\"\",\"dataType\":\"patentC	ount\"}"
@@ -53,11 +28,25 @@ const sseFetch =  async () => {
         conversation_id: '', // currentConversationId.value, // 会话id, 第一次请求后获取
         user: 'test' // userName.value, // 用户名，区分请求用户
     }
+
+    let fetchData = {
+        "inputs": {},
+        "query": "玄凤鹦鹉和小黄鸡",
+        "response_mode": "streaming", 
+        "conversation_id": "", 
+        "user": "test"
+    }
+
+    console.log('1111111111111000000000000000000001111111111111111111111111');
+
     await fetchEventSource(url, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(fetchData),
+        openWhenHidden: true,
         async onopen(response) {
+            console.log(response, '=========== onopen ==========');
+            
             if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
                 return; // everything's good
             } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
@@ -68,7 +57,7 @@ const sseFetch =  async () => {
             }
         },
         onmessage(msg) {
-            console.log(msg, '=========== msg ==========');
+            console.log(msg, '=========== onmessage ==========');
             // if the server emits an error message, throw an exception
             // so it gets handled by the onerror callback below:
             if (msg.event === 'FatalError') {
@@ -76,6 +65,8 @@ const sseFetch =  async () => {
             }
         },
         onclose() {
+            console.log('=========== onclose ==========');
+
             // if the server closes the connection unexpectedly, retry:
             throw new RetriableError();
         },
