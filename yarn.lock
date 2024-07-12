@@ -1293,7 +1293,7 @@ form-data@^4.0.0:
 
 frappe-gantt@^0.6.1:
   version "0.6.1"
-  resolved "https://registry.yarnpkg.com/frappe-gantt/-/frappe-gantt-0.6.1.tgz#57ae0b5f024101fc7cd5ba92f605de97dba9c9a1"
+  resolved "https://registry.npmjs.org/frappe-gantt/-/frappe-gantt-0.6.1.tgz"
   integrity sha512-1cSU9vLbwypjzaxnCfnEE03Xr3HlAV2S8dRtjxw62o+amkx1A8bBIFd2jp84mcDdTCM77Ij4LzZBslAKZB8oMg==
 
 fs.realpath@^1.0.0:
