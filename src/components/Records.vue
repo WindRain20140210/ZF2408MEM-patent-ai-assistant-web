@@ -1,11 +1,34 @@
-<script setup>
-
-</script>
-
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
+
       <v-row>
+        <!-- right side sheet -->
+        <v-col cols="3">
+
+          <!-- top button -->
+          <v-sheet rounded="lg">
+            <v-list rounded="lg">
+              <v-list-item style="text-align:center">
+                标准高级检索
+              </v-list-item>
+            </v-list>
+          </v-sheet>
+
+          <!-- sheet blow the button -->
+          <div style="margin-top: 15px">
+            <v-sheet rounded="lg">
+              <v-list rounded="lg">
+                <v-list-item @click="$router.push('/search')">
+                  生成报告
+                </v-list-item>
+                <v-list-item>
+                  我的报告
+                </v-list-item>
+              </v-list>
+            </v-sheet>
+          </div>
+        </v-col>
 
         <!-- left side blank -->
         <v-col>
@@ -19,7 +42,6 @@
               <v-card-title class="d-flex align-center pe-2">
                 &nbsp;
                 我的报告
-
                 <v-spacer></v-spacer>
 
                 <v-text-field
@@ -61,26 +83,11 @@
                 </template>
 
               </v-data-table>
+
             </v-card>
 
           </v-sheet>
         </v-col>
-
-        <!-- right side sheet -->
-        <v-col cols="3">
-          <v-sheet rounded="lg">
-            <v-list rounded="lg">
-
-              <v-list-item
-                v-for="n in left_tabs"
-                :key="n"
-                :title="`${n}`"
-                link
-              ></v-list-item>
-            </v-list>
-          </v-sheet>
-        </v-col>
-
       </v-row>
     </v-container>
   </v-main>
@@ -92,13 +99,7 @@ export default {
     // left - list mock tab
     left_tabs: [
       "生成报告",
-      "我的报告",
-      "mock 1",
-      "mock 2",
-      "mock 3",
-      "mock 4",
-      "mock 5",
-      "mock 6",
+      "我的报告"
     ],
 
     // sheet - mock data
@@ -123,101 +124,65 @@ export default {
     ],
     items: [
       {
-        name: '锂离子电池能量密度增长',
-        price: 699.99,
+        name: '一种微球状费托合成铁基催化剂及其制备方法',
+        price: 699,
         rating: 5,
         stock: true,
       },
       {
-        name: '邻苯二甲酸二烯丙酯树脂改性化合物',
-        price: 799.99,
+        name: '高纯度蛇毒纤溶酶的制备方法及其药物制剂',
+        price: 345,
         rating: 4,
         stock: false,
       },
       {
-        name: '网络交换机的人工智能功能技术',
-        price: 649.99,
+        name: '一种治疗眼底出血症的中药及其制备方法',
+        price: 267,
+        rating: 4,
+        stock: false,
+      },
+      {
+        name: '基于等离子波的纳米光刻光学装置',
+        price: 799.,
         rating: 3,
-        stock: true,
+        stock: false,
       },
       {
-        name: '塑料土工格室条带排水孔制造模具',
-        price: 1499.99,
-        rating: 4,
-        stock: true,
-      },
-      {
-        name: '石墨电极双螺纹梳加工机床',
-        price: 299.99,
+        name: '治疗心脑血管疾病的药物',
+        price: 876,
         rating: 4,
         stock: false,
       },
       {
-        name: '多元醇苯甲酸酯增塑剂',
-        price: 699.99,
+        name: '分体建造坞内合拢的造船方法',
+        price: 345,
+        rating: 4,
+        stock: false,
+      },
+      {
+        name: '一种防治农作物再植障碍病的肥料',
+        price: 123,
+        rating: 3,
+        stock: false,
+      },
+      {
+        name: '苯甲酸亚锡的新合成方法',
+        price: 826,
+        rating: 1,
+        stock: false,
+      },
+      {
+        name: '灌注桩基础分布式光纤传感检测方法',
+        price: 982,
         rating: 5,
-        stock: true,
-      },
-      {
-        name: '一种在线修理方法及其专用组合机床',
-        price: 799.99,
-        rating: 4,
         stock: false,
       },
       {
-        name: '二乙二醇二苯甲酸矾',
-        price: 649.99,
-        rating: 3,
-        stock: true,
-      },
-      {
-        name: '塑料土工格室条带排水孔制造模具',
-        price: 1499.99,
-        rating: 4,
-        stock: true,
-      },
-      {
-        name: '石墨电极双螺纹梳加工机床',
-        price: 299.99,
+        name: '制备抗病毒口服液的方法',
+        price: 134,
         rating: 4,
         stock: false,
-      },
-      {
-        name: '多元醇苯甲酸酯增塑剂',
-        price: 699.99,
-        rating: 5,
-        stock: true,
-      },
-      {
-        name: '一种在线修理方法及其专用组合机床',
-        price: 799.99,
-        rating: 4,
-        stock: false,
-      },
-      {
-        name: '二乙二醇二苯甲酸矾',
-        price: 649.99,
-        rating: 3,
-        stock: true,
-      },
-      {
-        name: '二乙二醇二苯甲酸矾',
-        price: 649.99,
-        rating: 3,
-        stock: true,
-      },
-      {
-        name: '塑料土工格室条带排水孔制造模具',
-        price: 1499.99,
-        rating: 4,
-        stock: true,
-      },
-      {
-        name: '石墨电极双螺纹梳加工机床',
-        price: 299.99,
-        rating: 4,
-        stock: false,
-      },
+      }
     ]
   }),
 }

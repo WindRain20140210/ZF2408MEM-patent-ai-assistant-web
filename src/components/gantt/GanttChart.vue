@@ -17,7 +17,7 @@ export default {
     },
     width: {
       type: String,
-      default: "1000px",
+      default: "800px",
     },
     height: {
       type: String,

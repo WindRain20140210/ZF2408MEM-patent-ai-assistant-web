@@ -5,11 +5,12 @@ const sseFetch =  async (fetchData2) => {
 
     class RetriableError extends Error { }
     class FatalError extends Error { }
-    // const url = 'http://110.42.103.198:23837/v1/chat-messages';
-    const url = 'https://api.dify.ai/v1/chat-messages';
+    const url = 'http://110.42.103.198:23837/v1/chat-messages';
+    // const url = 'https://api.dify.ai/v1/chat-messages';
     // const url = '';
-    // const apiKey = ref('app-Agp9QZQWtA8GsB0GdbrPekT3')
-    const apiKey = ref('app-TVD5Ms2KWOVnmqZVeI8QBmj2')
+
+    const apiKey = ref('app-Agp9QZQWtA8GsB0GdbrPekT3')
+    // const apiKey = ref('app-TVD5Ms2KWOVnmqZVeI8QBmj2')
 
     // const apiKey = 'app-v08ygzkVa9q7JSA4uCqToITH'; // 李欣欣
 
@@ -18,17 +19,11 @@ const sseFetch =  async (fetchData2) => {
         'Content-Type': 'application/json'
     }
 
-    // const fetchData = {
-    //     "inputs": {},
-    //     "query": "玄凤鹦鹉和小黄鸡",
-    //     "response_mode": "streaming",
-    //     "conversation_id": "",
-    //     "user": "test"
-    // }
     const fetchData = {
         inputs: {
             "conditions":
-            "{\"time\":\"\",\"industry\":\"\",\"keyWord\":\"\",\"r	egion\":\"\",\"territory\":\"\",\"dataType\":\"patentC	ount\"}"
+            "{\"time\":\"\"," + "\"industry\":\"\",\"keyWord\":\"\",\"region\":\"\",\"territory\":\"\",\"dataType\":\"patentCount\"}"
+
     }, // 参数变量
         query: '专利报告分析', // 用户对话框中输入的内容
         response_mode: 'streaming', // 'blocking',// 固定传
@@ -36,15 +31,6 @@ const sseFetch =  async (fetchData2) => {
         user: 'test' // userName.value, // 用户名，区分请求用户
     }
 
-    // let fetchData = {
-    //     "inputs": {},
-    //     "query": "玄凤鹦鹉和小黄鸡",
-    //     "response_mode": "streaming", 
-    //     "conversation_id": "", 
-    //     "user": "test"
-    // }
-
-    console.log('1111111111111000000000000000000001111111111111111111111111');
 
     await fetchEventSource(url, {
         method: 'POST',

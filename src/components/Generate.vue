@@ -4,14 +4,14 @@ import {onMounted, ref} from "vue";
 import {UserService} from "/src/http/api.js";
 
 const leftTabs = [
-  "Playground 1",
-  "Playground 2",
-  "mock 3",
-  "mock 4",
-  "mock 5",
-  "mock 6",
-  "mock 7",
-  "mock 8"
+  "技术背景和目标",
+  "技术现状分析",
+  "具体研究内容",
+  "技术发展路线图",
+  "主要玩家分析",
+  "当前技术方案梳理",
+  "重点专利解读",
+  "可能的研发方向",
 ]
 
 // BarChart
@@ -39,15 +39,13 @@ const xNamesCircle = ref([]);
 const yValsCircle = ref([]);
 
 // GanttChart
-const ganttChartRef = ref(null);
-const ganttLoading = ref(true);
-const ganttError = ref(false);
+// const ganttChartRef = ref(null);
+// const ganttLoading = ref(true);
+// const ganttError = ref(false);
 
-const ganttDataSet = ref([]);
+// const ganttDataSet = ref([]);
 
 // ....
-const search = ref('')
-
 /**
  * BarChart data net request
  * @returns {Promise<void>}
@@ -118,33 +116,31 @@ const initLineChart = async () => {
  * GanttChart data net request
  * @returns {Promise<void>}
  */
-const initGanttChart = async () => {
-  console.log("ooooooooooooooooooooooooo")
-
-  const res = await UserService.ganttchart();
-  if (res.status === 200) {
-    const data = res.data.data;
-    ganttError.value = false;
-    ganttLoading.value = false;
-
-    data.forEach(function (item) {
-      const element = {
-        "end": item["end"],
-        "id": item["id"],
-        "name": item["name"],
-        "progress": item["progress"],
-        "start": item["start"],
-      }
-      console.log("data => " + JSON.stringify(element));
-
-      ganttDataSet.value.push(element);
-    });
-
-  } else {
-    ganttLoading.value = false;
-    ganttError.value = true;
-  }
-};
+// const initGanttChart = async () => {
+//   const res = await UserService.ganttchart();
+//   if (res.status === 200) {
+//     const data = res.data.data;
+//     ganttError.value = false;
+//     ganttLoading.value = false;
+//
+//     data.forEach(function (item) {
+//       const element = {
+//         "end": item["end"],
+//         "id": item["id"],
+//         "name": item["name"],
+//         "progress": item["progress"],
+//         "start": item["start"],
+//       }
+//       console.log("data => " + JSON.stringify(element));
+//
+//       ganttDataSet.value.push(element);
+//     });
+//
+//   } else {
+//     ganttLoading.value = false;
+//     ganttError.value = true;
+//   }
+// };
 
 // ... lifecycle hook ...
 onMounted(() => {
@@ -164,10 +160,11 @@ onMounted(() => {
           } else if (entry.target.id === "circleChart" && xNamesCircle.value.length === 0) {
             initCircleChart();
 
-          } else if (entry.target.id === "ganttChart" && ganttDataSet.value.length === 0) {
-            initGanttChart();
-
-          } else {
+          }
+          // else if (entry.target.id === "ganttChart" && ganttDataSet.value.length === 0) {
+          //   initGanttChart();
+          // }
+          else {
             return false;
           }
         }
@@ -183,17 +180,31 @@ onMounted(() => {
   observer.observe(barChartRef.value);
   observer.observe(circleChartRef.value);
   observer.observe(lineChartRef.value);
-  observer.observe(ganttChartRef.value);
+  // observer.observe(ganttChartRef.value);
 });
-
 </script>
 
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
       <v-row>
+        <!-- right side sheet -->
+        <v-col cols="3">
+          <v-sheet rounded="lg">
+            <v-list rounded="lg">
 
-        <!-- right side blank -->
+              <v-list-item
+                v-for="n in leftTabs"
+                :key="n"
+                :title="`${n}`"
+                link
+              />
+
+            </v-list>
+          </v-sheet>
+        </v-col>
+
+        <!-- left side blank -->
         <v-col>
           <v-sheet
             min-height="80vh"
@@ -201,26 +212,6 @@ onMounted(() => {
 
             <!-- main content -->
             <v-card flat>
-              <!-- title -->
-              <v-card-title class="d-flex align-center pe-2">
-                &nbsp;
-                报告图表生成测试
-
-                <v-spacer></v-spacer>
-
-                <v-text-field
-                  v-model="search"
-                  density="compact"
-                  label="Search"
-                  prepend-inner-icon="mdi-magnify"
-                  variant="solo-filled"
-                  flat
-                  hide-details
-                  single-line
-                ></v-text-field>
-              </v-card-title>
-
-              <v-divider></v-divider>
 
               <!-- !!!! table area !!!! -->
 
@@ -279,6 +270,7 @@ onMounted(() => {
 
               <!-- GanttChart -->
               <!-- mock loading cost time, when view in viewport auto net request -->
+              <!--
               <div id="ganttChart" ref="ganttChartRef">
                 <div class="title center-flex">专利研发周期</div>
 
@@ -297,6 +289,7 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
+              -->
 
               <!-- ****** RelationshipChart ***** -->
               <!-- <v-relationship-chart/> -->
@@ -306,34 +299,18 @@ onMounted(() => {
           </v-sheet>
         </v-col>
 
-        <!-- left side sheet -->
-        <v-col cols="3">
-          <v-sheet rounded="lg">
-            <v-list rounded="lg">
-
-              <v-list-item
-                v-for="n in leftTabs"
-                :key="n"
-                :title="`${n}`"
-                link
-              ></v-list-item>
-
-            </v-list>
-          </v-sheet>
-        </v-col>
-
       </v-row>
     </v-container>
   </v-main>
 </template>
 
 <script>
-// my custom components
+// custom components
 import vBarChart from "./echarts/BarChart.vue";
 import vCircleChart from "./echarts/CircleChart.vue";
 import vLineChart from "./echarts/LineChart.vue";
 
-import vGanttChart from "./gantt/GanttChart.vue"
+// import vGanttChart from "./gantt/GanttChart.vue"
 // import vRelationshipChart from "./echarts/RelationshipChart.vue"
 
 // export default
@@ -342,7 +319,7 @@ export default {
     vBarChart,
     vCircleChart,
     vLineChart,
-    vGanttChart,
+    // vGanttChart,
     // vRelationshipChart,
   }
 }

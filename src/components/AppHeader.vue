@@ -11,7 +11,6 @@ const links = [
 </script>
 
 <template>
-  <!-- <v-app-bar flat height="150" id="inspire" class="bg-grey-lighten-3"> -->
   <v-app-bar flat height="150" class="header">
     <v-container style="background-color: #0586fd">
 
@@ -32,19 +31,18 @@ const links = [
             <v-col>
               <v-card-text>
                 <v-text-field
-                  :loading="loading"
                   append-inner-icon="mdi-magnify"
                   density="compact"
                   label="请输入关键词"
                   variant="solo"
                   hide-details
                   single-line
-                  @click:append-inner="onClick"
                 ></v-text-field>
               </v-card-text>
             </v-col>
           </v-row>
         </v-col>
+
       </v-row>
 
       <v-row>
@@ -65,7 +63,6 @@ const links = [
       </v-row>
 
     </v-container>
-
   </v-app-bar>
 </template>
 
@@ -73,50 +70,18 @@ const links = [
 export default {
   data: () => ({
     links: [
+      '/',
+      '/',
+      '/',
+      '/',
+      '/generate',
+      '/record',
       '/search',
-      '/playground',
-      '/playground',
-      '/playground',
-      '/playground',
-      '/playground',
-      '/report'
     ],
   }),
 }
 </script>
 
 <style scoped>
-.header {
-  background-color: #0586fd !important;
-}
-
-header .logo {
-  display: inline-block;
-  width: 100px;
-  height: auto;
-  vertical-align: middle;
-  margin-top: -13px;
-}
-
-header .logo-p {
-  color: #ffffff;
-  font-weight: bolder;
-  line-height: 80px;
-  font-size: 28px;
-  font-family: emoji;
-}
-
-.search-btn {
-  background-color: #0858fd;
-  color: #ffffff;
-}
-
-.logo-wrap {
-  width: 300px;
-}
-
-.btn-wrap {
-  margin-right: -40px;
-  margin-top: 3px;
-}
+@import "../styles/header.css";
 </style>
