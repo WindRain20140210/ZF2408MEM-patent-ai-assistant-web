@@ -305,6 +305,7 @@ onMounted(() => {
 </template>
 
 <script>
+
 // custom components
 import vBarChart from "./echarts/BarChart.vue";
 import vCircleChart from "./echarts/CircleChart.vue";

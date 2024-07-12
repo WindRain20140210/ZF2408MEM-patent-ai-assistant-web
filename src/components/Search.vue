@@ -35,13 +35,43 @@
 
         <!-- left side blank -->
         <v-col>
+
+          <!-- main content -->
           <v-sheet
             min-height="80vh"
-            rounded="lg">
+            rounded="lg"
+            class="d-flex justify-center align-center">
+            <!-- ********** -->
+            <v-col>
+              <v-row>
+                <v-card
+                  class="mx-auto"
+                  prepend-icon="$vuetify"
+                  subtitle="The #1 Vue UI Library"
+                  width="500">
 
-            <!-- main content -->
+                  <template v-slot:title>
+                    <span class="font-weight-black">关键词/检索式</span>
+                  </template>
 
+                  <v-card-text class="bg-surface-light pt-4">
+                    <v-textarea
+                      label="输入区域"
+                      v-model="text"
+                      rows="5"
+                      outlined
+                    ></v-textarea>
+                  </v-card-text>
+                </v-card>
+              </v-row>
+
+              <v-row class="justify-center align-center" style="margin-top:45px">
+                <v-btn @click="$router.push('/generate')">生成报告</v-btn>
+              </v-row>
+            </v-col>
+            <!-- ********** -->
           </v-sheet>
+
         </v-col>
       </v-row>
     </v-container>
@@ -49,7 +79,6 @@
 </template>
 
 <script>
-import {createRouter as router} from "vue-router";
 
 export default {
   data: () => ({
@@ -59,12 +88,6 @@ export default {
       "我的报告"
     ]
   }),
-  methods: {
-    handleLeftSheetItemIndex(index) {
-      if (index === 1) {
-        router.push('record')
-      }
-    }
-  }
+  methods: {}
 }
 </script>

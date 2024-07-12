@@ -56,7 +56,7 @@ const links = [
               variant="text"
               color="white"
               @click="$router.push($data.links[index])"
-            ></v-btn>
+            />
           </v-container>
 
         </v-col>
