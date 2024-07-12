@@ -64,10 +64,10 @@ export default defineConfig({
         ],
     },
     server: {
-        // local debug use
+        // -----------local debug use -----------
         port: 3000,
 
-        // Docker image use
+        // ----------- Docker image use ----------
         // watch: {
         //     usePolling: true,
         // },

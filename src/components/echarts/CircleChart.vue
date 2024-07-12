@@ -41,7 +41,7 @@ export default {
     const initChart = () => {
       const option = {
         title: {
-          text: '占比分析',
+          text: '专利占比',
           left: 'center',
           top: 'center'
         },
@@ -49,34 +49,40 @@ export default {
           type: 'pie',
           radius: ['40%', '70%'],
           center: ['50%', '50%'],
+
+          // pie chart many many configs
           label: {
-            normal: {
-              show: true,
-              formatter: "{c} %",
-              textStyle: {
-                fontSize: 13,
-              },
-              position: 'outside'
-            },
-            emphasis: {
-              show: true
-            }
+            // normal: {
+            //   show: true,
+            //   formatter: "{c} %",
+            //   textStyle: {
+            //     fontSize: 13,
+            //   },
+            //   position: 'outside'
+            // },
+
+            // emphasis: {
+            //   show: true
+            // }
           },
-          labelLine: {
-            normal: {
-              show: true
-            },
-            emphasis: {
-              show: true
-            }
-          },
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          },
+
+          // labelLine: {
+          //   normal: {
+          //     show: true
+          //   },
+          //   emphasis: {
+          //     show: true
+          //   }
+          // },
+
+          // emphasis: {
+          //   itemStyle: {
+          //     shadowBlur: 10,
+          //     shadowOffsetX: 0,
+          //     shadowColor: 'rgba(0, 0, 0, 0.5)'
+          //   }
+          // },
+
           data: data
         }]
       };

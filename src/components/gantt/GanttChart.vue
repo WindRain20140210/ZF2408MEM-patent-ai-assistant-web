@@ -1,65 +1,76 @@
+<template>
+  <div class="center-flex">
+    <svg id="gantt" ref="ganttChartsRef" :style="{ width, height }"></svg>
+  </div>
+</template>
 
-<script setup>
-
-import {onMounted} from 'vue'
+<script>
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import Gantt from "frappe-gantt";
 
-const tasks = [
-  {
-    id: 'Task 1',
-    name: '高安全性三元材料电池',
-    start: '2019-4-28',
-    end: '2020-12-31',
-    progress: 100
+export default {
+  name: "GanttChartsComponent",
+  props: {
+    data: {
+      type: Array,
+      required: true,
+    },
+    width: {
+      type: String,
+      default: "1000px",
+    },
+    height: {
+      type: String,
+      default: "600px",
+    },
   },
-  {
-    id: 'Task 2',
-    name: '固态电池技术开发',
-    start: '2020-12-28',
-    end: '2021-12-31',
-    progress: 100
-  },
-  {
-    id: 'Task 3',
-    name: '电池模组一体化设计',
-    start: '2018-12-28',
-    end: '2023-12-31',
-    progress: 100
-  },
-  {
-    id: 'Task 4',
-    name: '云端电池管理系统',
-    start: '2018-6-28',
-    end: '2021-12-31',
-    progress: 0
-  },
-  {
-    id: 'Task 5',
-    name: '相变材料热管理技术',
-    start: '2019-5-20',
-    end: '2021-12-31',
-    progress: 0
-  },
-  {
-    id: 'Task 6',
-    name: '电池热失控防护技术',
-    start: '2019-6-28',
-    end: '2024-6-1',
-    progress: 0
-  }
-];
 
-onMounted(() => {
-  const gantt = new Gantt("#gantt", tasks);
-  gantt.change_view_mode('Year')
-})
+  setup(props) {
+    const ganttChartsRef = ref(null);
+    let ganttChart = null;
+
+    const dataSet = props.data.values();
+
+    let dataArr = new Array(0);
+    dataSet.forEach((dataItem) => {
+      const element = {
+        id: dataItem["id"],
+        name: dataItem["name"],
+        start: dataItem["start"],
+        end: dataItem["end"],
+        progress: parseInt(dataItem["progress"], 10)
+      };
+      dataArr.push(element)
+    })
+
+    onMounted(() => {
+      if (ganttChartsRef.value) {
+        ganttChart = new Gantt("#gantt", dataArr);
+        ganttChart.change_view_mode('Year')
+      }
+    });
+
+    watch(
+      () => props.option,
+      (newOption) => {
+        if (ganttChart) {
+          ganttChart = new Gantt("#gantt", newOption);
+          ganttChart.change_view_mode('Year')
+        }
+      }
+    );
+
+    onUnmounted(() => {
+      ganttChart && ganttChart.dispose();
+    });
+
+    return {ganttChartsRef};
+  },
+};
 
 </script>
 
-<template>
-  <h3>Gantt Chart</h3>
-  <div style="width: 600px;height:600px;">
-    <svg id="gantt"></svg>
-  </div>
-</template>
+<style scoped>
+@import "../../styles/utils.css";
+</style>
 

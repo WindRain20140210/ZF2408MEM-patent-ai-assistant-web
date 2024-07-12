@@ -10,7 +10,7 @@ const sseFetch =  async () => {
 //  let data={}
 // this.controller = new AbortController()
 // const signal = this.controller.signal
- 
+
 
 // const ctrl = new AbortController();
 // fetchEventSource('/api/sse', {
@@ -39,8 +39,8 @@ const sseFetch =  async () => {
     // const fetchData = {
     //     "inputs": {},
     //     "query": "玄凤鹦鹉和小黄鸡",
-    //     "response_mode": "streaming", 
-    //     "conversation_id": "", 
+    //     "response_mode": "streaming",
+    //     "conversation_id": "",
     //     "user": "test"
     // }
     const fetchData = {
@@ -59,7 +59,7 @@ const sseFetch =  async () => {
         body: JSON.stringify(fetchData),
         async onopen(response) {
             if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
-                return; // everything's good
+                 // everything's good
             } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
                 // client-side errors are usually non-retriable:
                 throw new FatalError();
