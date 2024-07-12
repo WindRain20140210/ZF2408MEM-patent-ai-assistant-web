@@ -3,66 +3,66 @@
 </script>
 
 <template>
-    <v-main class="bg-grey-lighten-3">
-      <v-container>
-        <v-row>
+  <v-main class="bg-grey-lighten-3">
+    <v-container>
+      <v-row>
 
-          <!-- left side blank -->
-          <v-col>
-            <v-sheet
-              min-height="80vh"
-              rounded="lg">
+        <!-- left side blank -->
+        <v-col>
+          <v-sheet
+            min-height="80vh"
+            rounded="lg">
 
-              <!-- main content -->
-              <v-card flat>
-                <!-- title -->
-                <v-card-title class="d-flex align-center pe-2">
-                  &nbsp;
-                  我的检索
+            <!-- main content -->
+            <v-card flat>
+              <!-- title -->
+              <v-card-title class="d-flex align-center pe-2">
+                &nbsp;
+                我的检索
 
-                  <v-spacer></v-spacer>
+                <v-spacer></v-spacer>
 
-                  <v-text-field
-                    v-model="search"
-                    density="compact"
-                    label="Search"
-                    prepend-inner-icon="mdi-magnify"
-                    variant="solo-filled"
-                    flat
-                    hide-details
-                    single-line
-                  ></v-text-field>
-                </v-card-title>
+                <v-text-field
+                  v-model="search"
+                  density="compact"
+                  label="Search"
+                  prepend-inner-icon="mdi-magnify"
+                  variant="solo-filled"
+                  flat
+                  hide-details
+                  single-line
+                ></v-text-field>
+              </v-card-title>
 
-                <v-divider></v-divider>
+              <v-divider></v-divider>
 
-                <!-- main data table -->
-                <h1> 组件开发中 </h1>
+              <!-- main data table -->
+              <h1> 组件开发中 </h1>
 
-              </v-card>
+            </v-card>
 
-            </v-sheet>
-          </v-col>
+          </v-sheet>
+        </v-col>
 
-          <!-- right side sheet -->
-          <v-col cols="3">
-            <v-sheet rounded="lg">
-              <v-list rounded="lg">
+        <!-- right side sheet -->
+        <v-col cols="3">
+          <v-sheet rounded="lg">
+            <v-list rounded="lg">
 
-                <v-list-item
-                  v-for="n in left_tabs"
-                  :key="n"
-                  :title="`${n}`"
-                  link
-                ></v-list-item>
+              <v-list-item
+                v-for="n in left_tabs"
+                :key="n"
+                :title="`${n}`"
+                link
+              ></v-list-item>
 
-              </v-list>
-            </v-sheet>
-          </v-col>
+            </v-list>
+          </v-sheet>
+        </v-col>
 
-        </v-row>
-      </v-container>
-    </v-main>
+      </v-row>
+    </v-container>
+  </v-main>
 </template>
 
 <script>

@@ -56,7 +56,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: xArray, // data: ['2019', '2020', '2021', '2022', '2023'],   // x轴数据 years
+          data: xArray, // x轴数据 years
           name: '年份',
           nameTextStyle: {
             fontWeight: 600,

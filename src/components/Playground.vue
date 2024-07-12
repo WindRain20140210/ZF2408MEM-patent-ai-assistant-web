@@ -38,6 +38,13 @@ const circleError = ref(false);
 const xNamesCircle = ref([]);
 const yValsCircle = ref([]);
 
+// GanttChart
+const ganttChartRef = ref(null);
+const ganttLoading = ref(true);
+const ganttError = ref(false);
+
+const ganttDataSet = ref([]);
+
 // ....
 const search = ref('')
 
@@ -68,7 +75,7 @@ const initBarChart = async () => {
  * @returns {Promise<void>}
  */
 const initCircleChart = async () => {
-  const res = await UserService.barchart();
+  const res = await UserService.circlechart();
   if (res.status === 200) {
     const data = res.data.data;
     circleError.value = false;
@@ -107,6 +114,37 @@ const initLineChart = async () => {
   }
 };
 
+/**
+ * GanttChart data net request
+ * @returns {Promise<void>}
+ */
+const initGanttChart = async () => {
+  console.log("ooooooooooooooooooooooooo")
+
+  const res = await UserService.ganttchart();
+  if (res.status === 200) {
+    const data = res.data.data;
+    ganttError.value = false;
+    ganttLoading.value = false;
+
+    data.forEach(function (item) {
+      const element = {
+        "end": item["end"],
+        "id": item["id"],
+        "name": item["name"],
+        "progress": item["progress"],
+        "start": item["start"],
+      }
+      console.log("data => " + JSON.stringify(element));
+
+      ganttDataSet.value.push(element);
+    });
+
+  } else {
+    ganttLoading.value = false;
+    ganttError.value = true;
+  }
+};
 
 // ... lifecycle hook ...
 onMounted(() => {
@@ -126,6 +164,9 @@ onMounted(() => {
           } else if (entry.target.id === "circleChart" && xNamesCircle.value.length === 0) {
             initCircleChart();
 
+          } else if (entry.target.id === "ganttChart" && ganttDataSet.value.length === 0) {
+            initGanttChart();
+
           } else {
             return false;
           }
@@ -142,7 +183,7 @@ onMounted(() => {
   observer.observe(barChartRef.value);
   observer.observe(circleChartRef.value);
   observer.observe(lineChartRef.value);
-
+  observer.observe(ganttChartRef.value);
 });
 
 </script>
@@ -182,7 +223,9 @@ onMounted(() => {
               <v-divider></v-divider>
 
               <!-- !!!! table area !!!! -->
+
               <!-- BarChart -->
+              <!-- mock loading cost time, when view in viewport auto net request -->
               <div id="barChart" ref="barChartRef">
                 <v-bar-chart
                   :data="{ x:xBar, y:yBar }"
@@ -199,6 +242,7 @@ onMounted(() => {
               </div>
 
               <!-- CircleChart -->
+              <!-- mock loading cost time, when view in viewport auto net request -->
               <div id="circleChart" ref="circleChartRef">
                 <v-circle-chart
                   :data="{ names:xNamesCircle, values:yValsCircle }"
@@ -213,12 +257,6 @@ onMounted(() => {
                   <div v-if="circleLoading === false && circleError === true">请求失败</div>
                 </div>
               </div>
-
-              <!-- ****** RelationshipChart ***** -->
-              <v-relationship-chart/>
-
-              <!-- ****** GanttChart **** -->
-              <v-gantt-chart/>
 
               <!-- LineChart -->
               <!-- mock loading cost time, when view in viewport auto net request -->
@@ -238,6 +276,30 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
+
+              <!-- GanttChart -->
+              <!-- mock loading cost time, when view in viewport auto net request -->
+              <div id="ganttChart" ref="ganttChartRef">
+                <div class="title center-flex">专利研发周期</div>
+
+                <v-gantt-chart
+                  :data="ganttDataSet"
+                  v-if="lineError === false && lineLoading === false"
+                />
+
+                <div v-else class="nodata">
+                  <div v-if="lineLoading === true">
+                    <img src="../assets/loading.jpg" alt="" class="loading"/>
+                    <div class="loadingText">加载中</div>
+                  </div>
+                  <div v-if="lineLoading === false && lineError === true">
+                    请求失败
+                  </div>
+                </div>
+              </div>
+
+              <!-- ****** RelationshipChart ***** -->
+              <!-- <v-relationship-chart/> -->
               <!-- !!!! table area !!!! -->
             </v-card>
 
@@ -268,23 +330,25 @@ onMounted(() => {
 <script>
 // my custom components
 import vBarChart from "./echarts/BarChart.vue";
-import vLineChart from "./echarts/LineChart.vue";
 import vCircleChart from "./echarts/CircleChart.vue";
-import vRelationshipChart from "./echarts/RelationshipChart.vue"
+import vLineChart from "./echarts/LineChart.vue";
+
 import vGanttChart from "./gantt/GanttChart.vue"
+// import vRelationshipChart from "./echarts/RelationshipChart.vue"
 
 // export default
 export default {
   components: {
     vBarChart,
-    vLineChart,
     vCircleChart,
-    vRelationshipChart,
-    vGanttChart
+    vLineChart,
+    vGanttChart,
+    // vRelationshipChart,
   }
 }
 </script>
 
 <style scoped>
 @import "../styles/loading.css";
+@import "../styles/utils.css";
 </style>

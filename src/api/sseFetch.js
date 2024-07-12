@@ -18,7 +18,14 @@ const sseFetch =  async (fetchData2) => {
         'Content-Type': 'application/json'
     }
 
-    let fetchData1 = {
+    // const fetchData = {
+    //     "inputs": {},
+    //     "query": "玄凤鹦鹉和小黄鸡",
+    //     "response_mode": "streaming",
+    //     "conversation_id": "",
+    //     "user": "test"
+    // }
+    const fetchData = {
         inputs: {
             "conditions":
             "{\"time\":\"\",\"industry\":\"\",\"keyWord\":\"\",\"r	egion\":\"\",\"territory\":\"\",\"dataType\":\"patentC	ount\"}"
@@ -29,13 +36,13 @@ const sseFetch =  async (fetchData2) => {
         user: 'test' // userName.value, // 用户名，区分请求用户
     }
 
-    let fetchData = {
-        "inputs": {},
-        "query": "玄凤鹦鹉和小黄鸡",
-        "response_mode": "streaming", 
-        "conversation_id": "", 
-        "user": "test"
-    }
+    // let fetchData = {
+    //     "inputs": {},
+    //     "query": "玄凤鹦鹉和小黄鸡",
+    //     "response_mode": "streaming", 
+    //     "conversation_id": "", 
+    //     "user": "test"
+    // }
 
     console.log('1111111111111000000000000000000001111111111111111111111111');
 
@@ -46,9 +53,8 @@ const sseFetch =  async (fetchData2) => {
         openWhenHidden: true,
         async onopen(response) {
             console.log(response, '=========== onopen ==========');
-            
             if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
-                return; // everything's good
+                 // everything's good
             } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
                 // client-side errors are usually non-retriable:
                 throw new FatalError();
