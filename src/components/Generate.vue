@@ -5,13 +5,12 @@ import {UserService} from "/src/http/api.js";
 
 const leftTabs = [
   "技术背景和目标",
-  "技术现状分析",
-  "具体研究内容",
-  "技术发展路线图",
-  "主要玩家分析",
-  "当前技术方案梳理",
-  "重点专利解读",
-  "可能的研发方向",
+  "技术发展及衍变趋势分析",
+  "申请人排名分析",
+  "地域分析",
+  "专利类型",
+  "技术构成分析",
+  "专利集中度分析"
 ]
 
 // BarChart
@@ -161,8 +160,8 @@ onMounted(() => {
             initCircleChart();
 
           }
-          // else if (entry.target.id === "ganttChart" && ganttDataSet.value.length === 0) {
-          //   initGanttChart();
+            // else if (entry.target.id === "ganttChart" && ganttDataSet.value.length === 0) {
+            //   initGanttChart();
           // }
           else {
             return false;

@@ -6,15 +6,6 @@
         <!-- right side sheet -->
         <v-col cols="3">
 
-          <!-- top button -->
-          <v-sheet rounded="lg">
-            <v-list rounded="lg">
-              <v-list-item style="text-align:center">
-                标准高级检索
-              </v-list-item>
-            </v-list>
-          </v-sheet>
-
           <!-- sheet blow the button -->
           <div style="margin-top: 15px">
             <v-sheet rounded="lg">
@@ -22,7 +13,9 @@
                 <v-list-item @click="$router.push('/search')">
                   生成报告
                 </v-list-item>
-                <v-list-item>
+
+                <v-list-item
+                  style="background-color: #F6F6F6; width:100%; height: 100%">
                   我的报告
                 </v-list-item>
               </v-list>
@@ -33,7 +26,7 @@
         <!-- left side blank -->
         <v-col>
           <v-sheet
-            min-height="80vh"
+            min-height="50vh"
             rounded="lg">
 
             <!-- main content -->
