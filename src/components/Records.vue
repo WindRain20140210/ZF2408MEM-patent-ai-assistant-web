@@ -7,7 +7,7 @@
         <v-col cols="3">
 
           <!-- sheet blow the button -->
-          <div style="margin-top: 15px">
+          <div>
             <v-sheet rounded="lg">
               <v-list rounded="lg">
                 <v-list-item @click="$router.push('/search')">
@@ -40,7 +40,7 @@
                 <v-text-field
                   v-model="search"
                   density="compact"
-                  label="Search"
+                  label="请输入报告名称"
                   prepend-inner-icon="mdi-magnify"
                   variant="solo-filled"
                   flat
@@ -52,31 +52,31 @@
               <v-divider></v-divider>
 
               <!-- main data table -->
+              <!-- display records of my patents -->
               <v-data-table
                 v-model:search="search"
                 :items="items"
-                :headers="headers">
+                :headers="headers"
+                :items-per-page="8">
 
-                <template v-slot:header.stock>
-                  <div class="text-end">Stock</div>
-                </template>
-
-                <template v-slot:item.rating="{ item }">
-                  <v-rating
-                    :model-value="item.rating"
-                    color="orange-darken-2"
-                    density="compact"
+                <!-- right side button -->
+                <template v-slot:item.actions="{ item }">
+                  <!-- download patent -->
+                  <v-icon
+                    class="me-2"
                     size="small"
-                    readonly
-                  ></v-rating>
+                    @click="downloadItem(item)"
+                    style="transform: rotate(180deg);">
+                    mdi-arrow-up-bold-box-outline
+                  </v-icon>
+                  <!-- delete patent -->
+                  <v-icon
+                    size="small"
+                    @click="deleteItem(item)">
+                    mdi-delete
+                  </v-icon>
                 </template>
-
-                <template v-slot:item.stock="{ item }">
-                  <div class="text-end"></div>
-                </template>
-
               </v-data-table>
-
             </v-card>
 
           </v-sheet>
@@ -94,89 +94,76 @@ export default {
       "生成报告",
       "我的报告"
     ],
-
     // sheet - mock data
     search: '',
     headers: [
-      {
-        title: '专利标题',
-        align: 'start',
-        key: 'name'
-      },
-      {
-        title: '专利价值',
-        align: 'end',
-        key: 'price'
-      },
-      {
-        title: '专利热度',
-        align: 'start',
-        key: 'rating'
-      },
-      {title: '描述信息'},
+      {title: '序号', key: 'id', align: 'center',},
+      {title: '报告名称', key: 'title', align: 'center',},
+      {title: '创建时间', key: 'createTime', align: 'center',},
+      {title: '操作', key: 'actions', sortable: false, align: "center"},
     ],
     items: [
       {
-        name: '一种微球状费托合成铁基催化剂及其制备方法',
-        price: 699,
-        rating: 5,
-        stock: true,
+        id: 1,
+        title: '一种关于锂电池提升能量密度的研究报告',
+        createTime: '2024-07-05 23:30:00',
+        dbId: 1,
       },
       {
-        name: '高纯度蛇毒纤溶酶的制备方法及其药物制剂',
-        price: 345,
-        rating: 4,
-        stock: false,
+        id: 2,
+        title: '一种关于提高能源使用效率实现碳中和的研究报告',
+        createTime: '2024-07-07 10:30:31',
+        dbId: 2,
       },
       {
-        name: '一种治疗眼底出血症的中药及其制备方法',
-        price: 267,
-        rating: 4,
-        stock: false,
+        id: 3,
+        title: '正极材料及其制备方法、二次电池与终端设备',
+        createTime: '2024-07-05 23:30:00',
+        dbId: 3,
       },
       {
-        name: '基于等离子波的纳米光刻光学装置',
-        price: 799.,
-        rating: 3,
-        stock: false,
+        id: 4,
+        title: '一种关于提高能源使用效率实现碳中和的研究报告',
+        createTime: '2021-02-17 10:30:31',
+        dbId: 4,
       },
       {
-        name: '治疗心脑血管疾病的药物',
-        price: 876,
-        rating: 4,
-        stock: false,
+        id: 5,
+        title: '一种关于锂电池提升能量密度的研究报告',
+        createTime: '2022-03-23 23:30:00',
+        dbId: 5,
       },
       {
-        name: '分体建造坞内合拢的造船方法',
-        price: 345,
-        rating: 4,
-        stock: false,
+        id: 6,
+        title: '改性剂及其用途、正极材料的改性方法',
+        createTime: '2021-06-03 7:30:31',
+        dbId: 6,
       },
       {
-        name: '一种防治农作物再植障碍病的肥料',
-        price: 123,
-        rating: 3,
-        stock: false,
+        id: 7,
+        title: '外形结构设计专利、电解液',
+        createTime: '2022-05-04 23:30:00',
+        dbId: 7,
       },
       {
-        name: '苯甲酸亚锡的新合成方法',
-        price: 826,
-        rating: 1,
-        stock: false,
-      },
-      {
-        name: '灌注桩基础分布式光纤传感检测方法',
-        price: 982,
-        rating: 5,
-        stock: false,
-      },
-      {
-        name: '制备抗病毒口服液的方法',
-        price: 134,
-        rating: 4,
-        stock: false,
+        id: 8,
+        title: '材料技术专利、二次电池与终端设备',
+        createTime: '2023-06-05 9:30:31',
+        dbId: 8,
       }
-    ]
+    ],
+
   }),
+  methods: {
+    downloadItem(item) {
+      // download patent paper
+      // this. = this.items.indexOf(item)
+      console.log("download DataBase ID:" + item.db)
+    },
+    deleteItem(item) {
+      // deleteItem
+      console.log("delete DataBase ID:" + item.db)
+    }
+  },
 }
 </script>

@@ -6,7 +6,7 @@
         <v-col cols="3">
 
           <!-- sheet blow the button -->
-          <div style="margin-top: 15px">
+          <div>
             <v-sheet rounded="lg">
               <v-list rounded="lg">
 
@@ -18,18 +18,16 @@
                 <v-list-item @click="$router.push('/record')">
                   我的报告
                 </v-list-item>
-
               </v-list>
             </v-sheet>
           </div>
         </v-col>
 
-        <!-- left side blank -->
+        <!-- left side content -->
         <v-col>
-
           <!-- main content -->
           <v-sheet
-            min-height="60vh"
+            min-height="50vh"
             rounded="lg"
             class="d-flex justify-center align-center">
 
@@ -54,17 +52,11 @@
                 </div>
 
                 <v-text-field
-                  label="请输入 关键词、公司名、人名、专利号等"
+                  label="请生成一份关于新能源的专利报告"
                   variant="outlined"
                   single-line/>
 
                 <v-row justify="center">
-                  <v-col cols="12" md="6" justify="center">
-                    <div class="centered-div">
-                      查询到的报告数量:3000
-                    </div>
-                  </v-col>
-
                   <v-col cols="12" md="6">
                     <v-btn
                       class="text-none"

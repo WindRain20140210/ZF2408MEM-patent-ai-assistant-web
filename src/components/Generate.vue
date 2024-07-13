@@ -38,11 +38,11 @@ const xNamesCircle = ref([]);
 const yValsCircle = ref([]);
 
 // GanttChart
-// const ganttChartRef = ref(null);
-// const ganttLoading = ref(true);
-// const ganttError = ref(false);
+const ganttChartRef = ref(null);
+const ganttLoading = ref(true);
+const ganttError = ref(false);
 
-// const ganttDataSet = ref([]);
+const ganttDataSet = ref([]);
 
 // ....
 /**
@@ -115,31 +115,31 @@ const initLineChart = async () => {
  * GanttChart data net request
  * @returns {Promise<void>}
  */
-// const initGanttChart = async () => {
-//   const res = await UserService.ganttchart();
-//   if (res.status === 200) {
-//     const data = res.data.data;
-//     ganttError.value = false;
-//     ganttLoading.value = false;
-//
-//     data.forEach(function (item) {
-//       const element = {
-//         "end": item["end"],
-//         "id": item["id"],
-//         "name": item["name"],
-//         "progress": item["progress"],
-//         "start": item["start"],
-//       }
-//       console.log("data => " + JSON.stringify(element));
-//
-//       ganttDataSet.value.push(element);
-//     });
-//
-//   } else {
-//     ganttLoading.value = false;
-//     ganttError.value = true;
-//   }
-// };
+const initGanttChart = async () => {
+  const res = await UserService.ganttchart();
+  if (res.status === 200) {
+    const data = res.data.data;
+    ganttError.value = false;
+    ganttLoading.value = false;
+
+    data.forEach(function (item) {
+      const element = {
+        "end": item["end"],
+        "id": item["id"],
+        "name": item["name"],
+        "progress": item["progress"],
+        "start": item["start"],
+      }
+      console.log("data => " + JSON.stringify(element));
+
+      ganttDataSet.value.push(element);
+    });
+
+  } else {
+    ganttLoading.value = false;
+    ganttError.value = true;
+  }
+};
 
 // ... lifecycle hook ...
 onMounted(() => {
@@ -150,20 +150,25 @@ onMounted(() => {
         if (entry.isIntersecting) {
           console.log(entry.target.id, "is in viewport");
 
+          // BarChart
           if (entry.target.id === "barChart" && xBar.value.length === 0) {
             initBarChart();
 
-          } else if (entry.target.id === "lineChart" && xLine.value.length === 0) {
+          }
+          // LineChart
+          else if (entry.target.id === "lineChart" && xLine.value.length === 0) {
             initLineChart();
 
-          } else if (entry.target.id === "circleChart" && xNamesCircle.value.length === 0) {
+          }
+          // CircleChart
+          else if (entry.target.id === "circleChart" && xNamesCircle.value.length === 0) {
             initCircleChart();
 
           }
-            // else if (entry.target.id === "ganttChart" && ganttDataSet.value.length === 0) {
-            //   initGanttChart();
-          // }
-          else {
+          // GanttChart
+          else if (entry.target.id === "ganttChart" && ganttDataSet.value.length === 0) {
+            initGanttChart();
+          } else {
             return false;
           }
         }
@@ -176,16 +181,24 @@ onMounted(() => {
   );
 
   // observe elements
+  // BarChart
   observer.observe(barChartRef.value);
+
+  // CircleChart
   observer.observe(circleChartRef.value);
+
+  // LineChart
   observer.observe(lineChartRef.value);
-  // observer.observe(ganttChartRef.value);
+
+  // GanttChart
+  observer.observe(ganttChartRef.value);
 });
 </script>
 
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
+
       <v-row>
         <!-- right side sheet -->
         <v-col cols="3">
@@ -196,9 +209,7 @@ onMounted(() => {
                 v-for="n in leftTabs"
                 :key="n"
                 :title="`${n}`"
-                link
-              />
-
+                link/>
             </v-list>
           </v-sheet>
         </v-col>
@@ -269,7 +280,6 @@ onMounted(() => {
 
               <!-- GanttChart -->
               <!-- mock loading cost time, when view in viewport auto net request -->
-              <!--
               <div id="ganttChart" ref="ganttChartRef">
                 <div class="title center-flex">专利研发周期</div>
 
@@ -288,7 +298,6 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-              -->
 
               <!-- ****** RelationshipChart ***** -->
               <!-- <v-relationship-chart/> -->
@@ -310,7 +319,7 @@ import vBarChart from "./echarts/BarChart.vue";
 import vCircleChart from "./echarts/CircleChart.vue";
 import vLineChart from "./echarts/LineChart.vue";
 
-// import vGanttChart from "./gantt/GanttChart.vue"
+import vGanttChart from "./gantt/GanttChart.vue"
 // import vRelationshipChart from "./echarts/RelationshipChart.vue"
 
 // export default
@@ -319,7 +328,7 @@ export default {
     vBarChart,
     vCircleChart,
     vLineChart,
-    // vGanttChart,
+    vGanttChart,
     // vRelationshipChart,
   }
 }
