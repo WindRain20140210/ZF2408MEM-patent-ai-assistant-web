@@ -1,189 +1,3 @@
-<script setup>
-
-import {onMounted, ref} from "vue";
-import {UserService} from "/src/http/api.js";
-
-const leftTabs = [
-  "技术背景和目标",
-  "技术现状分析",
-  "具体研究内容",
-  "技术发展路线图",
-  "主要玩家分析",
-  "当前技术方案梳理",
-  "重点专利解读",
-  "可能的研发方向",
-]
-
-// BarChart
-const barChartRef = ref(null)
-const barLoading = ref(true);
-const barError = ref(true);
-
-const xBar = ref([]);
-const yBar = ref([]);
-
-// LineChart
-const lineChartRef = ref(null);
-const lineLoading = ref(true);
-const lineError = ref(false);
-
-const xLine = ref([]);
-const yLine = ref([]);
-
-// CircleChart
-const circleChartRef = ref(null);
-const circleLoading = ref(true);
-const circleError = ref(false);
-
-const xNamesCircle = ref([]);
-const yValsCircle = ref([]);
-
-// GanttChart
-// const ganttChartRef = ref(null);
-// const ganttLoading = ref(true);
-// const ganttError = ref(false);
-
-// const ganttDataSet = ref([]);
-
-// ....
-/**
- * BarChart data net request
- * @returns {Promise<void>}
- */
-const initBarChart = async () => {
-  const res = await UserService.barchart();
-  if (res.status === 200) {
-    const data = res.data.data;
-    barError.value = false;
-    barLoading.value = false;
-
-    data.forEach((item) => {
-      xBar.value.push(item.name);
-      yBar.value.push(item.value);
-    });
-
-  } else {
-    barLoading.value = false;
-    barError.value = true;
-  }
-};
-
-/**
- * CircleChart data net request
- * @returns {Promise<void>}
- */
-const initCircleChart = async () => {
-  const res = await UserService.circlechart();
-  if (res.status === 200) {
-    const data = res.data.data;
-    circleError.value = false;
-    circleLoading.value = false;
-
-    data.forEach((item) => {
-      xNamesCircle.value.push(item.name);
-      yValsCircle.value.push(item.value);
-    });
-
-  } else {
-    circleLoading.value = false;
-    circleError.value = true;
-  }
-};
-
-/**
- * LineChart data net request
- * @returns {Promise<void>}
- */
-const initLineChart = async () => {
-  const res = await UserService.linechart();
-  if (res.status === 200) {
-    const data = res.data.data;
-    lineError.value = false;
-    lineLoading.value = false;
-
-    data.forEach(function (item) {
-      xLine.value.push(item.name)
-      yLine.value.push(item.arr)
-    });
-
-  } else {
-    lineLoading.value = false;
-    lineError.value = true;
-  }
-};
-
-/**
- * GanttChart data net request
- * @returns {Promise<void>}
- */
-// const initGanttChart = async () => {
-//   const res = await UserService.ganttchart();
-//   if (res.status === 200) {
-//     const data = res.data.data;
-//     ganttError.value = false;
-//     ganttLoading.value = false;
-//
-//     data.forEach(function (item) {
-//       const element = {
-//         "end": item["end"],
-//         "id": item["id"],
-//         "name": item["name"],
-//         "progress": item["progress"],
-//         "start": item["start"],
-//       }
-//       console.log("data => " + JSON.stringify(element));
-//
-//       ganttDataSet.value.push(element);
-//     });
-//
-//   } else {
-//     ganttLoading.value = false;
-//     ganttError.value = true;
-//   }
-// };
-
-// ... lifecycle hook ...
-onMounted(() => {
-  // page observer
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          console.log(entry.target.id, "is in viewport");
-
-          if (entry.target.id === "barChart" && xBar.value.length === 0) {
-            initBarChart();
-
-          } else if (entry.target.id === "lineChart" && xLine.value.length === 0) {
-            initLineChart();
-
-          } else if (entry.target.id === "circleChart" && xNamesCircle.value.length === 0) {
-            initCircleChart();
-
-          }
-          // else if (entry.target.id === "ganttChart" && ganttDataSet.value.length === 0) {
-          //   initGanttChart();
-          // }
-          else {
-            return false;
-          }
-        }
-      });
-    },
-    {
-      rootMargin: "0px",
-      threshold: 0.1,
-    }
-  );
-
-  // observe elements
-  observer.observe(barChartRef.value);
-  observer.observe(circleChartRef.value);
-  observer.observe(lineChartRef.value);
-  // observer.observe(ganttChartRef.value);
-});
-</script>
-
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
@@ -204,129 +18,56 @@ onMounted(() => {
           </v-sheet>
         </v-col>
 
-        <!-- left side blank -->
-        <v-col>
-          <v-sheet
-            min-height="80vh"
-            rounded="lg">
+                <!-- left side blank -->
+          <v-col>
+            <v-sheet
+              min-height="80vh"
+              rounded="lg">
 
-            <!-- main content -->
-            <v-card flat>
+              <!-- main content -->
+              <v-card flat>
+                <v-patent-trend1/>
+                <v-patent-trend2/>
+                <v-patent-type />
+                <!-- <v-patent-area /> 地域先不展示 -->
+                <v-patent-applicant />
+              </v-card>
+            </v-sheet>
+          </v-col>
 
-              <!-- !!!! table area !!!! -->
+        </v-row>
 
-              <!-- BarChart -->
-              <!-- mock loading cost time, when view in viewport auto net request -->
-              <div id="barChart" ref="barChartRef">
-                <v-bar-chart
-                  :data="{ x:xBar, y:yBar }"
-                  v-if="barError === false && barLoading === false"
-                />
-
-                <div v-else class="nodata">
-                  <div v-if="barLoading === true">
-                    <img src="../assets/loading.jpg" alt="" class="loading"/>
-                    <div class="loadingText">加载中</div>
-                  </div>
-                  <div v-if="barLoading === false && barError === true">请求失败</div>
-                </div>
-              </div>
-
-              <!-- CircleChart -->
-              <!-- mock loading cost time, when view in viewport auto net request -->
-              <div id="circleChart" ref="circleChartRef">
-                <v-circle-chart
-                  :data="{ names:xNamesCircle, values:yValsCircle }"
-                  v-if="circleError === false && circleLoading === false"
-                />
-
-                <div v-else class="nodata">
-                  <div v-if="circleLoading === true">
-                    <img src="../assets/loading.jpg" alt="" class="loading"/>
-                    <div class="loadingText">加载中</div>
-                  </div>
-                  <div v-if="circleLoading === false && circleError === true">请求失败</div>
-                </div>
-              </div>
-
-              <!-- LineChart -->
-              <!-- mock loading cost time, when view in viewport auto net request -->
-              <div id="lineChart" ref="lineChartRef">
-                <v-line-chart
-                  :data="{ x:xLine, y:yLine }"
-                  v-if="lineError === false && lineLoading === false"
-                />
-
-                <div v-else class="nodata">
-                  <div v-if="lineLoading === true">
-                    <img src="../assets/loading.jpg" alt="" class="loading"/>
-                    <div class="loadingText">加载中</div>
-                  </div>
-                  <div v-if="lineLoading === false && lineError === true">
-                    请求失败
-                  </div>
-                </div>
-              </div>
-
-              <!-- GanttChart -->
-              <!-- mock loading cost time, when view in viewport auto net request -->
-              <!--
-              <div id="ganttChart" ref="ganttChartRef">
-                <div class="title center-flex">专利研发周期</div>
-
-                <v-gantt-chart
-                  :data="ganttDataSet"
-                  v-if="lineError === false && lineLoading === false"
-                />
-
-                <div v-else class="nodata">
-                  <div v-if="lineLoading === true">
-                    <img src="../assets/loading.jpg" alt="" class="loading"/>
-                    <div class="loadingText">加载中</div>
-                  </div>
-                  <div v-if="lineLoading === false && lineError === true">
-                    请求失败
-                  </div>
-                </div>
-              </div>
-              -->
-
-              <!-- ****** RelationshipChart ***** -->
-              <!-- <v-relationship-chart/> -->
-              <!-- !!!! table area !!!! -->
-            </v-card>
-
-          </v-sheet>
-        </v-col>
-
-      </v-row>
     </v-container>
   </v-main>
 </template>
-
 <script>
+import vPatentTrend1 from "./reportModule/PatentTrend1.vue"
+import vPatentTrend2 from "./reportModule/PatentTrend2.vue"
+import vPatentType from "./reportModule/PatentType.vue"
+// import vPatentArea from "./reportModule/PatentArea.vue"
+import vPatentApplicant from "./reportModule/PatentApplicant.vue"
 
-// custom components
-import vBarChart from "./echarts/BarChart.vue";
-import vCircleChart from "./echarts/CircleChart.vue";
-import vLineChart from "./echarts/LineChart.vue";
 
-// import vGanttChart from "./gantt/GanttChart.vue"
-// import vRelationshipChart from "./echarts/RelationshipChart.vue"
-
-// export default
 export default {
   components: {
-    vBarChart,
-    vCircleChart,
-    vLineChart,
-    // vGanttChart,
-    // vRelationshipChart,
+    vPatentTrend1,
+    vPatentTrend2,
+    vPatentType,
+    // vPatentArea,
+    vPatentApplicant,
   }
 }
-</script>
+</script> 
 
-<style scoped>
-@import "../styles/loading.css";
-@import "../styles/utils.css";
-</style>
+<script setup>
+  const leftTabs = [
+    "技术背景和目标",
+    "技术现状分析",
+    "具体研究内容",
+    "技术发展路线图",
+    "主要玩家分析",
+    "当前技术方案梳理",
+    "重点专利解读",
+    "可能的研发方向",
+  ];
+</script>

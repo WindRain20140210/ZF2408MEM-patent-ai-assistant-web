@@ -1,77 +1,95 @@
-import { fetchEventSource, EventStreamContentType } from '@microsoft/fetch-event-source';
-import { ref } from 'vue';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
 
-const sseFetch =  async (fetchData2) => {
-
-    class RetriableError extends Error { }
-    class FatalError extends Error { }
+const sseFetch = (fetchData, callback) => {
     const url = 'http://110.42.103.198:23837/v1/chat-messages';
-    // const url = 'https://api.dify.ai/v1/chat-messages';
-    // const url = '';
+    const apiKey = 'app-K2JCwC36gS4UYILFfw60w256';
 
-    const apiKey = ref('app-Agp9QZQWtA8GsB0GdbrPekT3')
-    // const apiKey = ref('app-TVD5Ms2KWOVnmqZVeI8QBmj2')
+const ctrl = new AbortController();
 
-    // const apiKey = 'app-v08ygzkVa9q7JSA4uCqToITH'; // 李欣欣
+let content = ''; // 文案内容
+let temp = ''; // 存储json数据过桥
+let jsonData = null; // 图表json
 
-    const headers = {
-        'Authorization': `Bearer ${apiKey.value}`,
-        'Content-Type': 'application/json'
+fetchEventSource(url, {
+  method: 'POST',
+  headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+  },
+  body: JSON.stringify(fetchData),
+  signal: ctrl.signal,
+  openWhenHidden: true,
+  async onopen(response) {
+    console.log('onopen',response);
+  },
+  onmessage(msg) {
+    try {
+      const data = JSON.parse(msg.data);
+      console.log(data, 'msg =========')
+      
+
+      if (data.event === "message") {
+          
+          if(data.answer.indexOf('@') > -1  && temp.indexOf('@@@DataType') < 0 ) {
+            
+            let str = data.answer;
+            let splitIndex = str.indexOf("@"); 
+            let firstPart = str.slice(0, splitIndex);
+            let secondPart = str.slice(splitIndex);
+
+            temp += secondPart;
+            content += firstPart;
+          } 
+
+          if(temp.indexOf('@') > -1) {
+            temp += data.answer;
+          } else {
+            content += data.answer;
+          }
+
+          if(temp.indexOf('@@@DataType') > -1 && temp.indexOf('@@@End') > -1) {
+            console.log(temp, 'temp -------')
+            let jsonString = temp.match(/{[\s\S]*}/)[0]; // 使用正则表达式提取 JSON 部分
+            jsonData = JSON.parse(jsonString); // 将 JSON 字符串转换为对象
+          }
+          callback && callback(content, jsonData);
+      }
+      if(data.event === "message_end") {
+        ctrl.abort();
+      }
+    } catch (error) {
+      console.log(error);
     }
 
-    const fetchData = {
-        inputs: {
-            "conditions":
-            "{\"time\":\"\"," + "\"industry\":\"\",\"keyWord\":\"\",\"region\":\"\",\"territory\":\"\",\"dataType\":\"patentCount\"}"
+  },
+  onclose() {
+    console.log('onclose');
+  },
+  onerror(err) {
+    console.log('onerror', err);
+    // ctrl.abort();
+    throw err;
+  }
+});
 
-    }, // 参数变量
-        query: '专利报告分析', // 用户对话框中输入的内容
-        response_mode: 'streaming', // 'blocking',// 固定传
-        conversation_id: '', // currentConversationId.value, // 会话id, 第一次请求后获取
-        user: 'test' // userName.value, // 用户名，区分请求用户
-    }
+    // fetchEventSource(url, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Authorization': `Bearer ${apiKey}`,
+    //     },
+    //     openWhenHidden: true,
+    //     body: JSON.stringify(fetchData),
+    //     onmessage(msg) {
 
+    //         const data = JSON.parse(msg.data);
+    //         console.log(data, 'msg =========')
 
-    await fetchEventSource(url, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(fetchData),
-        openWhenHidden: true,
-        async onopen(response) {
-            console.log(response, '=========== onopen ==========');
-            if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
-                 // everything's good
-            } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
-                // client-side errors are usually non-retriable:
-                throw new FatalError();
-            } else {
-                throw new RetriableError();
-            }
-        },
-        onmessage(msg) {
-            console.log(msg, '=========== onmessage ==========');
-            // if the server emits an error message, throw an exception
-            // so it gets handled by the onerror callback below:
-            if (msg.event === 'FatalError') {
-                throw new FatalError(msg.data);
-            }
-        },
-        onclose() {
-            console.log('=========== onclose ==========');
-
-            // if the server closes the connection unexpectedly, retry:
-            throw new RetriableError();
-        },
-        onerror(err) {
-            if (err instanceof FatalError) {
-                throw err; // rethrow to stop the operation
-            } else {
-                // do nothing to automatically retry. You can also
-                // return a specific retry interval here.
-            }
-        }
-    });
-
+    //         if (data.event === 'message') {
+    //             callback && callback(data);
+    //         }
+    //     }
+    // });
 }
-
+ 
 export default sseFetch;
