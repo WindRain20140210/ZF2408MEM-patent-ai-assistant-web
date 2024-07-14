@@ -1,7 +1,6 @@
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
-
       <v-row>
         <!-- right side sheet -->
         <v-col cols="3">
@@ -106,11 +105,17 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <!-- AI Assistant -->
+    <Assistant />
   </v-main>
 </template>
 
 <script>
+import Assistant from "@/components/Assistant.vue";
+
 export default {
+  components: {Assistant},
   data: () => ({
     dialog: false,
     dialogDelete: false,

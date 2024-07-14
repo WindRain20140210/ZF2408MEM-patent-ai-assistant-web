@@ -77,14 +77,20 @@
           </v-sheet>
 
         </v-col>
+
       </v-row>
+
+      <!-- AI Assistant -->
+      <Assistant />
     </v-container>
   </v-main>
 </template>
 
 <script>
+import Assistant from "@/components/Assistant.vue";
 
 export default {
+  components: {Assistant},
   data: () => ({
     loading: false,
     // left - list mock tab
@@ -94,15 +100,9 @@ export default {
     ],
   }),
   watch: {},
-  methods: {}
+  methods: {
+
+  }
 }
 </script>
 
-<style scoped>
-.centered-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%; /* 可根据需要调整高度 */
-}
-</style>
