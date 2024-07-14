@@ -7,11 +7,13 @@ import AppFooter from "@/components/AppFooter.vue";
 <!-- layout settings -->
 <template>
   <v-app>
+
     <AppHeader/>
     <v-main>
       <router-view/>
     </v-main>
     <AppFooter/>
+
   </v-app>
 </template>
 
