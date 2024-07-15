@@ -198,8 +198,8 @@ onMounted(() => {
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
-
       <v-row>
+
         <!-- right side sheet -->
         <v-col cols="3">
           <v-sheet rounded="lg">
@@ -216,94 +216,313 @@ onMounted(() => {
 
         <!-- left side blank -->
         <v-col>
+          <!-- !!!! --- table area --- !!!! -->
+
+          <!-- 技术背景和目标 -->
           <v-sheet
-            min-height="80vh"
-            rounded="lg">
+            min-height="40vh"
+            rounded="lg"
+          >
 
-            <!-- main content -->
-            <v-card flat>
+            <v-container>
+              <v-card-title>技术背景和目标</v-card-title>
+              <v-row>
+                <!-- 展示文字和图片均分 柱状图信息要展示完全 -->
+                <v-col cols="4">
+                  <h6>
+                    We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                    makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                    premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                    trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                    introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    <br/> <br/>
+                    We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                    makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                    premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                    trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                    introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  </h6>
+                </v-col>
 
-              <!-- !!!! table area !!!! -->
+                <v-col cols="8">
+                  <!-- BarChart -->
+                  <!-- mock loading cost time, when view in viewport auto net request -->
+                  <v-card flat>
 
-              <!-- BarChart -->
-              <!-- mock loading cost time, when view in viewport auto net request -->
-              <div id="barChart" ref="barChartRef">
-                <v-bar-chart
-                  :data="{ x:xBar, y:yBar }"
-                  v-if="barError === false && barLoading === false"
-                />
+                    <div id="barChart" ref="barChartRef">
+                      <v-bar-chart
+                        :data="{ x:xBar, y:yBar }"
+                        v-if="barError === false && barLoading === false"
+                      />
 
-                <div v-else class="nodata">
-                  <div v-if="barLoading === true">
-                    <img src="../assets/loading.jpg" alt="" class="loading"/>
-                    <div class="loadingText">加载中</div>
-                  </div>
-                  <div v-if="barLoading === false && barError === true">请求失败</div>
-                </div>
-              </div>
+                      <div v-else class="nodata">
+                        <div v-if="barLoading === true">
+                          <img src="../assets/loading.jpg" alt="" class="loading"/>
+                          <div class="loadingText">加载中</div>
+                        </div>
+                        <div v-if="barLoading === false && barError === true">请求失败</div>
+                      </div>
+                    </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-sheet>
 
-              <!-- CircleChart -->
-              <!-- mock loading cost time, when view in viewport auto net request -->
-              <div id="circleChart" ref="circleChartRef">
-                <v-circle-chart
-                  :data="{ names:xNamesCircle, values:yValsCircle }"
-                  v-if="circleError === false && circleLoading === false"
-                />
+          <!-- 技术发展及衍变趋势分析 -->
+          <v-sheet
+            min-height="40vh"
+            rounded="lg"
+            style="margin-top: 45px"
+          >
 
-                <div v-else class="nodata">
-                  <div v-if="circleLoading === true">
-                    <img src="../assets/loading.jpg" alt="" class="loading"/>
-                    <div class="loadingText">加载中</div>
-                  </div>
-                  <div v-if="circleLoading === false && circleError === true">请求失败</div>
-                </div>
-              </div>
+            <v-container>
+              <v-card-title>技术发展及衍变趋势分析</v-card-title>
+              <v-row>
+                <!-- 展示文字和图片均分 柱状图信息要展示完全 -->
+                <v-col cols="4">
+                  <h6>
+                    We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                    makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                    premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                    trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                    introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    <br/> <br/>
+                    We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                    makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                    premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                    trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                    introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  </h6>
+                </v-col>
 
-              <!-- LineChart -->
-              <!-- mock loading cost time, when view in viewport auto net request -->
-              <div id="lineChart" ref="lineChartRef">
-                <v-line-chart
-                  :data="{ x:xLine, y:yLine }"
-                  v-if="lineError === false && lineLoading === false"
-                />
+                <v-col cols="8">
+                  <!-- CircleChart -->
+                  <!-- mock loading cost time, when view in viewport auto net request -->
+                  <v-card flat>
+                    <div id="circleChart" ref="circleChartRef">
+                      <v-circle-chart
+                        :data="{ names:xNamesCircle, values:yValsCircle }"
+                        v-if="circleError === false && circleLoading === false"
+                      />
 
-                <div v-else class="nodata">
-                  <div v-if="lineLoading === true">
-                    <img src="../assets/loading.jpg" alt="" class="loading"/>
-                    <div class="loadingText">加载中</div>
-                  </div>
-                  <div v-if="lineLoading === false && lineError === true">
-                    请求失败
-                  </div>
-                </div>
-              </div>
+                      <div v-else class="nodata">
+                        <div v-if="circleLoading === true">
+                          <img src="../assets/loading.jpg" alt="" class="loading"/>
+                          <div class="loadingText">加载中</div>
+                        </div>
+                        <div v-if="circleLoading === false && circleError === true">请求失败</div>
+                      </div>
+                    </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-sheet>
 
-              <!-- GanttChart -->
-              <!-- mock loading cost time, when view in viewport auto net request -->
-              <div id="ganttChart" ref="ganttChartRef">
-                <div class="title center-flex">专利研发周期</div>
+          <!-- 申请人排名分析 -->
+          <v-sheet
+            min-height="40vh"
+            rounded="lg"
+            style="margin-top: 45px"
+          >
 
-                <v-gantt-chart
-                  :data="ganttDataSet"
-                  v-if="lineError === false && lineLoading === false"
-                />
+            <v-container>
+              <v-card-title>申请人排名分析</v-card-title>
+              <v-row>
+                <!-- 展示文字和图片均分 柱状图信息要展示完全 -->
+                <v-col cols="4">
+                  <h6>
+                    We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                    makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                    premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                    trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                    introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    <br/> <br/>
+                    We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                    makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                    premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                    trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                    introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  </h6>
+                </v-col>
 
-                <div v-else class="nodata">
-                  <div v-if="lineLoading === true">
-                    <img src="../assets/loading.jpg" alt="" class="loading"/>
-                    <div class="loadingText">加载中</div>
-                  </div>
-                  <div v-if="lineLoading === false && lineError === true">
-                    请求失败
-                  </div>
-                </div>
-              </div>
+                <v-col cols="8">
+                  <!-- LineChart -->
+                  <!-- mock loading cost time, when view in viewport auto net request -->
+                  <v-card flat>
+                    <div id="lineChart" ref="lineChartRef">
+                      <v-line-chart
+                        :data="{ x:xLine, y:yLine }"
+                        v-if="lineError === false && lineLoading === false"
+                      />
 
-              <!-- ****** RelationshipChart ***** -->
-              <!-- <v-relationship-chart/> -->
-              <!-- !!!! table area !!!! -->
-            </v-card>
+                      <div v-else class="nodata">
+                        <div v-if="lineLoading === true">
+                          <img src="../assets/loading.jpg" alt="" class="loading"/>
+                          <div class="loadingText">加载中</div>
+                        </div>
+                        <div v-if="lineLoading === false && lineError === true">
+                          请求失败
+                        </div>
+                      </div>
+                    </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-sheet>
 
+          <!-- 地域分析 -->
+          <v-sheet
+            min-height="40vh"
+            rounded="lg"
+            style="margin-top: 45px"
+          >
+
+            <v-container>
+              <v-card-title>地域分析</v-card-title>
+              <v-row>
+                <!-- 展示文字和图片均分 柱状图信息要展示完全 -->
+                <v-col cols="4">
+                  <h6>
+                    We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                    makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                    premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                    trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                    introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    <br/> <br/>
+                    We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                    makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                    premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                    trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                    introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  </h6>
+                </v-col>
+
+                <v-col cols="8">
+                  <!-- GanttChart -->
+                  <!-- mock loading cost time, when view in viewport auto net request -->
+                  <v-card flat>
+                    <div id="ganttChart" ref="ganttChartRef">
+                      <v-gantt-chart
+                        :data="ganttDataSet"
+                        v-if="lineError === false && lineLoading === false"/>
+
+                      <div v-else class="nodata">
+                        <div v-if="lineLoading === true">
+                          <img src="../assets/loading.jpg" alt="" class="loading"/>
+                          <div class="loadingText">加载中</div>
+                        </div>
+                        <div v-if="lineLoading === false && lineError === true">
+                          请求失败
+                        </div>
+                      </div>
+
+                    </div>
+                  </v-card>
+                </v-col>
+
+              </v-row>
+            </v-container>
+          </v-sheet>
+
+          <!-- 专利类型 -->
+          <v-sheet
+            min-height="40vh"
+            rounded="lg"
+            style="margin-top: 45px"
+          >
+
+            <v-container>
+              <v-card-title>专利类型</v-card-title>
+              <v-col cols="4">
+                <h6>
+                  We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                  makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                  premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                  trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                  introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  <br/> <br/>
+                  We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                  makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                  premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                  trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                  introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                </h6>
+              </v-col>
+              <v-col cols="8"></v-col>
+            </v-container>
+          </v-sheet>
+
+          <!-- 技术构成分析 -->
+          <v-sheet
+            min-height="40vh"
+            rounded="lg"
+            style="margin-top: 45px">
+
+            <v-container>
+              <v-card-title>技术构成分析</v-card-title>
+              <v-col cols="4">
+                <h6>
+                  We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                  makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                  premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                  trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                  introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  <br/> <br/>
+                  We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                  makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                  premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                  trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                  introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                </h6>
+              </v-col>
+              <v-col cols="8"></v-col>
+            </v-container>
+          </v-sheet>
+
+          <!-- 专利集中度分析 -->
+          <v-sheet
+            min-height="40vh"
+            rounded="lg"
+            style="margin-top: 45px">
+
+            <v-container>
+              <v-card-title>专利集中度分析</v-card-title>
+              <v-col cols="4">
+                <h6>
+                  We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                  makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                  premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                  trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                  introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  <br/> <br/>
+                  We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
+                  makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
+                  premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
+                  trained to follow an instruction in a prompt and provide a detailed response. We are excited to
+                  introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                </h6>
+              </v-col>
+              <v-col cols="8"></v-col>
+            </v-container>
+
+            <!-- !!!! table area !!!! -->
           </v-sheet>
         </v-col>
 
