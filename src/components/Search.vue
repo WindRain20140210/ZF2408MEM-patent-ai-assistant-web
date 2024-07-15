@@ -93,7 +93,7 @@ export default {
   components: {Assistant},
   data: () => ({
     loading: false,
-    // left - list mock tab
+    // left - list tab
     left_tabs: [
       "生成报告",
       "我的报告"

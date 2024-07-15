@@ -4,13 +4,13 @@ import {onMounted, ref} from "vue";
 import {UserService} from "/src/http/api.js";
 
 const leftTabs = [
-  "技术背景和目标",
-  "技术发展及衍变趋势分析",
-  "申请人排名分析",
-  "地域分析",
-  "专利类型",
-  "技术构成分析",
-  "专利集中度分析"
+  {title: '技术背景和目标', domId: 'tab1'},
+  {title: '技术发展及衍变趋势分析', domId: 'tab2'},
+  {title: '申请人排名分析', domId: 'tab3'},
+  {title: '地域分析', domId: 'tab4'},
+  {title: '专利类型', domId: 'tab5'},
+  {title: '技术构成分析', domId: 'tab6'},
+  {title: '专利集中度分析', domId: 'tab7'}
 ]
 
 // BarChart
@@ -43,6 +43,9 @@ const ganttLoading = ref(true);
 const ganttError = ref(false);
 
 const ganttDataSet = ref([]);
+
+// ....
+const activeTabIndex = ref(0);
 
 // ....
 /**
@@ -141,8 +144,30 @@ const initGanttChart = async () => {
   }
 };
 
+const scrollTabElement = (tab) => {
+  const element = document.getElementById(tab.domId);
+  element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+};
+
 // ... lifecycle hook ...
 onMounted(() => {
+
+  // page scroll
+  window.addEventListener('scroll', () => {
+
+    // 此处需要进行调整 ....
+    const scrollTop = Math.round(document.documentElement.scrollTop, document.body.scrollTop);
+    leftTabs.forEach((tab, index) => {
+      const element = document.getElementById(tab.domId);
+      const offsetTop = element.offsetTop;
+
+      // 290 这个值是怎么来的 ？ 如果控件的高度发生变化需要冲重新设定该值
+      if (scrollTop + 290 >= offsetTop) {
+        activeTabIndex.value = index;
+      }
+    })
+  });
+
   // page observer
   const observer = new IntersectionObserver(
     (entries) => {
@@ -203,14 +228,18 @@ onMounted(() => {
         <!-- right side sheet -->
         <v-col cols="3">
           <v-sheet rounded="lg">
-            <v-list rounded="lg">
-
-              <v-list-item
-                v-for="n in leftTabs"
-                :key="n"
-                :title="`${n}`"
-                link/>
-            </v-list>
+            <div class="leftTabsFixed">
+              <v-list rounded="lg">
+                <v-list-item
+                  v-for="(element, index) in leftTabs"
+                  :class="{ activeTab: activeTabIndex === index }"
+                  :key="element"
+                  :title="`${element.title}`"
+                  link
+                  @click="scrollTabElement(element)"
+                />
+              </v-list>
+            </div>
           </v-sheet>
         </v-col>
 
@@ -221,10 +250,9 @@ onMounted(() => {
           <!-- 技术背景和目标 -->
           <v-sheet
             min-height="40vh"
-            rounded="lg"
-          >
+            rounded="lg">
 
-            <v-container>
+            <v-container id="tab1">
               <v-card-title>技术背景和目标</v-card-title>
               <v-row>
                 <!-- 展示文字和图片均分 柱状图信息要展示完全 -->
@@ -235,14 +263,16 @@ onMounted(() => {
                     premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                     trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                     introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                    window).
                     <br/> <br/>
                     We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
                     makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
                     premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                     trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                     introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                    window).
                   </h6>
                 </v-col>
 
@@ -275,10 +305,9 @@ onMounted(() => {
           <v-sheet
             min-height="40vh"
             rounded="lg"
-            style="margin-top: 45px"
-          >
+            style="margin-top: 45px">
 
-            <v-container>
+            <v-container id="tab2">
               <v-card-title>技术发展及衍变趋势分析</v-card-title>
               <v-row>
                 <!-- 展示文字和图片均分 柱状图信息要展示完全 -->
@@ -289,14 +318,16 @@ onMounted(() => {
                     premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                     trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                     introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                    window).
                     <br/> <br/>
                     We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
                     makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
                     premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                     trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                     introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                    window).
                   </h6>
                 </v-col>
 
@@ -328,10 +359,9 @@ onMounted(() => {
           <v-sheet
             min-height="40vh"
             rounded="lg"
-            style="margin-top: 45px"
-          >
+            style="margin-top: 45px">
 
-            <v-container>
+            <v-container id="tab3">
               <v-card-title>申请人排名分析</v-card-title>
               <v-row>
                 <!-- 展示文字和图片均分 柱状图信息要展示完全 -->
@@ -342,14 +372,16 @@ onMounted(() => {
                     premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                     trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                     introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                    window).
                     <br/> <br/>
                     We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
                     makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
                     premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                     trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                     introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                    window).
                   </h6>
                 </v-col>
 
@@ -383,10 +415,9 @@ onMounted(() => {
           <v-sheet
             min-height="40vh"
             rounded="lg"
-            style="margin-top: 45px"
-          >
+            style="margin-top: 45px">
 
-            <v-container>
+            <v-container id="tab4">
               <v-card-title>地域分析</v-card-title>
               <v-row>
                 <!-- 展示文字和图片均分 柱状图信息要展示完全 -->
@@ -397,14 +428,16 @@ onMounted(() => {
                     premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                     trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                     introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                    window).
                     <br/> <br/>
                     We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
                     makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
                     premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                     trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                     introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                    During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                    window).
                   </h6>
                 </v-col>
 
@@ -439,10 +472,9 @@ onMounted(() => {
           <v-sheet
             min-height="40vh"
             rounded="lg"
-            style="margin-top: 45px"
-          >
+            style="margin-top: 45px">
 
-            <v-container>
+            <v-container id="tab5">
               <v-card-title>专利类型</v-card-title>
               <v-col cols="4">
                 <h6>
@@ -451,14 +483,16 @@ onMounted(() => {
                   premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                   trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                   introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                  window).
                   <br/> <br/>
                   We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
                   makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
                   premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                   trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                   introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                  window).
                 </h6>
               </v-col>
               <v-col cols="8"></v-col>
@@ -471,7 +505,7 @@ onMounted(() => {
             rounded="lg"
             style="margin-top: 45px">
 
-            <v-container>
+            <v-container id="tab6">
               <v-card-title>技术构成分析</v-card-title>
               <v-col cols="4">
                 <h6>
@@ -480,14 +514,16 @@ onMounted(() => {
                   premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                   trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                   introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                  window).
                   <br/> <br/>
                   We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
                   makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
                   premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                   trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                   introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                  window).
                 </h6>
               </v-col>
               <v-col cols="8"></v-col>
@@ -500,7 +536,7 @@ onMounted(() => {
             rounded="lg"
             style="margin-top: 45px">
 
-            <v-container>
+            <v-container id="tab7">
               <v-card-title>专利集中度分析</v-card-title>
               <v-col cols="4">
                 <h6>
@@ -509,14 +545,16 @@ onMounted(() => {
                   premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                   trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                   introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                  window).
                   <br/> <br/>
                   We’ve trained a model called ChatGPT which interacts in a conversational way. The dialogue format
                   makes it possible for ChatGPT to answer followup questions, admit its mistakes, challenge incorrect
                   premises, and reject inappropriate requests. ChatGPT is a sibling model to InstructGPT, which is
                   trained to follow an instruction in a prompt and provide a detailed response. We are excited to
                   introduce ChatGPT to get users’ feedback and learn about its strengths and weaknesses.
-                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new window).
+                  During the research preview, usage of ChatGPT is free. Try it now at chatgpt.com(opens in a new
+                  window).
                 </h6>
               </v-col>
               <v-col cols="8"></v-col>
@@ -524,6 +562,8 @@ onMounted(() => {
 
             <!-- !!!! table area !!!! -->
           </v-sheet>
+
+          <!-- !!!! --- table area --- !!!! -->
         </v-col>
 
       </v-row>
@@ -556,4 +596,13 @@ export default {
 <style scoped>
 @import "../styles/loading.css";
 @import "../styles/utils.css";
+
+.activeTab {
+  background: #477991;
+  color: #fff;
+}
+
+.leftTabsFixed {
+  position: fixed;
+}
 </style>
