@@ -96,8 +96,8 @@ let number = ref(0)
 async function getPatentNumber() {
   const resp = await UserService.getnumbers();
   if (resp.status === 200) {
-    console.log("server query patent number resp: " + resp.data['data'])
-    number.value = resp.data['data']
+    console.log("server query patent number resp: " + resp.data['patentNum'])
+    number.value = resp.data['patentNum']
   } else {
     // error
   }

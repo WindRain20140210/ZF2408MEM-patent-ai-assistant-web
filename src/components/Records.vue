@@ -115,23 +115,22 @@ const fetchUserRecords = async (params) => {
   }
 }
 
-const deleteResp = ref([]);
-const deleteRecord = async (params) => {
+// ...
+async function requestDeleteRecord(params, onExpected, onUnExpected) {
   const res = await UserService.deleterecord(params)
   if (res.status === 200) {
-    const data = res.data.data;
-    if (data.length > 0) {
-      // server response status ok ...
-      deleteResp.value.push(true)
-    }
+    const dbId = res.data['dbId'];
+    console.log("received server response= " + dbId)
+
+    if (dbId > 0) onExpected()
   } else {
     // server resp error ...
-    deleteResp.value.push(false)
+    onUnExpected()
   }
 }
 
 // download file
-// no.1 server resp data contain download url
+// no.1 server resp data contain download url - current
 // no.2 request server to get the download url
 
 // https protocol - use a tag to download file with token
@@ -231,15 +230,20 @@ export default {
     deleteItemConfirm() {
       // user confirm to delete select item.
       // need request to server pass which patent is deleted.
-      deleteRecord({dbId: this.editedItem.dbId})
+      requestDeleteRecord(
+        {
+          dbId: this.editedItem.dbId
+        },
+        () => {
+          // server delete item successful
+          this.items.splice(this.editedIndex, 1)
+          this.closeDelete()
 
-      if (deleteResp.value) {
-        this.items.splice(this.editedIndex, 1)
-      } else {
-        // error delete failed, do not update ui list
-      }
-
-      this.closeDelete()
+        },
+        () => {
+          // error delete failed, do not update ui list
+          this.closeDelete()
+        })
     },
 
     closeDelete() {
