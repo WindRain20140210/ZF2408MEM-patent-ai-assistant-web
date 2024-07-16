@@ -26,18 +26,17 @@ axios.interceptors.response.use(response => {
 
 // 封装 GET POST 请求并导出
 export function request(url = '', params = {}, type = 'POST') {
-// 设置 url params type 的默认值
+  // 设置 url params type 的默认值
   return new Promise((resolve, reject) => {
+
     let promise
     if (type.toUpperCase() === 'GET') {
-      promise = axios({
-        url, params
-      })
+      promise = axios({url, params})
+
     } else if (type.toUpperCase() === 'POST') {
-      promise = axios({
-        method: 'POST', url, data: params
-      })
+      promise = axios({method: 'POST', url, data: params})
     }
+
     //处理返回
     promise.then(res => {
       resolve(res)

@@ -13,7 +13,9 @@ const leftTabs = [
   {title: '专利集中度分析', domId: 'tab7'}
 ]
 
+// every item margin top
 const marginTop = 20;
+
 // BarChart
 const barChartRef = ref(null)
 const barLoading = ref(true);
@@ -29,7 +31,7 @@ const lineError = ref(false);
 
 const xLine = ref([]);
 const yLine = ref([]);
-
+const activeTabIndex = ref(0);
 
 // CircleChart
 const circleChartRef = ref(null);
@@ -46,10 +48,7 @@ const ganttError = ref(false);
 
 const ganttDataSet = ref([]);
 
-//
-const activeTabIndex = ref(0);
-
-// ....
+// network request
 /**
  * BarChart data net request
  * @returns {Promise<void>}
@@ -146,12 +145,12 @@ const initGanttChart = async () => {
   }
 };
 
-const tempTabIndex = ref(0);
-const scrollTabElement = (tab, index) => {
+
+// .....
+
+const scrollTabElement = (tab) => {
   const element = document.getElementById(tab.domId);
   const offsetTop = element.offsetTop;
-  tempTabIndex.value = index;
-  if (index === leftTabs.length - 1) activeTabIndex.value = index;
   window.scrollTo({top: offsetTop - marginTop, left: 0, behavior: 'smooth'});
 };
 
@@ -168,10 +167,8 @@ onMounted(() => {
       const offsetTop = element.offsetTop;
       if (scrollTop >= (offsetTop - (marginTop + 4)) && scrollTop <= clientHeight + offsetTop) {
         activeTabIndex.value = index;
-      } else {
-        if (tempTabIndex.value === leftTabs.length - 1) {
-          activeTabIndex.value = tempTabIndex.value;
-        }
+      } else if (scrollTop >= window.document.body.scrollHeight - window.innerHeight - marginTop) { // 判断是否滑到底部
+        activeTabIndex.value = leftTabs.length - 1;
       }
     })
   });
@@ -238,8 +235,14 @@ onMounted(() => {
           <v-sheet rounded="lg">
             <div class="leftTabsFixed">
               <v-list rounded="lg">
-                <v-list-item :class="{ activeTab: activeTabIndex === i }" v-for="(n, i) in leftTabs" :key="n"
-                             :title="`${n.title}`" link @click="scrollTabElement(n, i)"/>
+                <v-list-item
+                  v-for="(item, index) in leftTabs"
+                  :class="{ activeTab: activeTabIndex === index }"
+                  :key="item"
+                  :title="`${ item.title }`"
+                  link
+                  @click="scrollTabElement(item)"
+                />
               </v-list>
             </div>
           </v-sheet>

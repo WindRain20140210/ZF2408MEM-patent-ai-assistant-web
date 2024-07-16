@@ -2,27 +2,7 @@
   <v-main class="bg-grey-lighten-3">
     <v-container>
       <v-row>
-        <!-- right side sheet -->
-        <v-col cols="3">
 
-          <!-- sheet blow the button -->
-          <div>
-            <v-sheet rounded="lg">
-              <v-list rounded="lg">
-                <v-list-item @click="$router.push('/search')">
-                  生成报告
-                </v-list-item>
-
-                <v-list-item
-                  style="background-color: #F6F6F6; width:100%; height: 100%">
-                  我的报告
-                </v-list-item>
-              </v-list>
-            </v-sheet>
-          </div>
-        </v-col>
-
-        <!-- left side blank -->
         <v-col>
           <v-sheet
             min-height="50vh"
@@ -107,104 +87,138 @@
     </v-container>
 
     <!-- AI Assistant -->
-    <Assistant />
+    <Assistant/>
   </v-main>
 </template>
 
 <script>
 import Assistant from "@/components/Assistant.vue";
+import {UserService} from "@/http/api";
+import {ref} from "vue";
+
+// {
+// id: 1,
+//  title: '一种关于锂电池提升能量密度的研究报告',
+//  createTime: '2024-07-05 23:30:00',
+//  dbId: 1,
+// }
+
+// request network
+const recordList = ref([]);
+const fetchUserRecords = async (params) => {
+  const res = await UserService.userrecords(params)
+  if (res.status === 200) {
+    const data = res.data.data;
+    recordList.value.push(...data)
+  } else {
+    // server resp error ...
+  }
+}
+
+const deleteResp = ref([]);
+const deleteRecord = async (params) => {
+  const res = await UserService.deleterecord(params)
+  if (res.status === 200) {
+    const data = res.data.data;
+    if (data.length > 0) {
+      // server response status ok ...
+      deleteResp.value.push(true)
+    }
+  } else {
+    // server resp error ...
+    deleteResp.value.push(false)
+  }
+}
+
+// download file
+// no.1 server resp data contain download url
+// no.2 request server to get the download url
+
+// https protocol - use a tag to download file with token
+// 创建一个点击事件触发下载
+function downloadFile(fileUrl) {
+  // 文件下载地址
+  // const fileUrl = 'https://example.com/path/to/file';
+
+  // 设置请求头
+  const headers = new Headers();
+  headers.append('Authorization', 'Bearer YourAccessToken'); // 设置授权头，替换YourAccessToken为实际的访问令牌
+
+  // 发起 Fetch 请求
+  fetch(fileUrl, {
+    method: 'GET',
+    headers: headers,
+  })
+    .then(response => response.blob())
+    .then(blob => {
+      // 创建一个虚拟的链接元素，模拟点击下载
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'filename.ext'; // 设置下载文件名，替换filename.ext为实际的文件名和扩展名
+      document.body.appendChild(link);
+
+      // 模拟点击
+      link.click();
+
+      // 移除虚拟链接元素
+      document.body.removeChild(link);
+    })
+    .catch(error => console.error('下载失败：', error));
+}
 
 export default {
-  components: {Assistant},
+  components: {
+    Assistant
+  },
   data: () => ({
     dialog: false,
     dialogDelete: false,
-
     search: '',
+    items: [],
     left_tabs: [
       "生成报告",
       "我的报告"
     ],
-
     headers: [
       {title: '序号', key: 'id', align: 'center',},
       {title: '报告名称', key: 'title', align: 'center',},
-      {title: '创建时间', key: 'createTime', align: 'center',},
+      {title: '最后更新', key: 'createTime', align: 'center',},
       {title: '操作', key: 'actions', sortable: false, align: "center"},
     ],
-    items: [],
-
     editedItem: {
       id: 0,
       title: '',
       createTime: '',
       dbId: 0,
+      fileUrl: '',
     },
   }),
 
   created() {
     this.initialize()
-  }, // use mock data
+    fetchUserRecords()
+  },
+
   methods: {
+    // request to server get data
     initialize() {
-      this.items = [
-        {
-          id: 1,
-          title: '一种关于锂电池提升能量密度的研究报告',
-          createTime: '2024-07-05 23:30:00',
-          dbId: 1,
-        },
-        {
-          id: 2,
-          title: '一种关于提高能源使用效率实现碳中和的研究报告',
-          createTime: '2024-07-07 10:30:31',
-          dbId: 2,
-        },
-        {
-          id: 3,
-          title: '正极材料及其制备方法、二次电池与终端设备',
-          createTime: '2024-07-05 23:30:00',
-          dbId: 3,
-        },
-        {
-          id: 4,
-          title: '一种关于提高能源使用效率实现碳中和的研究报告',
-          createTime: '2021-02-17 10:30:31',
-          dbId: 4,
-        },
-        {
-          id: 5,
-          title: '一种关于锂电池提升能量密度的研究报告',
-          createTime: '2022-03-23 23:30:00',
-          dbId: 5,
-        },
-        {
-          id: 6,
-          title: '改性剂及其用途、正极材料的改性方法',
-          createTime: '2021-06-03 7:30:31',
-          dbId: 6,
-        },
-        {
-          id: 7,
-          title: '外形结构设计专利、电解液',
-          createTime: '2022-05-04 23:30:00',
-          dbId: 7,
-        },
-        {
-          id: 8,
-          title: '材料技术专利、二次电池与终端设备',
-          createTime: '2023-06-05 9:30:31',
-          dbId: 8,
-        }
-      ]
+      this.items = recordList.value
     },
 
-    // download patent
+    // download patent file
     downloadItem(item) {
-      // item.dbId
-      console.log("download item of DataBase ID:" + item.dbId)
+      console.log("download item: " + item.fileUrl)
+
+      // normal use a tag to download file
+      let a = document.createElement("a");
+      a.setAttribute("href", item.fileUrl);
+      a.setAttribute('target', '_blank');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     },
 
+    // delete user generate patent item in list
     deleteItem(item) {
       // item.dbId
       console.log("delete item of Database ID:", item.dbId)
@@ -215,7 +229,16 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.items.splice(this.editedIndex, 1)
+      // user confirm to delete select item.
+      // need request to server pass which patent is deleted.
+      deleteRecord({dbId: this.editedItem.dbId})
+
+      if (deleteResp.value) {
+        this.items.splice(this.editedIndex, 1)
+      } else {
+        // error delete failed, do not update ui list
+      }
+
       this.closeDelete()
     },
 
