@@ -1,8 +1,13 @@
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
-      <v-row>
 
+      <v-row style="height: 40px; justify-content: end; margin-top: 2px; margin-right: 5px;">
+        <v-btn @click="$router.push('/search')">创建专利报告</v-btn>
+      </v-row>
+
+      <!-- main - row -->
+      <v-row>
         <v-col>
           <v-sheet
             min-height="50vh"
@@ -29,6 +34,7 @@
               </v-card-title>
 
               <v-divider></v-divider>
+
               <!-- main data table - display records of my patents -->
               <v-data-table
                 v-model:search="search"
@@ -59,7 +65,7 @@
             <!-- conform delete dialog -->
             <v-dialog v-model="dialogDelete" max-width="500px">
               <v-card>
-                <v-card-title class="text-h5">确定要删除此项专利的生成记录吗?</v-card-title>
+                <v-card-title class="text-h5">确定删除此专利报告吗？</v-card-title>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn

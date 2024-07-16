@@ -21,12 +21,12 @@
               </v-card-title>
 
               <v-card-text>
-                专利报告分析，帮助专利转化和交易提供多维度参考依据
+                填写你的筛选条件，我们将根据专利、文献，通过专利只能助手为你快速生成个性化专利报告。
               </v-card-text>
 
               <v-card-text>
                 <div class="text-subtitle-2 font-weight-black mb-1">
-                  关键词 / 检索式
+                  关键词
                 </div>
 
                 <v-row>
@@ -43,7 +43,7 @@
                   </v-col>
                   <v-col cols="8">
                     <v-text-field
-                      label="请生成一份关于新能源的专利报告"
+                      label="请输入关键字"
                       variant="outlined"
                       single-line
                       v-model="userInput"
@@ -135,8 +135,8 @@ export default {
     ],
 
     // user selected type
-    items: ['1', '2', '3', '4', '5'],
-    selectedItem: '1',
+    items: ['筛选条件一', '筛选条件二', '筛选条件三', '筛选条件四', '筛选条件五'],
+    selectedItem: '筛选条件一',
 
     userInput: '',
     num: number // patent number
