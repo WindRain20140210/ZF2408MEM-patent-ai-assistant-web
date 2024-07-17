@@ -233,16 +233,15 @@ onMounted(() => {
       <v-container style="display: flex; z-index: 999; margin-top: -20px" class="leftTabsFixed">
         <v-row style="width: 100%; background: white;">
 
-          <v-col style="display: flex; align-items: center;" cols="7">
+          <v-col style="display: flex; align-items: center;" cols="8">
             <v-btn @click="$router.push('/search')">返回</v-btn>
             <div style="margin-left: 15px">一种关于锂电池脉冲电容器提升能量密度指标的研究</div>
           </v-col>
 
-          <v-col style="display: flex;  align-items: center;" cols="5">
+          <v-col style="display: flex;  align-items: center;" cols="4">
             上次更新: 2024-07-12
-            <v-btn style="margin-left: 15px">更新数据</v-btn>
-            <v-btn>下载报告</v-btn>
-            <v-btn @click="$router.push('/record')" style="margin-left: 5px">历史报告</v-btn>
+            <v-btn style="margin-left: 10px">下载报告</v-btn>
+            <v-btn @click="$router.push('/record')"  style="margin-left: 10px">历史报告</v-btn>
           </v-col>
         </v-row>
       </v-container>
