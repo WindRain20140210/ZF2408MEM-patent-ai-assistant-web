@@ -45,22 +45,6 @@ const links = [
 
       </v-row>
 
-      <v-row>
-        <v-col>
-          <v-container class="mx-auto d-flex align-center justify-center">
-            <!-- Top Tab -->
-            <v-btn
-              v-for="(link, index) in links"
-              :key="link"
-              :text="link"
-              variant="text"
-              color="white"
-              @click="$router.push($data.links[index])"
-            />
-          </v-container>
-
-        </v-col>
-      </v-row>
 
     </v-container>
   </v-app-bar>

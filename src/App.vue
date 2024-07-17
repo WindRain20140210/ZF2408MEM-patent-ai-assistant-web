@@ -1,20 +1,17 @@
-
 <script setup>
 
 import AppHeader from "@/components/AppHeader.vue";
+// import AppFooter from "@/components/AppFooter.vue";
 </script>
 
+<!-- layout settings -->
 <template>
   <v-app>
-
-    <!-- application header layout -->
     <AppHeader/>
-
-    <!-- main layout -->
     <v-main>
-      <router-view />
+      <router-view/>
     </v-main>
-
+    <!-- <AppFooter/> -->
   </v-app>
 </template>
 

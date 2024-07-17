@@ -1,26 +1,17 @@
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
-
       <v-row>
         <!-- right side sheet -->
         <v-col cols="3">
-
-          <!-- top button -->
-          <v-sheet rounded="lg">
-            <v-list rounded="lg">
-              <v-list-item style="text-align:center">
-                标准高级检索
-              </v-list-item>
-            </v-list>
-          </v-sheet>
 
           <!-- sheet blow the button -->
           <div style="margin-top: 15px">
             <v-sheet rounded="lg">
               <v-list rounded="lg">
 
-                <v-list-item>
+                <v-list-item
+                  style="background-color: #F6F6F6; width:100%; height: 100%">
                   生成报告
                 </v-list-item>
 
@@ -38,37 +29,58 @@
 
           <!-- main content -->
           <v-sheet
-            min-height="80vh"
+            min-height="60vh"
             rounded="lg"
             class="d-flex justify-center align-center">
+
             <!-- ********** -->
-            <v-col>
-              <v-row>
-                <v-card
-                  class="mx-auto"
-                  prepend-icon="$vuetify"
-                  subtitle="The #1 Vue UI Library"
-                  width="500">
+            <v-card
+              class="mx-auto"
+              elevation="3"
+              width="80%"
+              height="100%">
 
-                  <template v-slot:title>
-                    <span class="font-weight-black">关键词/检索式</span>
-                  </template>
+              <v-card-title class="py-5 font-weight-black">
+                专利报告范围检索
+              </v-card-title>
 
-                  <v-card-text class="bg-surface-light pt-4">
-                    <v-textarea
-                      label="输入区域"
-                      v-model="text"
-                      rows="5"
-                      outlined
-                    ></v-textarea>
-                  </v-card-text>
-                </v-card>
-              </v-row>
+              <v-card-text>
+                专利报告分析，帮助专利转化和交易提供多维度参考依据
+              </v-card-text>
 
-              <v-row class="justify-center align-center" style="margin-top:45px">
-                <v-btn @click="$router.push('/generate')">生成报告</v-btn>
-              </v-row>
-            </v-col>
+              <v-card-text>
+                <div class="text-subtitle-2 font-weight-black mb-1">
+                  关键词 / 检索式
+                </div>
+
+                <v-text-field
+                  label="请输入 关键词、公司名、人名、专利号等"
+                  variant="outlined"
+                  single-line/>
+
+                <v-row justify="center">
+                  <v-col cols="12" md="6" justify="center">
+                    <div class="centered-div">
+                      查询到的报告数量:3000
+                    </div>
+                  </v-col>
+
+                  <v-col cols="12" md="6">
+                    <v-btn
+                      class="text-none"
+                      color="secondary"
+                      size="x-large"
+                      variant="flat"
+                      @click="$router.push('/generate')"
+                      block>
+                      生成报告
+                    </v-btn>
+                  </v-col>
+                </v-row>
+
+              </v-card-text>
+            </v-card>
+
             <!-- ********** -->
           </v-sheet>
 
@@ -82,12 +94,23 @@
 
 export default {
   data: () => ({
+    loading: false,
     // left - list mock tab
     left_tabs: [
       "生成报告",
       "我的报告"
-    ]
+    ],
   }),
+  watch: {},
   methods: {}
 }
 </script>
+
+<style scoped>
+.centered-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* 可根据需要调整高度 */
+}
+</style>

@@ -49,7 +49,9 @@ fetchEventSource(url, {
 
           if(temp.indexOf('@@@DataType') > -1 && temp.indexOf('@@@End') > -1) {
             console.log(temp, 'temp -------')
+
             let jsonString = temp.match(/{[\s\S]*}/)[0]; // 使用正则表达式提取 JSON 部分
+            // let jsonString = extractJSON(temp);
             jsonData = JSON.parse(jsonString); // 将 JSON 字符串转换为对象
           }
           callback && callback(content, jsonData);
@@ -92,4 +94,12 @@ fetchEventSource(url, {
     // });
 }
  
+function extractJSON(str) {
+  const regex = /@@@DataType:[^\s]+\s*(\{.*?\}|\[.*?\])\s*@@@End\s+temp/;
+  const match = str.match(regex);
+  if (match && match[1]) {
+      return JSON.parse(match[1]);
+  }
+  return null;
+}
 export default sseFetch;
