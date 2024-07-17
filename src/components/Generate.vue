@@ -1,20 +1,74 @@
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
+
+      <v-container
+        style="display: flex;
+        z-index: 999;
+        margin-top: -20px"
+        class="leftTabsFixed">
+
+        <v-row
+          style="width: 100%;
+          background: white;">
+
+          <v-col
+            style="display: flex;
+            align-items: center;"
+            cols="8">
+
+            <v-btn
+              @click="$router.push('/search')"
+              prepend-icon="mdi-arrow-left"
+              variant="plain">
+              返回
+            </v-btn>
+
+            <div style="margin-left: 15px">
+              <p style="font-size: 14px">
+                一种关于锂电池脉冲电容器提升能量密度指标的研究
+              </p>
+
+            </div>
+          </v-col>
+
+          <v-col style="display: flex;  align-items: center;" cols="4">
+            <p style="font-size: 12px; color: lightgray">上次更新: 2024-07-12</p>
+
+            <v-btn style="margin-left: 10px"
+                   append-icon="mdi-checkbox-marked-circle"
+                   variant="plain"
+                   rounded="xl">
+              下载报告
+            </v-btn>
+
+            <v-btn @click="$router.push('/record')"
+                   style="margin-left: 5px"
+                   append-icon="mdi-arrow-right"
+                   variant="plain"
+                   rounded="xl">
+              历史报告
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+
       <v-row>
         <!-- right side sheet -->
         <v-col cols="3">
           <v-sheet rounded="lg">
-            <v-list rounded="lg">
-
-              <v-list-item
-                v-for="n in leftTabs"
-                :key="n"
-                :title="`${n}`"
-                link
-              />
-
-            </v-list>
+            <div class="leftTabsFixed" style="top: 230px;">
+              <v-list rounded="lg">
+                <v-list-item
+                  v-for="(item, index) in leftTabs"
+                  :class="{ activeTab: activeTabIndex === index }"
+                  :key="item"
+                  :title="`${ item.title }`"
+                  link
+                  @click="scrollTabElement(item)"
+                />
+              </v-list>
+            </div>
           </v-sheet>
         </v-col>
 

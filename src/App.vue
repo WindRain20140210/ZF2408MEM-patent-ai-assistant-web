@@ -7,11 +7,13 @@ import AppHeader from "@/components/AppHeader.vue";
 <!-- layout settings -->
 <template>
   <v-app>
+
     <AppHeader/>
     <v-main>
       <router-view/>
     </v-main>
-    <!-- <AppFooter/> -->
+    <AppFooter/>
+
   </v-app>
 </template>
 

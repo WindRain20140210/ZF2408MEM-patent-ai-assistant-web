@@ -1,15 +1,3 @@
-<script setup>
-const links = [
-  '首页',
-  '标准',
-  '技术',
-  '专利',
-  '企业',
-  '专家',
-  '报告'
-]
-</script>
-
 <template>
   <v-app-bar flat height="150" class="header">
     <v-container style="background-color: #0586fd">
@@ -52,17 +40,7 @@ const links = [
 
 <script>
 export default {
-  data: () => ({
-    links: [
-      '/',
-      '/',
-      '/',
-      '/',
-      '/generate',
-      '/record',
-      '/search',
-    ],
-  }),
+  data: () => ({}),
 }
 </script>
 
