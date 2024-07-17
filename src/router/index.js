@@ -20,23 +20,21 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
 
   routes: [
-    // index page - 筛选条件 search params
+    // index page - 我的历史报告 - 历史
     {
       path: '/',
-      redirect: '/search'
+      redirect: '/record'
     },
-    {
-      path: '/search',
-      component: searchPage
-    },
-
-    // 我的历史报告 - 历史
     {
       path: '/record',
       component: recordPage
     },
 
-    // 生成中 ....
+    // ....
+    {
+      path: '/search',
+      component: searchPage
+    },
     {
       path: '/generate',
       component: generatePage

@@ -1,9 +1,13 @@
 <template>
   <v-main class="bg-grey-lighten-3">
     <v-container>
+
+      <v-row style="margin-top: 1px; margin-left: 5px; margin-bottom: 1px">
+        <v-btn @click="$router.push('/record')">返回</v-btn>
+      </v-row>
+
       <v-row>
         <v-col>
-
           <v-sheet
             min-height="50vh"
             rounded="lg"
