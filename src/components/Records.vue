@@ -3,7 +3,12 @@
     <v-container>
 
       <v-row style="height: 40px; justify-content: end; margin-top: 2px; margin-right: 5px;">
-        <v-btn @click="$router.push('/search')">创建专利报告</v-btn>
+        <v-btn
+          @click="$router.push('/search')"
+          prepend-icon="mdi-wrench"
+          variant="outlined">
+          创建专利报告
+        </v-btn>
       </v-row>
 
       <!-- main - row -->
