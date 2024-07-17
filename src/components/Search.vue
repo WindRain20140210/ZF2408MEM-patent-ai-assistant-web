@@ -122,14 +122,9 @@ async function getPatentNumber() {
 //   }
 // }
 
-// ...
-
 function isEmptyString(str) {
   return str === null || str === undefined || str.trim() === '';
 }
-
-// .....
-
 
 export default {
   components: {
@@ -175,13 +170,11 @@ export default {
 </script>
 
 <style scoped>
-
 .text-center {
   display: flex;
   align-items: center;
   justify-content: center; /* 如果还需要水平居中，可以加上这个属性 */
   height: 100px; /* 设置div的高度 */
 }
-
 </style>
 
