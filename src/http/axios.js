@@ -2,7 +2,9 @@ import axios from 'axios';
 
 // 设置接口超时时间
 axios.defaults.timeout = 60000;
-axios.defaults.baseURL = 'http://110.42.103.198:26439'
+// axios.defaults.baseURL = 'http://110.42.103.198:26439'
+
+axios.defaults.baseURL = 'http://110.42.103.198:22440'
 
 // http request 拦截器
 axios.interceptors.request.use(config => {

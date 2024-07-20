@@ -1,40 +1,11 @@
 <template>
-  <v-app-bar flat height="150" class="header">
-    <v-container style="background-color: #0586fd">
-
-      <v-row>
-        <v-col class="logo-wrap">
+  <v-app-bar flat height="80" class="header" style="background-color: #0586fd">
+    <v-row>
+      <v-col class="logo-wrap">
           <img src="@/assets/my_logo.png" class="logo" alt=""/>
           <span class="logo-p">FT-AGENT-SPACE</span>
         </v-col>
-
-        <v-col>
-          <v-row>
-            <v-col class="btn-wrap">
-              <v-card-text>
-                <v-btn text="标准高级检索" class="float-right search-btn"></v-btn>
-              </v-card-text>
-            </v-col>
-
-            <v-col>
-              <v-card-text>
-                <v-text-field
-                  append-inner-icon="mdi-magnify"
-                  density="compact"
-                  label="请输入关键词"
-                  variant="solo"
-                  hide-details
-                  single-line
-                ></v-text-field>
-              </v-card-text>
-            </v-col>
-          </v-row>
-        </v-col>
-
-      </v-row>
-
-
-    </v-container>
+    </v-row>
   </v-app-bar>
 </template>
 

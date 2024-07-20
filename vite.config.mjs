@@ -74,5 +74,23 @@ export default defineConfig({
         // host: true, // Here
         // strictPort: true,
         // port: 9050,
+        proxy: {
+            // 在此处编写代理规则
+            '/v1': {
+                target: 'http://110.42.103.198:22440',
+                changeOrigin: true,
+                rewrite: (path) => {
+                    return path.replace(/^\/v1/, '')
+                }
+            },
+            '/api': {
+                target: 'http://8.146.201.197:30080/dev', //后端服务实际地址
+                changeOrigin: true,
+                rewrite: (path) => {
+                    return path.replace(/^\/api/, '');
+                },
+            },
+        }
+        
     }
 })

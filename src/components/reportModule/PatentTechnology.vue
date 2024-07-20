@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <p class="title">专利类型</p>
+    <p class="title">技术构成分析</p>
     <p class="content">{{ content }}</p>
   </div>
   <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
@@ -21,33 +21,48 @@ let chartInstance = null;
 const message = ref(props.message);
 
 
-const initChart = (seriesData) => {
+const initChart = (formattedData) => {
   const option = {
-    // title: {
-    //     text: 'Referer of a Website',
-    //     subtext: 'Fake Data',
-    //     left: 'center'
-    // },
-    // tooltip: {
-    //     trigger: 'item'
-    // },
-    // legend: {
-    //     orient: 'vertical',
-    //     left: 'left'
-    // },
+    // title:{
+    //         text:'矩形树',
+    //         left: 'center',     // 设置标题水平居中
+    //         top: 20             // 设置标题距离顶部的距离为20像素
+    //     },
+    //     tooltip: {        //浮窗效果
+    //     },
     series: [
       {
-        name: '专利类型',
-        type: 'pie',
-        radius: '50%',
-        data: seriesData,
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }
+        // name:'11111111',           
+        type: 'treemap',     //图例样式，矩形树
+        levels: [
+          // 第一个层级的配置
+          {
+            // 设置每个矩形的边框样式
+            itemStyle: {
+              borderColor: '#ffffff',  // 边框颜色
+              borderWidth: 4,       // 边框宽度
+              gapWidth: 1,          // 矩形之间的间隔宽度
+            },
+            // // 设置上方标签的显示方式
+            // upperLabel: {
+            //     show: false,  // 是否显示上方标签
+            // },
+          },
+          // 第二个层级的配置
+          // {
+          //     // 设置每个矩形的边框样式
+          //     itemStyle: {
+          //         borderColor: '#ffffff',  // 边框颜色
+          //         borderWidth: 2,       // 边框宽度
+          //         gapWidth: 1,          // 矩形之间的间隔宽度
+          //     },
+          //     // 设置上方标签的显示方式
+          //     upperLabel: {
+          //         show: false,  // 是否显示上方标签
+          //     },
+          // },
+        ],
+        data: formattedData
       }
     ]
   };
@@ -61,16 +76,13 @@ function renderPage(res_content, jsonData) {
   content.value = res_content;
 
   if (jsonData) {
+    const formattedData = jsonData.data.map(item => ({
+      name: item.class + item.num,
+      value: item.num
+    }));
 
-    // 遍历对象数组并修改字段名
-    jsonData.data = jsonData.data.map(item => {
-      return {
-        name: item.type,
-        value: item.num
-      };
-    });
+    initChart(formattedData);
 
-    initChart(jsonData.data);
   }
 }
 
@@ -84,7 +96,7 @@ function sseRenderPage() {
     area,
     key,
     theme: '',
-    dataType: 'patent_type',
+    dataType: 'patent_technology',
     applicant,
   };
 
@@ -106,8 +118,7 @@ function sseRenderPage() {
 
 setTimeout(() => {
   sseRenderPage();
-}, 3000);
-
+}, 4000);
 
 watch(
   () => props.detailData,
@@ -119,33 +130,6 @@ watch(
     }
   },
 );
-
-</script>
-<script>
-import { onMounted, ref } from "vue";
-import * as echarts from "echarts";
-import sseFetch from '/src/api/sseFetch';
-
-export default {
-  name: "EChartsComponent",
-  props: {
-    data: {
-      type: Object,
-      required: true,
-    },
-    width: {
-      type: String,
-      default: "100%",
-    },
-    height: {
-      type: String,
-      default: "400px",
-    }
-  },
-
-};
-
-
 
 </script>
 <style>

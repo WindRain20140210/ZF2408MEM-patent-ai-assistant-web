@@ -8,8 +8,8 @@ const conditions = {
       time: + new Date(),
       industry: '',
       region: '',
-      keyWord: '',
-      territory: '',
+      key: '',
+      theme: '',
       dataType: 'patent_trend1'
   };
       

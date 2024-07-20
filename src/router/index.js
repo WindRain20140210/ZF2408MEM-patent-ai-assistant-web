@@ -18,7 +18,6 @@ import generatePage from "@/pages/GeneratePage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-
   routes: [
     // index page - 我的历史报告 - 历史
     {

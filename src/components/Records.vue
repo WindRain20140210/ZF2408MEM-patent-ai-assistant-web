@@ -1,17 +1,17 @@
 <template>
-  <v-main class="bg-grey-lighten-3">
-    <v-container>
+    <v-main class="bg-wrapper">
+        <v-container>
 
-      <v-row style="height: 40px; justify-content: end; margin-top: 2px; margin-right: 5px;">
-        <v-btn
-          @click="$router.push('/search')"
-          prepend-icon="mdi-wrench"
-          variant="outlined">
-          创建专利报告
-        </v-btn>
-      </v-row>
+            <v-row style="height: 40px; justify-content: end; margin-top: 2px; margin-right: 5px;">
+                <v-btn
+                @click="$router.push('/search')"
+                prepend-icon="mdi-wrench"
+                variant="outlined">
+                创建专利报告
+                </v-btn>
+            </v-row>
 
-      <!-- main - row -->
+                  <!-- main - row -->
       <v-row>
         <v-col>
           <v-sheet
@@ -40,31 +40,27 @@
 
               <v-divider></v-divider>
 
-              <!-- main data table - display records of my patents -->
-              <v-data-table
-                v-model:search="search"
-                :items="items"
-                :headers="headers"
-                :items-per-page="8">
-
-                <!-- action button -->
+              <v-data-table 
+              :items="listdata"
+              :headers="headers"
+              >
                 <template v-slot:item.actions="{ item }">
-                  <!-- download patent -->
-                  <v-icon
-                    class="me-2"
-                    size="small"
-                    @click="downloadItem(item)"
-                    style="transform: rotate(180deg);">
-                    mdi-arrow-up-bold-box-outline
-                  </v-icon>
-                  <!-- delete patent -->
-                  <v-icon
-                    size="small"
-                    @click="deleteItem(item)">
-                    mdi-delete
-                  </v-icon>
+                    <v-icon
+                        class="me-2"
+                        size="small"
+                        @click="generate_pdf_fn(item)"
+                    >
+                    mdi-arrow-down	
+                    </v-icon>
+                    <v-icon
+                        size="small"
+                        @click="report_delete_fn(item)"
+                    >
+                        mdi-delete
+                    </v-icon>
                 </template>
-              </v-data-table>
+            </v-data-table>
+              
             </v-card>
 
             <!-- conform delete dialog -->
@@ -95,175 +91,59 @@
           </v-sheet>
         </v-col>
       </v-row>
-    </v-container>
-
-    <!-- AI Assistant -->
-    <Assistant/>
-  </v-main>
+        </v-container>
+    </v-main>
 </template>
 
-<script>
-import Assistant from "@/components/Assistant.vue";
-import {UserService} from "@/http/api";
-import {ref} from "vue";
+<script setup>
+import { onMounted, ref } from "vue";
+import { report_list, report_delete, generate_pdf } from '../api/api' 
 
-// {
-// id: 1,
-//  title: '一种关于锂电池提升能量密度的研究报告',
-//  createTime: '2024-07-05 23:30:00',
-//  dbId: 1,
-// }
+const headers = [
+    {title: '报告ID', key: 'id', align: 'center',},
+    {title: '报告名称', key: 'title', align: 'center',},
+    {title: '最后更新', key: 'update_time', align: 'center',},
+    {title: '操作', key: 'actions', sortable: false, align: "center"},
+];
 
-// request network
-const recordList = ref([]);
-const fetchUserRecords = async (params) => {
-  const res = await UserService.userrecords(params)
-  if (res.status === 200) {
-    const data = res.data.data;
-    recordList.value.push(...data)
-  } else {
-    // server resp error ...
-  }
-}
+const listdata = ref([]);
 
-// ...
-async function requestDeleteRecord(params, onExpected, onUnExpected) {
-  const res = await UserService.deleterecord(params)
-  if (res.status === 200) {
-    const dbId = res.data['dbId'];
-    console.log("received server response= " + dbId)
+const report_list_fn = async()=>{
+    const res = await report_list()
+    listdata.value = res.data;
+} 
 
-    if (dbId > 0) onExpected()
-  } else {
-    // server resp error ...
-    onUnExpected()
-  }
-}
+const report_delete_fn = async(item)=>{
+    const data = {
+        'ids': [ parseInt(item.id) ],
+        'userId': '21914df4-4745-43da-979a-c4adca6a58c0'
+    }
+    const res = await report_delete(data)
+    // 删除接口有问题
+} 
 
-// download file
-// no.1 server resp data contain download url - current
-// no.2 request server to get the download url
+const generate_pdf_fn = async(item)=>{
+    const data = {
+        // 'reportId': item.id,
+        'reportId': '47',
 
-// https protocol - use a tag to download file with token
-// 创建一个点击事件触发下载
-function downloadFile(fileUrl) {
-  // 文件下载地址
-  // const fileUrl = 'https://example.com/path/to/file';
+    }
+    const res = await generate_pdf(data)
+    console.log(res, '?????')
+    // listdata.value = res;
+    // 没有调试呢 ========= ？？？？
 
-  // 设置请求头
-  const headers = new Headers();
-  headers.append('Authorization', 'Bearer YourAccessToken'); // 设置授权头，替换YourAccessToken为实际的访问令牌
+} 
 
-  // 发起 Fetch 请求
-  fetch(fileUrl, {
-    method: 'GET',
-    headers: headers,
-  })
-    .then(response => response.blob())
-    .then(blob => {
-      // 创建一个虚拟的链接元素，模拟点击下载
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = 'filename.ext'; // 设置下载文件名，替换filename.ext为实际的文件名和扩展名
-      document.body.appendChild(link);
 
-      // 模拟点击
-      link.click();
+onMounted(() => {
+    report_list_fn()
+});
 
-      // 移除虚拟链接元素
-      document.body.removeChild(link);
-    })
-    .catch(error => console.error('下载失败：', error));
-}
-
-export default {
-  components: {
-    Assistant
-  },
-  data: () => ({
-    dialog: false,
-    dialogDelete: false,
-    search: '',
-    items: [],
-    left_tabs: [
-      "生成报告",
-      "我的报告"
-    ],
-    headers: [
-      {title: '序号', key: 'id', align: 'center',},
-      {title: '报告名称', key: 'title', align: 'center',},
-      {title: '最后更新', key: 'createTime', align: 'center',},
-      {title: '操作', key: 'actions', sortable: false, align: "center"},
-    ],
-    editedItem: {
-      id: 0,
-      title: '',
-      createTime: '',
-      dbId: 0,
-      fileUrl: '',
-    },
-  }),
-
-  created() {
-    this.initialize()
-    fetchUserRecords()
-  },
-
-  methods: {
-    // request to server get data
-    initialize() {
-      this.items = recordList.value
-    },
-
-    // download patent file
-    downloadItem(item) {
-      console.log("download item: " + item.fileUrl)
-
-      // normal use a tag to download file
-      let a = document.createElement("a");
-      a.setAttribute("href", item.fileUrl);
-      a.setAttribute('target', '_blank');
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    },
-
-    // delete user generate patent item in list
-    deleteItem(item) {
-      // item.dbId
-      console.log("delete item of Database ID:", item.dbId)
-
-      this.editedIndex = this.items.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
-    },
-
-    deleteItemConfirm() {
-      // user confirm to delete select item.
-      // need request to server pass which patent is deleted.
-      requestDeleteRecord(
-        {
-          dbId: this.editedItem.dbId
-        },
-        () => {
-          // server delete item successful
-          this.items.splice(this.editedIndex, 1)
-          this.closeDelete()
-
-        },
-        () => {
-          // error delete failed, do not update ui list
-          this.closeDelete()
-        })
-    },
-
-    closeDelete() {
-      this.dialogDelete = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-  },
-}
 </script>
+
+<style lang="scss" scoped>
+.bg-wrapper {
+  background-color: #f1f2f6;
+}
+</style>

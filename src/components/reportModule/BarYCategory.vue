@@ -5,14 +5,15 @@
     <div ref="echartsRef" :style="{ width, height }"></div>
   </template>
   <script setup>
-    const content = ref('');
-    onMounted(() => {
+    const content = ref('');    onMounted(() => {
+        const { industry, area, key, applicant } = JSON.parse(message.value);
+
         const conditions = {
             time: + new Date(),
             industry: '',
             area: '',
-            keyWord: '',
-            territory: '',
+            key: '',
+            theme: '',
             dataType: 'patent_applicant'
         };
           

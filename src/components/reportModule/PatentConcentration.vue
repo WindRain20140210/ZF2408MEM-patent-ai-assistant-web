@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <p class="title">专利类型</p>
+    <p class="title">专利集中度分析</p>
     <p class="content">{{ content }}</p>
   </div>
   <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
@@ -21,56 +21,42 @@ let chartInstance = null;
 const message = ref(props.message);
 
 
-const initChart = (seriesData) => {
+const initChart = (xAxisData, seriesData) => {
   const option = {
-    // title: {
-    //     text: 'Referer of a Website',
-    //     subtext: 'Fake Data',
-    //     left: 'center'
-    // },
-    // tooltip: {
-    //     trigger: 'item'
-    // },
-    // legend: {
-    //     orient: 'vertical',
-    //     left: 'left'
-    // },
+    xAxis: {
+      type: 'category',
+      data: xAxisData
+    },
+    yAxis: {
+      type: 'value'
+    },
     series: [
       {
-        name: '专利类型',
-        type: 'pie',
-        radius: '50%',
         data: seriesData,
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }
+        type: 'line',
+        smooth: true
       }
     ]
   };
-
   chartInstance = echarts.init(echartsRef.value);
   chartInstance.setOption(option);
 };
-
 
 function renderPage(res_content, jsonData) {
   content.value = res_content;
 
   if (jsonData) {
-
-    // 遍历对象数组并修改字段名
-    jsonData.data = jsonData.data.map(item => {
-      return {
-        name: item.type,
-        value: item.num
-      };
+    let grouped = {};
+    jsonData.data.forEach(item => {
+      for (let key in item) {
+        if (!grouped[key]) {
+          grouped[key] = [];
+        }
+        grouped[key].push(item[key]);
+      }
     });
 
-    initChart(jsonData.data);
+    initChart(grouped.year, grouped.proportion);
   }
 }
 
@@ -84,7 +70,7 @@ function sseRenderPage() {
     area,
     key,
     theme: '',
-    dataType: 'patent_type',
+    dataType: 'patent_concentration',
     applicant,
   };
 
@@ -106,8 +92,7 @@ function sseRenderPage() {
 
 setTimeout(() => {
   sseRenderPage();
-}, 3000);
-
+}, 5000);
 
 watch(
   () => props.detailData,
@@ -119,35 +104,8 @@ watch(
     }
   },
 );
-
 </script>
-<script>
-import { onMounted, ref } from "vue";
-import * as echarts from "echarts";
-import sseFetch from '/src/api/sseFetch';
 
-export default {
-  name: "EChartsComponent",
-  props: {
-    data: {
-      type: Object,
-      required: true,
-    },
-    width: {
-      type: String,
-      default: "100%",
-    },
-    height: {
-      type: String,
-      default: "400px",
-    }
-  },
-
-};
-
-
-
-</script>
 <style>
 .wrap {
   padding: 20px !important;

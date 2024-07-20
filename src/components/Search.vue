@@ -1,180 +1,161 @@
 <template>
-  <v-main class="bg-grey-lighten-3">
-    <v-container>
-
-      <v-row style="margin-top: 1px; margin-left: 5px;">
-        <v-btn
-          @click="$router.push('/record')"
-          variant="outlined"
-          prepend-icon="mdi-arrow-left">
-          返回
-        </v-btn>
-      </v-row>
-
-      <v-row>
-        <v-col>
-          <v-sheet
-            min-height="50vh"
-            rounded="lg"
-            class="d-flex justify-center align-center">
-
-            <!-- main content -->
-            <v-card
-              class="mx-auto"
-              elevation="3"
-              width="80%"
-              height="100%">
-
-              <v-card-title class="py-5 font-weight-black">
-                专利报告范围检索
-              </v-card-title>
-
-              <v-card-text>
-                填写你的筛选条件，我们将根据专利、文献，通过专利只能助手为你快速生成个性化专利报告。
-              </v-card-text>
-
-              <v-card-text>
-                <div class="text-subtitle-2 font-weight-black mb-1">
-                  关键词
-                </div>
-
-                <v-row>
-                  <v-col cols="4">
-                    <div>
-                      <v-combobox
-                        v-model="selectedItem"
-                        :items="items"
-                        density="comfortable"
-                        label="类别"
-                      ></v-combobox>
-                    </div>
-
-                  </v-col>
-                  <v-col cols="8">
-                    <v-text-field
-                      label="请输入关键字"
-                      variant="outlined"
-                      single-line
-                      v-model="userInput"
-                      @mouseleave="onTextFieldMouseLeave(userInput)"
-                    />
-                  </v-col>
-                </v-row>
-
-                <v-row justify="center">
-                  <v-col cols="6" md="6">
-                    <div class="text-center" style="height: 100%; width: 100%;">{{ num }} 份专利</div>
-                  </v-col>
-
-                  <v-col cols="6" md="6">
-                    <v-btn
-                      class="text-none"
-                      color="secondary"
-                      size="x-large"
-                      variant="flat"
-                      @click="searchBtnOnClick(selectedItem, userInput)"
-                      block>
-                      生成报告
-                    </v-btn>
-                  </v-col>
-                </v-row>
-
-              </v-card-text>
+    <v-main class="bg-wrapper">
+        <v-container>
+            <v-card>
+                <v-card-text class="text-medium-emphasis pa-6">
+                    <div class="mb-3">我的报告 / 创建专利报告</div>
+                    <div class="mb-3">专利报告范围检索</div>
+                    <div class="mb-3">填写你的筛选条件，我们将根据专利、文献，通过专利智能助手为你快速生成个性化专利报告。</div>
+                </v-card-text>
             </v-card>
 
-          </v-sheet>
-        </v-col>
-      </v-row>
+            <v-card class="input-card">
+                <v-card-text class="text-medium-emphasis pa-6">
+                    <div class="contain-box">
+                        <div class="mb-3">筛选条件至少输入一项</div>
+                        <!-- <v-row>
+                            <v-col cols="4">
+                                <v-list-subheader>数据类型</v-list-subheader>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-select
+                                    v-model="select"
+                                    :items="items"
+                                    item-title="state"
+                                    item-value="abbr"
+                                    label="Select"
+                                    variant="outlined"
+                                    persistent-hint
+                                    return-object
+                                    single-line
+                                ></v-select>
+                            </v-col>
+                        </v-row> -->
 
-      <!-- AI Assistant -->
-      <Assistant/>
-    </v-container>
-  </v-main>
+                        <v-row>
+                            <v-col cols="4">
+                                <v-list-subheader>申请人</v-list-subheader>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-text-field
+                                :model-value="applicant"
+                                v-model="applicant"
+                                variant="outlined"
+                                ></v-text-field>
+                                <input type="text" >
+
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="4">
+                                <v-list-subheader>专业行业</v-list-subheader>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-text-field
+                                :model-value="industry"
+                                v-model="industry"
+                                variant="outlined"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="4">
+                                <v-list-subheader>地域</v-list-subheader>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-text-field
+                                :model-value="area"
+                                v-model="area"
+                                variant="outlined"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="4">
+                                <v-list-subheader>技术关键字</v-list-subheader>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-text-field
+                                :model-value="key"
+                                v-model="key"
+                                variant="outlined"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <!-- <v-row>
+                            <v-col cols="4">
+                                <v-list-subheader>技术主题</v-list-subheader>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-text-field
+                                model-value="10.00"
+                                variant="outlined"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row> -->
+
+                        <v-btn
+                            class="text-none"
+                            color="secondary"
+                            size="x-large"
+                            variant="flat"
+                            @click="gotoGenerate"
+                            block>
+                            生成报告
+                        </v-btn>
+                    </div>
+                </v-card-text>
+            </v-card>
+        </v-container>
+    </v-main>
+
 </template>
 
-<script>
-import Assistant from "@/components/Assistant.vue";
-import {UserService} from "@/http/api";
-import {ref} from "vue";
+<script setup>
+import { onMounted, ref } from "vue";
+import router from '@/router'
 
+// const select = ref({ state: '技术背景和目标', abbr: 'patent_trend1' });
+// const patent_trend1 = ref();
+// const items =  [
+//     { state: '技术背景和目标', abbr: 'patent_trend1' },
+//     { state: '技术发展及衍变趋势分析', abbr: 'patent_trend2' },
+//     { state: '申请人排名分析', abbr: 'patent_applicant' },
+//     { state: '地域分布', abbr: 'patent_area' },
+//     { state: '专利类型', abbr: 'patent_type' },
+//     { state: '技术构成分析', abbr: 'patent_technology' },
+//     { state: '集中度分析', abbr: 'patent_concentration' },
+// ];
+const industry = ref('印刷');
+const area = ref('广东');
+const key = ref(null);
+const applicant = ref('');
 
-let timer = null;
-let number = ref(0)
-
-// request server to query patent number
-async function getPatentNumber() {
-  const resp = await UserService.getnumbers();
-  if (resp.status === 200) {
-    console.log("server query patent number resp: " + resp.data['patentNum'])
-    number.value = resp.data['patentNum']
-  } else {
-    // error
-  }
+const gotoGenerate = () => {
+    const query = {
+        message: encodeURIComponent(JSON.stringify({
+            industry: industry.value,
+            area: area.value,
+            key: key.value,
+            applicant: applicant.value,
+        }))
+    }
+    router.push({ path: '/generate', query })
 }
 
-// request server to search
-// const requestSearch = async () => {
-//   const resp = await UserService.search();
-//   if (resp.status === 200) {
-//
-//   } else {
-//     // error
-//   }
-// }
-
-function isEmptyString(str) {
-  return str === null || str === undefined || str.trim() === '';
-}
-
-export default {
-  components: {
-    Assistant
-  },
-  data: () => ({
-    loading: false,
-    // left - list tab
-    left_tabs: [
-      "生成报告",
-      "我的报告"
-    ],
-
-    // user selected type
-    items: ['筛选条件一', '筛选条件二', '筛选条件三', '筛选条件四', '筛选条件五'],
-    selectedItem: '筛选条件一',
-
-    userInput: '',
-    num: number // patent number
-  }),
-  watch: {},
-  methods: {
-    onTextFieldMouseLeave(userInput) {
-      clearTimeout(timer); // 防抖
-      timer = setTimeout(function () {
-        // 这里面要执行的操作
-        if (!isEmptyString(userInput)) {
-          console.log("userInput: " + userInput)
-          getPatentNumber()
-        } else {
-          number.value = 0
-        }
-
-      }, 2000);
-    },
-    searchBtnOnClick(type, input) {
-      console.log("search params: " + type + " // " + input);
-      // request server to search result and nav to generate page
-      this.$router.push('/generate');
-    },
-  },
-}
+    onMounted(() => {
+    });
 </script>
 
-<style scoped>
-.text-center {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* 如果还需要水平居中，可以加上这个属性 */
-  height: 100px; /* 设置div的高度 */
+<style lang="scss" scoped>
+.bg-wrapper {
+  background-color: #f1f2f6;
+}
+.input-card {
+    margin-top: 30px;
+}
+.contain-box {
+    width:  600px;
+    margin: 0 auto;
 }
 </style>
-

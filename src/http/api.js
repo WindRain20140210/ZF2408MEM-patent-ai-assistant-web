@@ -24,6 +24,9 @@ export class UserService {
     return request('/deleterecord', params, 'get')
   }
 
+  static async test() {
+    return request('/v1/report/detail', {id: 11})
+  }
   /**
    * generate page
    * tables of generate report

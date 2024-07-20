@@ -33,7 +33,7 @@
           </v-col>
 
           <v-col style="display: flex;  align-items: center;" cols="4">
-            <p style="font-size: 12px; color: lightgray">上次更新: 2024-07-12</p>
+            <!-- <p style="font-size: 12px; color: lightgray">上次更新: 2024-07-12</p> -->
 
             <v-btn style="margin-left: 10px"
                    append-icon="mdi-checkbox-marked-circle"
@@ -55,7 +55,7 @@
 
       <v-row>
         <!-- right side sheet -->
-        <v-col cols="3">
+        <!-- <v-col cols="3">
           <v-sheet rounded="lg">
             <div class="leftTabsFixed" style="top: 230px;">
               <v-list rounded="lg">
@@ -70,7 +70,7 @@
               </v-list>
             </div>
           </v-sheet>
-        </v-col>
+        </v-col> -->
 
                 <!-- left side blank -->
           <v-col>
@@ -80,11 +80,13 @@
 
               <!-- main content -->
               <v-card flat>
-                <v-patent-trend1/>
-                <v-patent-trend2/>
-                <v-patent-type />
-                <!-- <v-patent-area /> 地域先不展示 -->
-                <v-patent-applicant />
+                <v-patent-trend1 :message = message  :detailData = dataPatentTrend1 />
+                <v-patent-trend2 :message = message :detailData = dataPatentTrend2  />
+                <v-patent-applicant :message = message :detailData = dataPatentApplicant />
+                <v-patent-area :message = message :detailData = dataPatentArea />
+                <v-patent-type :message = message :detailData = dataPatentType />
+                <v-patent-technology :message = message :detailData = dataPatentTechnology />
+                <v-patent-concentration :message = message :detailData = dataPatentConcentration />
               </v-card>
             </v-sheet>
           </v-col>
@@ -97,31 +99,106 @@
 <script>
 import vPatentTrend1 from "./reportModule/PatentTrend1.vue"
 import vPatentTrend2 from "./reportModule/PatentTrend2.vue"
-import vPatentType from "./reportModule/PatentType.vue"
-// import vPatentArea from "./reportModule/PatentArea.vue"
 import vPatentApplicant from "./reportModule/PatentApplicant.vue"
+import vPatentArea from "./reportModule/PatentArea.vue"
+import vPatentType from "./reportModule/PatentType.vue"
+import vPatentTechnology from "./reportModule/PatentTechnology.vue"
+import vPatentConcentration from "./reportModule/PatentConcentration.vue"
 
 
 export default {
   components: {
     vPatentTrend1,
     vPatentTrend2,
-    vPatentType,
-    // vPatentArea,
     vPatentApplicant,
+    vPatentArea,
+    vPatentType,
+    vPatentTechnology,
+    vPatentConcentration,
   }
 }
 </script> 
 
 <script setup>
-  const leftTabs = [
-    "技术背景和目标",
-    "技术现状分析",
-    "具体研究内容",
-    "技术发展路线图",
-    "主要玩家分析",
-    "当前技术方案梳理",
-    "重点专利解读",
-    "可能的研发方向",
-  ];
+import { onMounted, ref } from "vue";
+import router from '@/router'
+import { report_detail, report_save } from '../api/api' 
+const message = ref(null);
+// const detailData = ref(null);
+const dataPatentTrend1 = ref(null);
+const dataPatentTrend2 = ref(null);
+const dataPatentApplicant = ref(null);
+const dataPatentArea = ref(null);
+const dataPatentType = ref(null);
+const dataPatentTechnology = ref(null);
+const dataPatentConcentration = ref(null);
+
+
+const report_save_fn = async()=>{
+    const res = await report_save()
+    console.log(res, 'report_save_fn')
+} 
+const report_detail_fn = async(id)=>{
+    const data = {
+      'id': parseInt(id),
+      'userId': '21914df4-4745-43da-979a-c4adca6a58c0'
+    }
+    const res = await report_detail(data)
+    if(res.data){
+      res.data.forEach(item => {
+        if(item.type === "patent_trend1") {
+            dataPatentTrend1.value = item
+        }
+        if(item.type === "patent_trend2") {
+            dataPatentTrend2.value = item
+        }
+        if(item.type === "patent_applicant") {
+            dataPatentApplicant.value = item
+        }
+        if(item.type === "patent_area") {
+            dataPatentArea.value = item
+        }
+        if(item.type === "patent_type") {
+            dataPatentType.value = item
+        }
+        if(item.type === "patent_technology") {
+            dataPatentTechnology.value = item
+        }
+        if(item.type === "patent_concentration") {
+            dataPatentConcentration.value = item
+        }
+      });
+
+
+    }
+    // console.log(res, 'report_detail_fn')
+} 
+  const query = router.currentRoute.value.query;
+
+  if(query.id) {
+    report_detail_fn(query.id)
+  }
+
+  if(query.message) {
+    message.value = decodeURIComponent(query.message);
+  console.log(message.value, 'query')
+
+  }
+// onMounted(() => {
+//   // 干啥用不知道
+//   // report_save_fn()
+
+// });
+
+
+  // const leftTabs = [
+  //   "技术背景和目标",
+  //   "技术现状分析",
+  //   "具体研究内容",
+  //   "技术发展路线图",
+  //   "主要玩家分析",
+  //   "当前技术方案梳理",
+  //   "重点专利解读",
+  //   "可能的研发方向",
+  // ];
 </script>
