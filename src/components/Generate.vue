@@ -169,7 +169,6 @@ const report_detail_fn = async(id)=>{
         }
       });
 
-
     }
     // console.log(res, 'report_detail_fn')
 } 

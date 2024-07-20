@@ -2,8 +2,9 @@ import { fetchEventSource } from '@microsoft/fetch-event-source';
 
 const sseFetch = (fetchData, callback) => {
     const url = 'http://110.42.103.198:23837/v1/chat-messages';
-    const apiKey = 'app-K2JCwC36gS4UYILFfw60w256';
-
+    // const apiKey = 'app-K2JCwC36gS4UYILFfw60w256';
+    const apiKey = 'app-XOm1EyPKw2EfeWS1vM5xC7bf';
+    
 const ctrl = new AbortController();
 
 let content = ''; // 文案内容

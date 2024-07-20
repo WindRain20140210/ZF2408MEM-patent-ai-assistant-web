@@ -22,7 +22,6 @@ const message = ref(props.message);
 
 
 const initChart = (xAxisData, seriesData) => {
-  console.log(xAxisData, 'xAxisData');
     const option  = {
     xAxis: {
         type: 'category',
