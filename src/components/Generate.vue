@@ -2,25 +2,17 @@
   <v-main class="bg-grey-lighten-3">
     <v-container>
 
-      <v-container
-        style="display: flex;
+      <v-container style="display: flex;
         z-index: 999;
-        margin-top: -20px"
-        class="leftTabsFixed">
+        margin-top: -20px" class="leftTabsFixed">
 
-        <v-row
-          style="width: 100%;
+        <v-row style="width: 100%;
           background: white;">
 
-          <v-col
-            style="display: flex;
-            align-items: center;"
-            cols="8">
+          <v-col style="display: flex;
+            align-items: center;" cols="8">
 
-            <v-btn
-              @click="$router.push('/search')"
-              prepend-icon="mdi-arrow-left"
-              variant="plain">
+            <v-btn @click="$router.push('/search')" prepend-icon="mdi-arrow-left" variant="plain">
               返回
             </v-btn>
 
@@ -35,18 +27,13 @@
           <v-col style="display: flex;  align-items: center;" cols="4">
             <!-- <p style="font-size: 12px; color: lightgray">上次更新: 2024-07-12</p> -->
 
-            <v-btn style="margin-left: 10px"
-                   append-icon="mdi-checkbox-marked-circle"
-                   variant="plain"
-                   rounded="xl">
+            <v-btn style="margin-left: 10px" @click="generate_pdf_fn" append-icon="mdi-checkbox-marked-circle"
+              variant="plain" rounded="xl">
               下载报告
             </v-btn>
 
-            <v-btn @click="$router.push('/record')"
-                   style="margin-left: 5px"
-                   append-icon="mdi-arrow-right"
-                   variant="plain"
-                   rounded="xl">
+            <v-btn @click="$router.push('/record')" style="margin-left: 5px" append-icon="mdi-arrow-right"
+              variant="plain" rounded="xl">
               历史报告
             </v-btn>
           </v-col>
@@ -72,26 +59,24 @@
           </v-sheet>
         </v-col> -->
 
-                <!-- left side blank -->
-          <v-col>
-            <v-sheet
-              min-height="80vh"
-              rounded="lg">
+        <!-- left side blank -->
+        <v-col>
+          <v-sheet min-height="80vh" rounded="lg">
 
-              <!-- main content -->
-              <v-card flat>
-                <v-patent-trend1 :message = message  :detailData = dataPatentTrend1 />
-                <v-patent-trend2 :message = message :detailData = dataPatentTrend2  />
-                <v-patent-applicant :message = message :detailData = dataPatentApplicant />
-                <v-patent-area :message = message :detailData = dataPatentArea />
-                <v-patent-type :message = message :detailData = dataPatentType />
-                <v-patent-technology :message = message :detailData = dataPatentTechnology />
-                <v-patent-concentration :message = message :detailData = dataPatentConcentration />
-              </v-card>
-            </v-sheet>
-          </v-col>
+            <!-- main content -->
+            <v-card flat>
+              <v-patent-trend1 :message=message :detailData=dataPatentTrend1 />
+              <v-patent-trend2 :message=message :detailData=dataPatentTrend2 />
+              <v-patent-applicant :message=message :detailData=dataPatentApplicant />
+              <v-patent-area :message=message :detailData=dataPatentArea />
+              <v-patent-type :message=message :detailData=dataPatentType />
+              <v-patent-technology :message=message :detailData=dataPatentTechnology />
+              <v-patent-concentration :message=message :detailData=dataPatentConcentration />
+            </v-card>
+          </v-sheet>
+        </v-col>
 
-        </v-row>
+      </v-row>
 
     </v-container>
   </v-main>
@@ -117,12 +102,14 @@ export default {
     vPatentConcentration,
   }
 }
-</script> 
+</script>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import router from '@/router'
-import { report_detail, report_save } from '../api/api' 
+import { report_detail, report_save } from '../api/api'
+
+const reportId = ref(null);
 const message = ref(null);
 // const detailData = ref(null);
 const dataPatentTrend1 = ref(null);
@@ -134,65 +121,102 @@ const dataPatentTechnology = ref(null);
 const dataPatentConcentration = ref(null);
 
 
-const report_save_fn = async()=>{
-    const res = await report_save()
-    console.log(res, 'report_save_fn')
-} 
-const report_detail_fn = async(id)=>{
-    const data = {
-      'id': parseInt(id),
-      'userId': '21914df4-4745-43da-979a-c4adca6a58c0'
-    }
-    const res = await report_detail(data)
-    if(res.data){
-      res.data.forEach(item => {
-        if(item.type === "patent_trend1") {
-            dataPatentTrend1.value = item
-        }
-        if(item.type === "patent_trend2") {
-            dataPatentTrend2.value = item
-        }
-        if(item.type === "patent_applicant") {
-            dataPatentApplicant.value = item
-        }
-        if(item.type === "patent_area") {
-            dataPatentArea.value = item
-        }
-        if(item.type === "patent_type") {
-            dataPatentType.value = item
-        }
-        if(item.type === "patent_technology") {
-            dataPatentTechnology.value = item
-        }
-        if(item.type === "patent_concentration") {
-            dataPatentConcentration.value = item
-        }
-      });
-
-    }
-    // console.log(res, 'report_detail_fn')
-} 
-  const query = router.currentRoute.value.query;
-
-  if(query.id) {
-    report_detail_fn(query.id)
+const report_save_fn = async () => {
+  const res = await report_save()
+  if (res.data) {
+    reportId.value = res.data.id;
   }
+  // console.log(res, 'report_save_fn')
+}
+const report_detail_fn = async (id) => {
+  const data = {
+    'id': parseInt(id),
+    'userId': '21914df4-4745-43da-979a-c4adca6a58c0'
+  }
+  const res = await report_detail(data)
+  if (res.data) {
+    res.data.forEach(item => {
+      if (item.type === "patent_trend1") {
+        dataPatentTrend1.value = item
+      }
+      if (item.type === "patent_trend2") {
+        dataPatentTrend2.value = item
+      }
+      if (item.type === "patent_applicant") {
+        dataPatentApplicant.value = item
+      }
+      if (item.type === "patent_area") {
+        dataPatentArea.value = item
+      }
+      if (item.type === "patent_type") {
+        dataPatentType.value = item
+      }
+      if (item.type === "patent_technology") {
+        dataPatentTechnology.value = item
+      }
+      if (item.type === "patent_concentration") {
+        dataPatentConcentration.value = item
+      }
+    });
 
-  if(query.message) {
-    message.value = decodeURIComponent(query.message);
+  }
+  // console.log(res, 'report_detail_fn')
+}
+const query = router.currentRoute.value.query;
+
+if (query.id) {
+  report_detail_fn(query.id)
+}
+
+if (query.message) {
+  message.value = decodeURIComponent(query.message);
   // console.log(message.value, 'query')
   report_save_fn()
-  }
+}
+
+const generate_pdf_fn = async () => {
+
+  fetch('http://110.42.103.198:22440/generate-pdf', {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      reportId: reportId.value + '',
+      userId: '21914df4-4745-43da-979a-c4adca6a58c0'
+    })
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.blob(); // Assuming the response is a PDF file
+    })
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'report.pdf'; // Specify the filename
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
 
 
-  // const leftTabs = [
-  //   "技术背景和目标",
-  //   "技术现状分析",
-  //   "具体研究内容",
-  //   "技术发展路线图",
-  //   "主要玩家分析",
-  //   "当前技术方案梳理",
-  //   "重点专利解读",
-  //   "可能的研发方向",
-  // ];
+}
+
+// const leftTabs = [
+//   "技术背景和目标",
+//   "技术现状分析",
+//   "具体研究内容",
+//   "技术发展路线图",
+//   "主要玩家分析",
+//   "当前技术方案梳理",
+//   "重点专利解读",
+//   "可能的研发方向",
+// ];
 </script>

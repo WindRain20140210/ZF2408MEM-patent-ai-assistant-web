@@ -125,9 +125,9 @@ import router from '@/router'
 //     { state: '技术构成分析', abbr: 'patent_technology' },
 //     { state: '集中度分析', abbr: 'patent_concentration' },
 // ];
-const industry = ref('印刷');
-const area = ref('广东');
-const key = ref(null);
+const industry = ref('');
+const area = ref('');
+const key = ref('');
 const applicant = ref('');
 
 const gotoGenerate = () => {
