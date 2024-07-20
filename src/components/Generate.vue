@@ -180,14 +180,9 @@ const report_detail_fn = async(id)=>{
 
   if(query.message) {
     message.value = decodeURIComponent(query.message);
-  console.log(message.value, 'query')
-
+  // console.log(message.value, 'query')
+  report_save_fn()
   }
-// onMounted(() => {
-//   // 干啥用不知道
-//   // report_save_fn()
-
-// });
 
 
   // const leftTabs = [

@@ -76,7 +76,7 @@ function renderPage(res_content, jsonData) {
   content.value = res_content;
 
   if (jsonData) {
-    const formattedData = jsonData.data.map(item => ({
+    const formattedData = jsonData?.data?.map(item => ({
       name: item.class + item.num,
       value: item.num
     }));

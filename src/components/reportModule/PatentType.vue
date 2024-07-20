@@ -63,7 +63,7 @@ function renderPage(res_content, jsonData) {
   if (jsonData) {
 
     // 遍历对象数组并修改字段名
-    jsonData.data = jsonData.data.map(item => {
+    jsonData.data = jsonData?.data?.map(item => {
       return {
         name: item.type,
         value: item.num

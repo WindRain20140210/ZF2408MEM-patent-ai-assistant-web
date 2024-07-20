@@ -2,17 +2,25 @@
     <v-main class="bg-wrapper">
         <v-container>
             <v-card>
-                <v-card-text class="text-medium-emphasis pa-6">
-                    <div class="mb-3">我的报告 / 创建专利报告</div>
-                    <div class="mb-3">专利报告范围检索</div>
-                    <div class="mb-3">填写你的筛选条件，我们将根据专利、文献，通过专利智能助手为你快速生成个性化专利报告。</div>
+                <v-card-text class="text-medium-emphasis pa-6 top-box">
+                    <p class="p1">我的报告 / <span class="b">创建专利报告</span></p>
+                    <p class="p2">专利报告范围检索</p>
+                    <p class="p3">填写你的筛选条件，我们将根据专利、文献，通过专利智能助手为你快速生成个性化专利报告。</p>
                 </v-card-text>
             </v-card>
 
-            <v-card class="input-card">
+            <v-card class="input-card bottom-box">
                 <v-card-text class="text-medium-emphasis pa-6">
                     <div class="contain-box">
-                        <div class="mb-3">筛选条件至少输入一项</div>
+                        <v-row>
+                            <v-col cols="4">
+                                <p class="lable-p">&nbsp;</p>
+                            </v-col>
+                            <v-col cols="8">
+                                <p class="">筛选条件至少输入一项</p>
+                            </v-col>
+                        </v-row>
+
                         <!-- <v-row>
                             <v-col cols="4">
                                 <v-list-subheader>数据类型</v-list-subheader>
@@ -31,70 +39,58 @@
                                 ></v-select>
                             </v-col>
                         </v-row> -->
+                        <v-row>
+                            <v-col cols="4">
+                                <p class="lable-p">技术关键字</p>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-text-field :model-value="key" v-model="key" variant="outlined"
+                                    density="compact"></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="4">
+                                <p class="lable-p">申请人</p>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-text-field :model-value="applicant" v-model="applicant" variant="outlined"
+                                    density="compact"></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="4">
+                                <p class="lable-p">地域</p>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-text-field :model-value="area" v-model="area" variant="outlined"
+                                    density="compact"></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="4">
+                                <p class="lable-p">专业行业</p>
+                            </v-col>
+                            <v-col cols="8">
+                                <v-text-field :model-value="industry" v-model="industry" variant="outlined"
+                                    density="compact"></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <!-- <v-btn @click="$router.push('/search')" class="text-none ms-4 text-white btn-search" rounded="0"
+                            variant="flat">
+                            创建专利报告
+                        </v-btn> -->
+                        <v-row>
+                            <v-col cols="4">
+                                <p class="lable-p">&nbsp;</p>
+                            </v-col>
+                            <v-col cols="8">
 
-                        <v-row>
-                            <v-col cols="4">
-                                <v-list-subheader>申请人</v-list-subheader>
-                            </v-col>
-                            <v-col cols="8">
-                                <v-text-field
-                                :model-value="applicant"
-                                v-model="applicant"
-                                variant="outlined"
-                                ></v-text-field>
-                                <input type="text" >
+                                <v-btn class="text-none ms-4 text-white btn-search" @click="gotoGenerate" color="blue-darken-4" rounded="0"
+                                    variant="flat">
+                                    生成报告
+                                </v-btn>
 
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="4">
-                                <v-list-subheader>专业行业</v-list-subheader>
-                            </v-col>
-                            <v-col cols="8">
-                                <v-text-field
-                                :model-value="industry"
-                                v-model="industry"
-                                variant="outlined"
-                                ></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="4">
-                                <v-list-subheader>地域</v-list-subheader>
-                            </v-col>
-                            <v-col cols="8">
-                                <v-text-field
-                                :model-value="area"
-                                v-model="area"
-                                variant="outlined"
-                                ></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="4">
-                                <v-list-subheader>技术关键字</v-list-subheader>
-                            </v-col>
-                            <v-col cols="8">
-                                <v-text-field
-                                :model-value="key"
-                                v-model="key"
-                                variant="outlined"
-                                ></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <!-- <v-row>
-                            <v-col cols="4">
-                                <v-list-subheader>技术主题</v-list-subheader>
-                            </v-col>
-                            <v-col cols="8">
-                                <v-text-field
-                                model-value="10.00"
-                                variant="outlined"
-                                ></v-text-field>
-                            </v-col>
-                        </v-row> -->
-
-                        <v-btn
+                                <!-- <v-btn
                             class="text-none"
                             color="secondary"
                             size="x-large"
@@ -102,7 +98,10 @@
                             @click="gotoGenerate"
                             block>
                             生成报告
-                        </v-btn>
+                        </v-btn> -->
+                            </v-col>
+                        </v-row>
+
                     </div>
                 </v-card-text>
             </v-card>
@@ -143,19 +142,52 @@ const gotoGenerate = () => {
     router.push({ path: '/generate', query })
 }
 
-    onMounted(() => {
-    });
+onMounted(() => {
+});
 </script>
 
 <style lang="scss" scoped>
 .bg-wrapper {
-  background-color: #f1f2f6;
+    background-color: #f1f2f6;
 }
+
 .input-card {
     margin-top: 30px;
 }
+
 .contain-box {
-    width:  600px;
+    width: 600px;
     margin: 0 auto;
+}
+
+.top-box p {
+    line-height: 30px;
+}
+
+.top-box .p1 {
+    font-size: 14px;
+}
+
+.top-box .p2 {
+    font-size: 16px;
+    color: #222;
+    line-height: 40px;
+    font-weight: bold;
+}
+
+.top-box .p3 {
+    font-size: 12px;
+}
+
+.lable-p {
+    text-align: right;
+    height: 40px;
+    line-height: 40px;
+}
+.btn-search {
+  background-color: #0586fd!important;
+}
+.bottom-box {
+    padding: 30px 0 50px;
 }
 </style>

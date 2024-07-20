@@ -119,11 +119,11 @@ function renderPage(res_content, jsonData) {
   
   if (jsonData) {
     const data = jsonData.data;
-    const years = data.map(item => item.year);
-    const authorization_nums = data.map(item => item.authorization_num);
-    const apply_nums = data.map(item => item.apply_num);
+    const years = data?.map(item => item.year);
+    const authorization_nums = data?.map(item => item.authorization_num);
+    const apply_nums = data?.map(item => item.apply_num);
     let percent = [];
-    authorization_nums.forEach((num, index) => {
+    authorization_nums?.forEach((num, index) => {
       let per = 0;
       if(num >= apply_nums[index]) {
         per = 0

@@ -47,7 +47,7 @@ function renderPage(res_content, jsonData) {
 
   if (jsonData) {
     let grouped = {};
-    jsonData.data.forEach(item => {
+    jsonData?.data?.forEach(item => {
       for (let key in item) {
         if (!grouped[key]) {
           grouped[key] = [];

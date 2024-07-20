@@ -83,11 +83,11 @@ export default defineConfig({
                     return path.replace(/^\/v1/, '')
                 }
             },
-            '/api': {
-                target: 'http://8.146.201.197:30080/dev', //后端服务实际地址
+            '/generate-pdf': {
+                target: 'http://110.42.103.198:22440',
                 changeOrigin: true,
                 rewrite: (path) => {
-                    return path.replace(/^\/api/, '');
+                    return path.replace(/^\/generate-pdf/, '');
                 },
             },
         }
