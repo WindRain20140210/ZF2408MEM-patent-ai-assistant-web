@@ -1,84 +1,64 @@
 <template>
-  <v-main class="bg-grey-lighten-3">
-    <v-container>
-
-      <v-container style="display: flex;
-        z-index: 999;
-        margin-top: -20px" class="leftTabsFixed">
-
-        <v-row style="width: 100%;
-          background: white;">
-
-          <v-col style="display: flex;
-            align-items: center;" cols="8">
-
-            <v-btn @click="$router.push('/search')" prepend-icon="mdi-arrow-left" variant="plain">
-              返回
-            </v-btn>
-
-            <div style="margin-left: 15px">
-              <p style="font-size: 14px">
-                一种关于锂电池脉冲电容器提升能量密度指标的研究
-              </p>
-
-            </div>
-          </v-col>
-
-          <v-col style="display: flex;  align-items: center;" cols="4">
-            <!-- <p style="font-size: 12px; color: lightgray">上次更新: 2024-07-12</p> -->
-
-            <v-btn style="margin-left: 10px" @click="generate_pdf_fn" append-icon="mdi-checkbox-marked-circle"
-              variant="plain" rounded="xl">
-              下载报告
-            </v-btn>
-
-            <v-btn @click="$router.push('/record')" style="margin-left: 5px" append-icon="mdi-arrow-right"
-              variant="plain" rounded="xl">
+  <v-main class="bg-wrapper">
+    <div class="container-box">
+      <v-card class="card-box">
+        <v-card-text class="top-box">
+          <p class="p1">我的报告&nbsp;&nbsp;/&nbsp;&nbsp;创建专利报告&nbsp;&nbsp;/&nbsp;&nbsp;<span class="b">专利报告详情</span></p>
+          <p class="p2">{{ title }}</p>
+          <p class="p3">&nbsp;</p>
+          <div class="btn-box">
+            <v-btn class="text-none ms-4 text-white btn-search0" variant="outlined" @click="$router.push('/record')"
+              color="blue-darken-4" rounded="0">
               历史报告
             </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
+            <v-btn class="text-none ms-4 text-white btn-search1" @click="generate_pdf_fn" color="blue-darken-4" rounded="0"
+              variant="flat">
+              下载报告
+            </v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+
+      <div class="article-box">
 
       <v-row>
-        <!-- right side sheet -->
-        <!-- <v-col cols="3">
+        <v-col cols="3">
           <v-sheet rounded="lg">
-            <div class="leftTabsFixed" style="top: 230px;">
+            <div :class = leftTabsFixed id="leftTabs" style="width: 330px;">
               <v-list rounded="lg">
                 <v-list-item
                   v-for="(item, index) in leftTabs"
                   :class="{ activeTab: activeTabIndex === index }"
-                  :key="item"
-                  :title="`${ item.title }`"
+                  :key="index"
+                  :title="`${item}`"
                   link
-                  @click="scrollTabElement(item)"
+                  @click="scrollTabElement(index)"
                 />
               </v-list>
             </div>
           </v-sheet>
-        </v-col> -->
+        </v-col>
 
-        <!-- left side blank -->
         <v-col>
           <v-sheet min-height="80vh" rounded="lg">
-
             <!-- main content -->
             <v-card flat>
-              <v-patent-trend1 :message=message :detailData=dataPatentTrend1 />
-              <v-patent-trend2 :message=message :detailData=dataPatentTrend2 />
-              <v-patent-applicant :message=message :detailData=dataPatentApplicant />
-              <v-patent-area :message=message :detailData=dataPatentArea />
-              <v-patent-type :message=message :detailData=dataPatentType />
-              <v-patent-technology :message=message :detailData=dataPatentTechnology />
-              <v-patent-concentration :message=message :detailData=dataPatentConcentration />
+              <v-patent-trend1 :message=message :detailData=dataPatentTrend1 chartId="chart0" />
+              <v-patent-trend2 :message=message :detailData=dataPatentTrend2 chartId="chart1" />
+              <v-patent-applicant :message=message :detailData=dataPatentApplicant chartId="chart2" />
+              <v-patent-area :message=message :detailData=dataPatentArea chartId="chart3" />
+              <v-patent-type :message=message :detailData=dataPatentType chartId="chart4" />
+              <v-patent-technology :message=message :detailData=dataPatentTechnology chartId="chart5" />
+              <v-patent-concentration :message=message :detailData=dataPatentConcentration chartId="chart6" />
             </v-card>
           </v-sheet>
         </v-col>
 
       </v-row>
 
-    </v-container>
+      </div>
+      
+    </div>
   </v-main>
 </template>
 <script>
@@ -105,13 +85,17 @@ export default {
 </script>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import router from '@/router'
 import { report_detail, report_save } from '../api/api'
 
+const activeTabIndex = ref(0);
+const leftTabsFixed = ref('');
+
 const reportId = ref(null);
 const message = ref(null);
-// const detailData = ref(null);
+const title = ref(null);
+
 const dataPatentTrend1 = ref(null);
 const dataPatentTrend2 = ref(null);
 const dataPatentApplicant = ref(null);
@@ -120,14 +104,32 @@ const dataPatentType = ref(null);
 const dataPatentTechnology = ref(null);
 const dataPatentConcentration = ref(null);
 
+const leftTabs = [
+  "技术背景和目标",
+  "技术发展及演变趋势分析",
+  "申请人排名分析",
+  "地域分析",
+  "专利类型",
+  "技术构成分析",
+  "专利集中度分析",
+];
 
 const report_save_fn = async () => {
-  const res = await report_save()
+  const { industry, area, key, applicant } = JSON.parse(message.value);
+  const data = {
+    user_id: '21914df4-4745-43da-979a-c4adca6a58c0',
+    key,
+    industry,
+    area,
+    applicant
+  }
+  const res = await report_save(data)
   if (res.data) {
     reportId.value = res.data.id;
+    title.value = res.data.title;
   }
-  // console.log(res, 'report_save_fn')
 }
+
 const report_detail_fn = async (id) => {
   const data = {
     'id': parseInt(id),
@@ -170,7 +172,6 @@ if (query.id) {
 
 if (query.message) {
   message.value = decodeURIComponent(query.message);
-  // console.log(message.value, 'query')
   report_save_fn()
 }
 
@@ -209,14 +210,92 @@ const generate_pdf_fn = async () => {
 
 }
 
-// const leftTabs = [
-//   "技术背景和目标",
-//   "技术现状分析",
-//   "具体研究内容",
-//   "技术发展路线图",
-//   "主要玩家分析",
-//   "当前技术方案梳理",
-//   "重点专利解读",
-//   "可能的研发方向",
-// ];
+const scrollTabElement = (index) => {
+  const chart = document.querySelector('#chart' + index);
+  window.scrollTo({
+    top: chart.offsetTop,
+    behavior: 'smooth'
+  });
+  activeTabIndex.value = index;
+}
+
+window.addEventListener('scroll', function() {
+    console.log(window.scrollY)
+    if (window.scrollY > 175) {
+      leftTabsFixed.value = 'leftTabsFixed';
+    } else {
+      leftTabsFixed.value = '';
+    }
+});
+
 </script>
+
+<style lang="scss" scoped>
+.bg-wrapper {
+  background-color: #f1f2f6;
+}
+
+.container-box {
+  width: 1392px !important;
+  margin: 24px auto;
+}
+
+.card-box {
+  box-shadow: none;
+}
+
+.top-box {
+  padding: 16px 32px;
+}
+
+.top-box .p1 {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+  line-height: 22px;
+  height: 22px;
+}
+
+.top-box .p1 .b {
+  color: rgb(24, 144, 255);
+}
+
+.top-box .p2 {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 60px;
+  height: 60px;
+}
+
+.top-box .p3 {
+  font-size: 14px;
+  line-height: 22px;
+  height: 22px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+button.btn-search0 {
+  border: 1px solid rgb(217, 217, 217) !important;
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+.btn-search1 {
+  background-color: #0586fd !important;
+}
+.btn-box {
+  width: 230px;
+  height: 40px;
+  position: absolute;
+  top: 50px;
+  right: 30px;
+}
+.article-box {
+  margin-top: 24px;
+}
+.leftTabsFixed {
+  position: fixed;
+  top: 90px;
+}
+.activeTab {
+  background-color: #0586fd !important;
+  color: #ffffff !important;
+}
+</style>

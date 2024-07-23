@@ -7,10 +7,15 @@
     </v-main>
 
   </v-app>
-    <iframe v-if="!robotShow" src="http://110.42.103.198:23837/chatbot/RwuJBwZo2Z9KRzvF" frameborder="0" id="difyRot" allow="microphone">
+  <div v-if="!robotShow" class="rot-box">
+    <iframe src="http://110.42.103.198:23837/chat/Iz5BWLrdXmINO2oE" frameborder="0" allow="microphone">
     </iframe>
+    <a href="/record" class="link">我的报告 ></a>
+    <span class="close" @click="toggle">关闭</span>
+  </div>
+
   <div id="robot" v-if="robotShow" @click="toggle">
-    <img src="@/assets/robot.png" id="robot" alt=""/>
+    <img src="@/assets/robot.png" class="robot-icon" alt=""/>
  </div>
 </template>
 <script setup>
@@ -25,17 +30,23 @@ function toggle() {
 </script>
 
 
-<style>
-    #difyRot {
+<style scoped>
+    .rot-box {
         position: fixed;
         bottom: 10px;
         right: 30px;
         width: 400px;
-        height: 400px;
+        height: 440px;
         z-index: 1000;
+        background-color: #ffffff;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     }
-    #robot {
+    .rot-box iframe {
+      width: 400px;
+      height: 400px;
+      display: block;
+    }
+    .robot-icon {
         cursor: pointer;
         position: fixed;
         bottom: 10px;
@@ -43,6 +54,22 @@ function toggle() {
         width: 100px;
         height: 100px;
         z-index: 1000;
+    }
+    .link {
+      font-size: 14px;
+      color: #0586fd;
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      z-index: 1001;
+    }
+    .close {
+      font-size: 14px;
+      color: #999;
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      z-index: 1001;
     }
 </style>
 

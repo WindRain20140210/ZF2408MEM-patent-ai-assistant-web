@@ -68,11 +68,7 @@ export function report_save(data) {
     return request({
         url,
         method: 'post',
-        data: {
-            'user_id': '21914df4-4745-43da-979a-c4adca6a58c0',
-            'title': '', // 是啥
-            'batch_id': '' // 是啥 => 空
-        }
+        data,
     });
 }
 /**

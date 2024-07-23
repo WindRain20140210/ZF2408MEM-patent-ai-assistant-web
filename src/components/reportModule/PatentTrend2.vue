@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap" :id=chartId>
     <p class="title">技术发展及演变趋势分析</p>
     <p class="content">{{ content }}</p>
   </div>
@@ -13,7 +13,8 @@ import sseFetch from '/src/api/sseFetch';
 
 const props = defineProps({
   message: Object,
-  detailData: Object
+  detailData: Object,
+  chartId: String
 })
 const content = ref('');
 const echartsRef = ref(null);
@@ -186,21 +187,6 @@ watch(
 );
 
 </script>
-<style>
-.wrap {
-  padding: 20px!important;
-}
-.title {
-  font-weight: bold;
-  color: #333333;
-  font-size: 20px;
-  height: 50px;
-  line-height: 50px;
-}
-.content {
-  color: #666666;
-  font-size: 14px;
-  line-height: 30px;
-  text-indent: 2em;
-}
+<style scoped>
+@import "../../styles/reportModule.css";
 </style>
