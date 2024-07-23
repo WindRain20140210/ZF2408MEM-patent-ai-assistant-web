@@ -6,24 +6,25 @@
         <v-card flat>
           <div class="top-wrapper">
             <p class="main-title">我的报告</p>
+            <div class="search-box">
+              <v-text-field v-model="searchKey" density="compact" label="请输入报告名称"
+              flat hide-details 
+              variant="outlined"
+              single-line></v-text-field>
+              <span class="mock-btn">搜索</span>
+            </div>
             <v-btn @click="$router.push('/search')" class="text-none ms-4 text-white btn-search" rounded="0"
               variant="flat">
               创建专利报告
             </v-btn>
           </div>
 
-          <!-- title -->
-          <!-- <v-card-title class="d-flex align-center pe-2">
-            我的报告
-            <v-spacer></v-spacer>
-
-            <v-text-field v-model="search" density="compact" label="请输入报告名称" prepend-inner-icon="mdi-magnify"
-              variant="solo-filled" flat hide-details single-line></v-text-field>
-          </v-card-title> -->
-
           <!-- <v-divider></v-divider> -->
           <div class="table-wrapper">
-            <v-data-table :items="listdata" :headers="headers">
+            <v-data-table
+            :items="listdata"
+            v-model:search="searchKey"
+            :headers="headers">
               <template v-slot:item.actions="{ item }">
                   <span class="link" @click="generate_pdf_fn(item)">下载</span>
                   <span class="bit">|</span>
@@ -72,6 +73,7 @@ const headers = [
 ];
 
 const listdata = ref([]);
+const searchKey = ref('');
 
 const report_list_fn = async () => {
   const res = await report_list()
@@ -175,5 +177,23 @@ onMounted(() => {
 .btn-search {
   float: right;
   background-color: #0586fd;
+}
+
+.search-box {
+  margin: 20px auto;
+  width: 552px;
+  position: relative;
+}
+.mock-btn {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 70px;
+  height: 40px;
+  background-color: #0586fd;
+  color: #ffffff;
+  text-align: center;
+  font-size: 16px;
+  line-height: 40px;
 }
 </style>

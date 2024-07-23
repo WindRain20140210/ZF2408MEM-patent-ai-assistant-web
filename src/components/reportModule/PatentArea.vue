@@ -1,6 +1,6 @@
 <template>
   <div class="wrap" :id=chartId>
-    <p class="title">地域分析 {{chartId}}</p>
+    <p class="title">地域分析</p>
     <p class="content">{{ content }}</p>
   </div>
   <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
@@ -24,9 +24,9 @@ const message = ref(props.message);
 const initChart = (series, year) => {
   const option = {
     animation: false,
-    title: {
-      text: 'Stacked Line'
-    },
+    // title: {
+    //   text: 'Stacked Line'
+    // },
     tooltip: {
       trigger: 'axis'
     },
@@ -39,11 +39,11 @@ const initChart = (series, year) => {
       bottom: '3%',
       containLabel: true
     },
-    toolbox: {
-      feature: {
-        saveAsImage: {}
-      }
-    },
+    // toolbox: {
+    //   feature: {
+    //     saveAsImage: {}
+    //   }
+    // },
     xAxis: {
       type: 'category',
       boundaryGap: false,

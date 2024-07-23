@@ -3,7 +3,7 @@
     <div class="container-box">
       <v-card class="card-box">
         <v-card-text class="top-box">
-          <p class="p1">我的报告&nbsp;&nbsp;/&nbsp;&nbsp;创建专利报告&nbsp;&nbsp;/&nbsp;&nbsp;<span class="b">专利报告详情</span></p>
+          <p class="p1"><a class="crumbs" href="/record">我的报告</a>&nbsp;&nbsp;/&nbsp;&nbsp;<a class="crumbs" href="/search">创建专利报告</a>&nbsp;&nbsp;/&nbsp;&nbsp;<span class="b">专利报告详情</span></p>
           <p class="p2">{{ title }}</p>
           <p class="p3">&nbsp;</p>
           <div class="btn-box">
@@ -85,7 +85,7 @@ export default {
 </script>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import router from '@/router'
 import { report_detail, report_save } from '../api/api'
 
@@ -114,8 +114,8 @@ const leftTabs = [
   "专利集中度分析",
 ];
 
-const report_save_fn = async () => {
-  const { industry, area, key, applicant } = JSON.parse(message.value);
+const report_save_fn = async (param) => {
+  const { industry, area, key, applicant } = JSON.parse(decodeURIComponent(param));
   const data = {
     user_id: '21914df4-4745-43da-979a-c4adca6a58c0',
     key,
@@ -137,6 +137,9 @@ const report_detail_fn = async (id) => {
   }
   const res = await report_detail(data)
   if (res.data) {
+    if(res.data.length > 0) {
+      title.value = res.data[0].title;
+    }
     res.data.forEach(item => {
       if (item.type === "patent_trend1") {
         dataPatentTrend1.value = item
@@ -168,11 +171,12 @@ const query = router.currentRoute.value.query;
 
 if (query.id) {
   report_detail_fn(query.id)
+  reportId.value = query.id;
 }
 
 if (query.message) {
+  report_save_fn(query.message)
   message.value = decodeURIComponent(query.message);
-  report_save_fn()
 }
 
 const generate_pdf_fn = async () => {
@@ -184,7 +188,7 @@ const generate_pdf_fn = async () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      reportId: reportId.value + '',
+      reportId: reportId.value,
       userId: '21914df4-4745-43da-979a-c4adca6a58c0'
     })
   })
@@ -210,6 +214,8 @@ const generate_pdf_fn = async () => {
 
 }
 
+
+
 const scrollTabElement = (index) => {
   const chart = document.querySelector('#chart' + index);
   window.scrollTo({
@@ -219,14 +225,39 @@ const scrollTabElement = (index) => {
   activeTabIndex.value = index;
 }
 
-window.addEventListener('scroll', function() {
-    console.log(window.scrollY)
+function getCurrentIndex() {
+
+  let index = 0;
+  for (let i=0; i<7; i++) {
+    const chart = document.querySelector('#chart' + i);
+    const rect = chart.getBoundingClientRect();
+
+    if(rect.top>0) {
+      index = i;
+      break;
+    }
+  }
+
+  return index;
+}
+
+onMounted(()=>{
+
+  window.addEventListener('scroll', function() {
     if (window.scrollY > 175) {
       leftTabsFixed.value = 'leftTabsFixed';
     } else {
       leftTabsFixed.value = '';
     }
-});
+
+    const index = getCurrentIndex();
+    activeTabIndex.value = index;
+
+  });
+
+
+})
+
 
 </script>
 
@@ -297,5 +328,9 @@ button.btn-search0 {
 .activeTab {
   background-color: #0586fd !important;
   color: #ffffff !important;
+}
+.crumbs {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.45);
 }
 </style>
