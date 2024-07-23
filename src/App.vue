@@ -35,15 +35,15 @@ function toggle() {
         position: fixed;
         bottom: 10px;
         right: 30px;
-        width: 400px;
-        height: 440px;
+        width: 500px;
+        height: 540px;
         z-index: 1000;
         background-color: #ffffff;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     }
     .rot-box iframe {
-      width: 400px;
-      height: 400px;
+      width: 500px;
+      height: 500px;
       display: block;
     }
     .robot-icon {
