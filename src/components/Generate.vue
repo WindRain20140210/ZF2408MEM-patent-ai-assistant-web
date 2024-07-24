@@ -168,6 +168,19 @@ const report_detail_fn = async (id) => {
       }
     });
 
+  } else {
+
+    const item = {
+      content: 'errordata',
+      data: null
+    }
+    dataPatentTrend1.value = item;
+    dataPatentTrend2.value = item;
+    dataPatentApplicant.value = item;
+    dataPatentArea.value = item;
+    dataPatentType.value = item;
+    dataPatentTechnology.value = item;
+    dataPatentConcentration.value = item;
   }
 }
 const query = router.currentRoute.value.query;
@@ -204,7 +217,7 @@ const generate_pdf_fn = async () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'report.pdf'; // Specify the filename
+      a.download = title.value + '.pdf'; // Specify the filename
       document.body.appendChild(a);
       a.click();
       a.remove();

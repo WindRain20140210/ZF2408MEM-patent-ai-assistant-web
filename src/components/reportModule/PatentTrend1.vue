@@ -1,25 +1,30 @@
 <template>
     <div class="wrap" :id=chartId>
       <p class="title">技术背景和目标</p>
-      <p class="content">{{ content }}</p>
+      <Loading v-show="!content"/>
+      <Empty v-show="content === 'errordata'"/>
+      <p class="content" v-show="content && content !=='errordata' ">{{ content }}</p>
     </div>
-    <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
+    <div v-show="echartShow" ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
 </template>
   
 <script setup>
 import { defineProps, watch, ref } from 'vue';
 import * as echarts from "echarts";
 import sseFetch from '/src/api/sseFetch';
+import Loading from './Loading.vue';
+import Empty from './Empty.vue';
+
+const echartShow = ref(null);
 
 const props = defineProps({
   message: Object,
   detailData: Object,
   chartId: String
 })
-const content = ref('');
+const content = ref(null);
 const echartsRef = ref(null);
 let chartInstance = null;
-// 
 
 
 const initChart = (xAxisData, seriesData) => {
@@ -38,13 +43,13 @@ const initChart = (xAxisData, seriesData) => {
         }
     ]
     };
-
     chartInstance = echarts.init(echartsRef.value);
     chartInstance.setOption(option);
 };
 
 
 function renderPage(res_content, jsonData) {
+  console.log(res_content, 'res_content');
   content.value = res_content;
   if (jsonData) {
     let grouped = {};
@@ -79,13 +84,14 @@ function sseRenderPage(messageData) {
       inputs: {
           conditions: JSON.stringify(conditions)
       },
-      query: '生成印刷行业分析报告', // 用户对话框中输入的内容
+      query: '生成报告', // 用户对话框中输入的内容
       response_mode: 'streaming', // 'blocking',// 固定传
       conversation_id: '', // currentConversationId.value, // 会话id, 第一次请求后获取
-      user: 'liruinan' // userName.value, // 用户名，区分请求用户
+      user: 'beihang' // userName.value, // 用户名，区分请求用户
   }
 
   sseFetch(fetchData, (res_content, jsonData) => {
+      echartShow.value = true;
       renderPage(res_content, jsonData)
   });
 

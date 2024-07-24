@@ -1,6 +1,4 @@
 <template>
-
-
   <v-dialog max-width="300" v-model="dialog">
     <v-card
         text="确认删除此报告吗？"
@@ -44,7 +42,8 @@
             <v-data-table
             :items="listdata"
             v-model:search="searchKey"
-            :headers="headers">
+            :headers="headers"
+            class="table-header">
               <template v-slot:item.actions="{ item }">
                   <router-link :to="{ path: '/generate', query: { id: item.id } }" class="link">查看</router-link>
                   <span class="bit">|</span>
@@ -87,10 +86,10 @@ import { onMounted, ref } from "vue";
 import { report_list, report_delete } from '../api/api'
 
 const headers = [
-  { title: '报告ID', key: 'id', align: 'center', },
-  { title: '报告名称', key: 'title', align: 'center', },
-  { title: '最后更新', key: 'update_time', align: 'center', },
-  { title: '操作', key: 'actions', sortable: false, align: "center" },
+  { title: '报告ID', key: 'id', align: 'center', width: '10%', style: 'background-color: #f1f2f6' },
+  { title: '报告名称', key: 'title', align: 'center', width: '45%' },
+  { title: '最后更新', key: 'update_time', align: 'center',  width: '20%'  },
+  { title: '操作', key: 'actions', sortable: false, align: "center", width: '25%' },
 ];
 
 const listdata = ref([]);
@@ -142,7 +141,7 @@ const generate_pdf_fn = async (item) => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'report.pdf'; // Specify the filename
+      a.download = item.title + '.pdf'; // Specify the filename
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -169,7 +168,16 @@ onMounted(() => {
 
 </script>
 
-<style lang="scss" scoped>
+<style>
+.table-header th span{
+  font-weight: bolder!important;
+} 
+.table-header th {
+  background-color:rgb(250, 250, 250);
+}
+</style>
+
+<style scoped>
 .bg-wrapper {
   background-color: #f1f2f6;
 }

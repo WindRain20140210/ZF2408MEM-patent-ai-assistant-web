@@ -11,6 +11,11 @@ let content = ''; // 文案内容
 let temp = ''; // 存储json数据过桥
 let jsonData = null; // 图表json
 
+const mockErrorData = {
+  content: 'errordata',
+  jsonData: null
+}
+
 fetchEventSource(url, {
   method: 'POST',
   headers: {
@@ -58,17 +63,21 @@ fetchEventSource(url, {
           callback && callback(content, jsonData);
       }
       if(data.event === "message_end") {
+        callback && callback(mockErrorData.content, mockErrorData.jsonData);
         ctrl.abort();
       }
     } catch (error) {
+      callback && callback(mockErrorData.content, mockErrorData.jsonData);
       console.log(error);
     }
 
   },
   onclose() {
+    callback && callback(mockErrorData.content, mockErrorData.jsonData);
     console.log('onclose');
   },
   onerror(err) {
+    callback && callback(mockErrorData.content, mockErrorData.jsonData);
     console.log('onerror', err);
     // ctrl.abort();
     throw err;
