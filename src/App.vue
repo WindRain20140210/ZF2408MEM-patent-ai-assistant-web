@@ -38,7 +38,7 @@ function toggle() {
 .rot-box {
   position: fixed;
   bottom: 45px;
-  right: 15px;
+  right: 5px;
   width: 500px;
   height: 540px;
   z-index: 1000;
