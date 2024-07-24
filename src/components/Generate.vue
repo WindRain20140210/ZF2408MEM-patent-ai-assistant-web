@@ -169,7 +169,6 @@ const report_detail_fn = async (id) => {
     });
 
   }
-  // console.log(res, 'report_detail_fn')
 }
 const query = router.currentRoute.value.query;
 
@@ -191,7 +190,7 @@ const generate_pdf_fn = async () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      reportId: reportId.value,
+      reportId: reportId.value + '',
       userId: '21914df4-4745-43da-979a-c4adca6a58c0'
     })
   })
