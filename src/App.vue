@@ -17,62 +17,67 @@
 
   <div id="robot" v-if="robotShow" @click="toggle">
     <img src="@/assets/robot.png" class="robot-icon" alt=""/>
- </div>
+  </div>
 </template>
 <script setup>
 
 import AppHeader from "@/components/AppHeader.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
-import { ref } from "vue";
+import {ref} from "vue";
+
 const robotShow = ref(true);
 
 function toggle() {
   robotShow.value = !robotShow.value;
- }
+}
 </script>
 
 
 <style scoped>
-    .rot-box {
-        position: fixed;
-        bottom: 10px;
-        right: 30px;
-        width: 500px;
-        height: 540px;
-        z-index: 1000;
-        background-color: #ffffff;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .rot-box iframe {
-      width: 500px;
-      height: 500px;
-      display: block;
-    }
-    .robot-icon {
-        cursor: pointer;
-        position: fixed;
-        bottom: 10px;
-        right: 30px;
-        width: 100px;
-        height: 100px;
-        z-index: 1000;
-    }
-    .link {
-      font-size: 14px;
-      color: #0586fd;
-      position: absolute;
-      bottom: 10px;
-      left: 20px;
-      z-index: 1001;
-    }
-    .close {
-      font-size: 14px;
-      color: #999;
-      position: absolute;
-      bottom: 10px;
-      right: 20px;
-      z-index: 1001;
-    }
+.rot-box {
+  position: fixed;
+  bottom: 45px;
+  right: 15px;
+  width: 500px;
+  height: 540px;
+  z-index: 1000;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rot-box iframe {
+  width: 500px;
+  height: 500px;
+  display: block;
+}
+
+.robot-icon {
+  cursor: pointer;
+  position: fixed;
+  bottom: 35px;
+  right: 30px;
+  width: 100px;
+  height: 100px;
+  z-index: 1000;
+}
+
+.link {
+  font-size: 14px;
+  color: #0586fd;
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+  z-index: 1001;
+}
+
+.close {
+  font-size: 14px;
+  color: #999;
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  z-index: 1001;
+}
 </style>
 
