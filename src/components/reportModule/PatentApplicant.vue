@@ -1,11 +1,11 @@
 <template>
-    <div class="wrap" :id=chartId>
-      <p class="title">申请人排名分析</p>
-      <p class="content">{{ content }}</p>
-    </div>
-    <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
+  <div class="wrap" :id=chartId>
+    <p class="title">申请人排名分析</p>
+    <p class="content">{{ content }}</p>
+  </div>
+  <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
 </template>
-  
+
 <script setup>
 import { defineProps, watch, ref } from 'vue';
 import * as echarts from "echarts";
@@ -19,50 +19,50 @@ const props = defineProps({
 const content = ref('');
 const echartsRef = ref(null);
 let chartInstance = null;
-const message = ref(props.message);
 
 
-    const initChart = (yAxisData, seriesData) => {
-        const option = {
-        // title: {
-        //     text: 'World Population'
-        // },
-        // tooltip: {
-        //     trigger: 'axis',
-        //     axisPointer: {
-        //     type: 'shadow'
-        //     }
-        // },
-        legend: {},
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'value',
-            boundaryGap: [0, 0.01]
-        },
-        yAxis: {
-            type: 'category',
-            data: yAxisData,
-        },
-        series: [
-            {
-            type: 'bar',
-            data: seriesData
-            },
-        ]
-        };
-  
-        chartInstance = echarts.init(echartsRef.value);
-        chartInstance.setOption(option);
-      };
+
+const initChart = (yAxisData, seriesData) => {
+  const option = {
+    // title: {
+    //     text: 'World Population'
+    // },
+    // tooltip: {
+    //     trigger: 'axis',
+    //     axisPointer: {
+    //     type: 'shadow'
+    //     }
+    // },
+    legend: {},
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'value',
+      boundaryGap: [0, 0.01]
+    },
+    yAxis: {
+      type: 'category',
+      data: yAxisData,
+    },
+    series: [
+      {
+        type: 'bar',
+        data: seriesData
+      },
+    ]
+  };
+
+  chartInstance = echarts.init(echartsRef.value);
+  chartInstance.setOption(option);
+};
 
 function renderPage(res_content, jsonData) {
   content.value = res_content;
-  
+
   if (jsonData) {
     let grouped = {};
     jsonData?.data?.forEach(item => {
@@ -78,11 +78,11 @@ function renderPage(res_content, jsonData) {
   }
 }
 
-function sseRenderPage() {
-  if(!message.value) return false;
-  const { industry, area, key, applicant, report_id } = message.value;
+function sseRenderPage(messageData) {
+  if (!messageData) return false;
+  const { industry, area, key, applicant, report_id } = messageData;
 
-const conditions = {
+  const conditions = {
     industry,
     area,
     key,
@@ -90,41 +90,50 @@ const conditions = {
     dataType: 'patent_applicant',
     applicant,
     report_id
-};
-  
-const fetchData = {
+  };
+
+  const fetchData = {
     inputs: {
-        conditions: JSON.stringify(conditions)
+      conditions: JSON.stringify(conditions)
     },
     query: '生成印刷行业分析报告', // 用户对话框中输入的内容
     response_mode: 'streaming', // 'blocking',// 固定传
     conversation_id: '', // currentConversationId.value, // 会话id, 第一次请求后获取
     user: 'liruinan' // userName.value, // 用户名，区分请求用户
-}
+  }
 
   sseFetch(fetchData, (res_content, jsonData) => {
-      renderPage(res_content, jsonData)
+    renderPage(res_content, jsonData)
   });
 
 }
 
-setTimeout(() => {
-  sseRenderPage();
-}, 2000);
+
 
 watch(
-    () => props.detailData,
-    (newValue)=> {
-      if(newValue) {
-        const res_content = newValue.content
-        const jsonData = JSON.parse(newValue.data);
-        renderPage(res_content, jsonData)
-      }
-    },
+  () => props.detailData,
+  (newValue) => {
+    if (newValue) {
+      const res_content = newValue.content
+      const jsonData = JSON.parse(newValue.data);
+      renderPage(res_content, jsonData)
+    }
+  },
 );
 
+watch(
+  () => props.message,
+  (newValue) => {
+    console.log(newValue)
+    if (newValue) {
+      setTimeout(() => {
+        sseRenderPage(newValue);
+      }, 2000);
+    }
+  },
+);
 </script>
- 
+
 <style scoped>
 @import "../../styles/reportModule.css";
 </style>

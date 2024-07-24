@@ -19,7 +19,7 @@ const props = defineProps({
 const content = ref('');
 const echartsRef = ref(null);
 let chartInstance = null;
-const message = ref(props.message);
+
 
 
 const initChart = (seriesData) => {
@@ -75,9 +75,9 @@ function renderPage(res_content, jsonData) {
   }
 }
 
-function sseRenderPage() {
-  if (!message.value) return false;
-  const { industry, area, key, applicant, report_id } = message.value;
+function sseRenderPage(messageData) {
+  if (!messageData) return false;
+  const { industry, area, key, applicant, report_id } = messageData;
 
   const conditions = {
     industry,
@@ -105,10 +105,6 @@ function sseRenderPage() {
 
 }
 
-setTimeout(() => {
-  sseRenderPage();
-}, 3000);
-
 
 watch(
   () => props.detailData,
@@ -117,6 +113,18 @@ watch(
       const res_content = newValue.content
       const jsonData = JSON.parse(newValue.data);
       renderPage(res_content, jsonData)
+    }
+  },
+);
+
+watch(
+  () => props.message,
+  (newValue) => {
+    console.log(newValue)
+    if (newValue) {
+      setTimeout(() => {
+        sseRenderPage(newValue);
+      }, 3000);
     }
   },
 );

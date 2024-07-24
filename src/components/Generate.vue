@@ -127,6 +127,10 @@ const report_save_fn = async (param) => {
   if (res.data) {
     reportId.value = res.data.id;
     title.value = res.data.title;
+    const data = JSON.parse(decodeURIComponent(query.message));
+    data.report_id = reportId.value;
+    message.value = data;
+    console.log(message.value)
   }
 }
 
@@ -176,12 +180,6 @@ if (query.id) {
 
 if (query.message) {
   report_save_fn(query.message);
-
-  const data = JSON.parse(decodeURIComponent(query.message));
-  data.report_id = reportId.value;
-
-
-  message.value = data;
 }
 
 const generate_pdf_fn = async () => {

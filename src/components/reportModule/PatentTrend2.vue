@@ -19,7 +19,7 @@ const props = defineProps({
 const content = ref('');
 const echartsRef = ref(null);
 let chartInstance = null;
-const message = ref(props.message);
+
 
 
 const initChart = (result) => {
@@ -146,9 +146,9 @@ function renderPage(res_content, jsonData) {
   }
 }
 
-function sseRenderPage() {
-    if(!message.value) return false;
-    const { industry, area, key, applicant, report_id } = message.value;
+function sseRenderPage(messageData) {
+    if(!messageData) return false;
+    const { industry, area, key, applicant, report_id } = messageData;
     const conditions = {
       industry,
       area,
@@ -171,9 +171,7 @@ function sseRenderPage() {
       renderPage(res_content, jsonData)
     });
 }
-setTimeout(() => {
-  sseRenderPage();
-}, 1000);
+
  
 watch(
     () => props.detailData,
@@ -182,6 +180,18 @@ watch(
         const res_content = newValue.content
         const jsonData = JSON.parse(newValue.data);
         renderPage(res_content, jsonData)
+      }
+    },
+);
+
+watch(
+    () => props.message,
+    (newValue)=> {
+      console.log(newValue)
+      if(newValue) {
+        setTimeout(() => {
+          sseRenderPage(newValue);
+        }, 1000);
       }
     },
 );
