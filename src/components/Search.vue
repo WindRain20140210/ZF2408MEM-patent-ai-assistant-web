@@ -44,7 +44,7 @@
                         <p class="lable-p">专业行业：</p>
                         <div class="text-box">
                             <v-text-field :model-value="industry" v-model="industry" variant="outlined"
-                                placeholder="请输入 如：锂电池" density="compact"></v-text-field>
+                                placeholder="请输入 如：汽车" density="compact"></v-text-field>
                         </div>
                     </div>
                     <div class="input-box">

@@ -16,6 +16,9 @@ const mockErrorData = {
   jsonData: null
 }
 
+const timeout = 10000;
+let isLock = true;
+
 fetchEventSource(url, {
   method: 'POST',
   headers: {
@@ -60,29 +63,33 @@ fetchEventSource(url, {
             // let jsonString = extractJSON(temp);
             jsonData = JSON.parse(jsonString); // 将 JSON 字符串转换为对象
           }
+          isLock = false;
           callback && callback(content, jsonData);
       }
       if(data.event === "message_end") {
-        callback && callback(mockErrorData.content, mockErrorData.jsonData);
         ctrl.abort();
       }
     } catch (error) {
-      callback && callback(mockErrorData.content, mockErrorData.jsonData);
       console.log(error);
     }
 
   },
   onclose() {
-    callback && callback(mockErrorData.content, mockErrorData.jsonData);
     console.log('onclose');
   },
   onerror(err) {
-    callback && callback(mockErrorData.content, mockErrorData.jsonData);
     console.log('onerror', err);
     // ctrl.abort();
     throw err;
   }
 });
+
+setTimeout(() => {
+  if(isLock) {
+    callback && callback(mockErrorData.content);
+    ctrl.abort();
+  }
+}, timeout);
 
     // fetchEventSource(url, {
     //     method: 'POST',

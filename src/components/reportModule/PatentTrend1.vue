@@ -49,7 +49,6 @@ const initChart = (xAxisData, seriesData) => {
 
 
 function renderPage(res_content, jsonData) {
-  console.log(res_content, 'res_content');
   content.value = res_content;
   if (jsonData) {
     let grouped = {};
