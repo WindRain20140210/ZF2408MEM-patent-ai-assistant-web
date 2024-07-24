@@ -85,7 +85,7 @@ export default {
 </script>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import router from '@/router'
 import { report_detail, report_save } from '../api/api'
 
@@ -175,8 +175,13 @@ if (query.id) {
 }
 
 if (query.message) {
-  report_save_fn(query.message)
-  message.value = decodeURIComponent(query.message);
+  report_save_fn(query.message);
+
+  const data = JSON.parse(decodeURIComponent(query.message));
+  data.report_id = reportId.value;
+
+
+  message.value = data;
 }
 
 const generate_pdf_fn = async () => {
@@ -241,9 +246,7 @@ function getCurrentIndex() {
   return index;
 }
 
-onMounted(()=>{
-
-  window.addEventListener('scroll', function() {
+function onScrollFn () {
     if (window.scrollY > 175) {
       leftTabsFixed.value = 'leftTabsFixed';
     } else {
@@ -253,9 +256,13 @@ onMounted(()=>{
     const index = getCurrentIndex();
     activeTabIndex.value = index;
 
-  });
+  }
 
-
+onMounted(()=>{
+  window.addEventListener('scroll', onScrollFn);
+})
+onUnmounted(()=>{
+  window.removeEventListener('scroll', onScrollFn);
 })
 
 

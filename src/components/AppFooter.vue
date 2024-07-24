@@ -1,5 +1,5 @@
 <template>
-  <v-footer height="40" app style="background-color: #424242;">
+  <v-footer height="40" app>
     <div>
       <a
         id="tag"
@@ -19,7 +19,7 @@
 
 <style scoped>
 #tag {
-  color: white;
+  color: #999;
   position: absolute;
   left: 50%;
   top: 50%;

@@ -5,6 +5,7 @@
     <v-main>
       <router-view/>
     </v-main>
+    <AppFooter/>
 
   </v-app>
   <div v-if="!robotShow" class="rot-box">
@@ -21,6 +22,8 @@
 <script setup>
 
 import AppHeader from "@/components/AppHeader.vue";
+import AppFooter from "@/components/AppFooter.vue";
+
 import { ref } from "vue";
 const robotShow = ref(true);
 

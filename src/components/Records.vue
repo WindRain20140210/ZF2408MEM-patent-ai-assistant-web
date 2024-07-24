@@ -1,4 +1,24 @@
 <template>
+
+
+  <v-dialog max-width="300" v-model="dialog">
+    <v-card
+        text="确认删除此报告吗？"
+      >
+        <template v-slot:actions>
+          <v-spacer></v-spacer>
+
+          <v-btn @click="dialog = false">
+            取消
+          </v-btn>
+
+          <v-btn @click="report_delete_fn()">
+            确定
+          </v-btn>
+        </template>
+      </v-card>
+</v-dialog>
+
   <v-main class="bg-wrapper">
       <v-sheet min-height="50vh" class="container-box">
 
@@ -26,11 +46,12 @@
             v-model:search="searchKey"
             :headers="headers">
               <template v-slot:item.actions="{ item }">
-                  <span class="link" @click="generate_pdf_fn(item)">下载</span>
-                  <span class="bit">|</span>
-                  <span class="link" @click="report_delete_fn(item)">删除</span>
-                  <span class="bit">|</span>
                   <router-link :to="{ path: '/generate', query: { id: item.id } }" class="link">查看</router-link>
+                  <span class="bit">|</span>
+                  <span class="link"
+                   @click="delete_fn(item)">删除</span>
+                  <span class="bit">|</span>
+                  <span class="link" @click="generate_pdf_fn(item)">下载</span>
               </template>
             </v-data-table>
           </div>
@@ -74,20 +95,29 @@ const headers = [
 
 const listdata = ref([]);
 const searchKey = ref('');
+const dialog = ref(false);
+const delete_item = ref(null);
 
 const report_list_fn = async () => {
   const res = await report_list()
   listdata.value = res.data;
 }
 
-const report_delete_fn = async (item) => {
+const delete_fn = async (item) => {
+  dialog.value = true;
+  delete_item.value = item;
+}
+
+const report_delete_fn = async () => {
+  dialog.value = false;
   const data = {
-    'ids': [parseInt(item.id)],
+    'ids': [parseInt(delete_item.value.id)],
     'userId': '21914df4-4745-43da-979a-c4adca6a58c0'
   }
   await report_delete(data)
   report_list_fn()
 }
+
 
 const generate_pdf_fn = async (item) => {
 

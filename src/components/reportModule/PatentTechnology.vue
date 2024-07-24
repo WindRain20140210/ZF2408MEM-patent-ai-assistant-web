@@ -89,16 +89,16 @@ function renderPage(res_content, jsonData) {
 
 function sseRenderPage() {
   if (!message.value) return false;
-  const { industry, area, key, applicant } = JSON.parse(message.value);
+  const { industry, area, key, applicant, report_id } = message.value;
 
   const conditions = {
-    time: + new Date(),
     industry,
     area,
     key,
     theme: '',
     dataType: 'patent_technology',
     applicant,
+    report_id,
   };
 
   const fetchData = {
