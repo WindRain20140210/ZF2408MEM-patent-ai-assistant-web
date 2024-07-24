@@ -1,92 +1,96 @@
 <template>
   <v-dialog max-width="300" v-model="dialog">
-    <v-card
-        text="确认删除此报告吗？"
-      >
-        <template v-slot:actions>
-          <v-spacer></v-spacer>
+    <v-card text="确认删除此报告吗？">
+      <template v-slot:actions>
+        <v-spacer></v-spacer>
 
-          <v-btn @click="dialog = false">
-            取消
-          </v-btn>
+        <v-btn @click="dialog = false">
+          取消
+        </v-btn>
 
-          <v-btn @click="report_delete_fn()">
-            确定
-          </v-btn>
-        </template>
-      </v-card>
-</v-dialog>
+        <v-btn @click="report_delete_fn()">
+          确定
+        </v-btn>
+      </template>
+    </v-card>
+  </v-dialog>
 
   <v-main class="bg-wrapper">
-      <v-sheet min-height="50vh" class="container-box">
+    <v-sheet min-height="50vh" class="container-box">
 
-        <!-- main content -->
-        <v-card flat>
-          <div class="top-wrapper">
-            <p class="main-title">我的报告</p>
-            <div class="search-box">
-              <v-text-field v-model="searchKey" density="compact" label="请输入报告名称"
-              flat hide-details 
+      <!-- main content -->
+      <v-card flat>
+        <div class="top-wrapper">
+          <p class="main-title">我的报告</p>
+          <div class="search-box">
+            <v-text-field
+              v-model="searchKey"
+              density="compact"
+              label="请输入报告名称"
+              flat
+              hide-details
               variant="outlined"
-              single-line></v-text-field>
-              <span class="mock-btn">搜索</span>
-            </div>
-            <v-btn @click="$router.push('/search')" class="text-none ms-4 text-white btn-search" rounded="0"
-              variant="flat">
-              创建专利报告
-            </v-btn>
+              single-line/>
+            <span class="mock-btn">搜索</span>
           </div>
+          <v-btn
+            @click="$router.push('/search')"
+            class="text-none ms-4 text-white btn-search"
+            rounded="0"
+            variant="flat">
+            创建专利报告
+          </v-btn>
+        </div>
 
-          <!-- <v-divider></v-divider> -->
-          <div class="table-wrapper">
-            <v-data-table
+        <div class="table-wrapper">
+          <v-data-table
             :items="listdata"
             v-model:search="searchKey"
             :headers="headers"
+            v-model:page="page"
+            :items-per-page="itemsPerPage"
             class="table-header">
-              <template v-slot:item.actions="{ item }">
-                  <router-link :to="{ path: '/generate', query: { id: item.id } }" class="link">查看</router-link>
-                  <span class="bit">|</span>
-                  <span class="link"
-                   @click="delete_fn(item)">删除</span>
-                  <span class="bit">|</span>
-                  <span class="link" @click="generate_pdf_fn(item)">下载</span>
-              </template>
-            </v-data-table>
-          </div>
 
+            <template v-slot:item.actions="{ item }">
+              <router-link :to="{ path: '/generate', query: { id: item.id } }" class="link">查看</router-link>
+              <span class="bit">|</span>
+              <span class="link" @click="delete_fn(item)">删除</span>
+              <span class="bit">|</span>
+              <span class="link" @click="generate_pdf_fn(item)">下载</span>
+            </template>
 
-        </v-card>
+            <!-- pagination -->
+            <template v-slot:bottom>
+              <div class="text-center">
+                <v-container>
+                  <v-row justify="center">
+                    <v-col cols="6" md="6">
+                      <v-container class="max-width">
+                        <v-pagination
+                          v-model="page"
+                          :length=pageCount
+                          class="my-4">
+                        </v-pagination>
+                      </v-container>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </div>
+            </template>
+          </v-data-table>
+        </div>
+      </v-card>
 
-        <!-- conform delete dialog -->
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">确定删除此专利报告吗？</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue-darken-1" variant="text" @click="closeDelete">
-                取消
-              </v-btn>
-
-              <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">
-                确定
-              </v-btn>
-
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
-      </v-sheet>
+    </v-sheet>
   </v-main>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { report_list, report_delete } from '../api/api'
+import {onMounted, ref} from "vue";
+import {report_delete, report_list} from '@/api/api'
 
 const headers = [
-  { title: '报告ID', key: 'id', align: 'center', width: '10%', style: 'background-color: #f1f2f6' },
+  { title: '报告ID', key: 'id', align: 'center', width: '10%' },
   { title: '报告名称', key: 'title', align: 'center', width: '45%' },
   { title: '最后更新', key: 'update_time', align: 'center',  width: '20%'  },
   { title: '操作', key: 'actions', sortable: false, align: "center", width: '25%' },
@@ -97,9 +101,14 @@ const searchKey = ref('');
 const dialog = ref(false);
 const delete_item = ref(null);
 
+// page count
+const pageCount = ref(0)
+
 const report_list_fn = async () => {
   const res = await report_list()
   listdata.value = res.data;
+  // calculate page number
+  pageCount.value = Math.ceil(listdata.value.length / 10)
 }
 
 const delete_fn = async (item) => {
@@ -116,7 +125,6 @@ const report_delete_fn = async () => {
   await report_delete(data)
   report_list_fn()
 }
-
 
 const generate_pdf_fn = async (item) => {
 
@@ -165,7 +173,18 @@ const generate_pdf_fn = async (item) => {
 onMounted(() => {
   report_list_fn()
 });
+</script>
 
+<script>
+// config pagination
+export default {
+  data() {
+    return {
+      page: 1,
+      itemsPerPage: 10
+    }
+  }
+}
 </script>
 
 <style>
@@ -183,7 +202,7 @@ onMounted(() => {
 }
 
 .container-box {
-  width: 1392px!important;
+  width: 1392px !important;
   margin: 24px auto;
 }
 
@@ -222,6 +241,7 @@ onMounted(() => {
   width: 552px;
   position: relative;
 }
+
 .mock-btn {
   position: absolute;
   right: 0px;
