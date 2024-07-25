@@ -25,7 +25,6 @@ const echartsRef = ref(null);
 let chartInstance = null;
 
 
-
 const initChart = (yAxisData, seriesData) => {
   const option = {
     // title: {
@@ -107,10 +106,8 @@ function sseRenderPage(messageData) {
   }
 
   sseFetch(fetchData, (res_content, jsonData) => {
-    echartShow.value = true;
     renderPage(res_content, jsonData)
   });
-
 }
 
 

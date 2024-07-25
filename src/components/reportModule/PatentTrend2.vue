@@ -173,8 +173,8 @@ function sseRenderPage(messageData) {
       conversation_id: '', // currentConversationId.value, // 会话id, 第一次请求后获取
       user: 'beihang' // userName.value, // 用户名，区分请求用户
     }
+
     sseFetch(fetchData, (res_content, jsonData) => {
-      echartShow.value = true;
       renderPage(res_content, jsonData)
     });
 }
