@@ -9,7 +9,7 @@
 
   </v-app>
   <div v-if="!robotShow" class="rot-box">
-    <iframe src="http://110.42.103.198:23837/chat/Iz5BWLrdXmINO2oE" frameborder="0" allow="microphone">
+    <iframe src="http://110.42.103.198:23837/chat/WaEyr1EZES5ujXrS" frameborder="0" allow="microphone">
     </iframe>
     <a href="/record" class="link">我的报告 ></a>
     <span class="close" @click="toggle">关闭</span>
