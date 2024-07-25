@@ -20,6 +20,7 @@ const props = defineProps({
   detailData: Object,
   chartId: String
 })
+
 const content = ref('');
 const echartsRef = ref(null);
 let chartInstance = null;

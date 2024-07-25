@@ -109,7 +109,6 @@ function sseRenderPage(messageData) {
   }
 
   sseFetch(fetchData, (res_content, jsonData) => {
-    echartShow.value = true;
     renderPage(res_content, jsonData)
   });
 
@@ -119,9 +118,18 @@ watch(
     () => props.detailData,
     (newValue)=> {
       if(newValue) {
-        const res_content = newValue.content
-        const jsonData = JSON.parse(newValue.data);
-        renderPage(res_content, jsonData)
+
+        try {
+          const res_content = newValue.content
+          const jsonData = JSON.parse(newValue.data);
+          renderPage(res_content, jsonData)
+
+        }catch (err){
+          console.log(err)
+        }
+
+
+
       }
     },
 );
