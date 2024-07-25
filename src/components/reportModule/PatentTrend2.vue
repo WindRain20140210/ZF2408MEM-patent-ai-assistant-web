@@ -28,7 +28,7 @@ let chartInstance = null;
 
 
 
-const initChart = (result) => {
+const initChart = (result, max, interval) => {
 
   const option = {
     // tooltip: {
@@ -64,9 +64,9 @@ const initChart = (result) => {
       {
         type: 'value',
         name: '专利数量',
-        // min: 0,
-        // max: 250,
-        interval: 50,
+        min: 0,
+        max,
+        interval,
         axisLabel: {
           formatter: '{value}'
         }
@@ -146,8 +146,11 @@ function renderPage(res_content, jsonData) {
         apply_nums: apply_nums,
         percent
     };
-
-    initChart(result);
+    const arr = apply_nums?.sort((a, b) => b - a);
+    const max = arr[0];
+    let interval = max ? max / 10 : 50;
+    interval =getClosestMultipleOfTen(interval);
+    initChart(result, max, interval);
 
   }
 }
@@ -202,6 +205,18 @@ watch(
       }
     },
 );
+
+function getClosestMultipleOfTen(num) {
+  if ( num < 5 ) {
+    return num
+  }
+  const remainder = num % 10;
+  if (remainder < 5) {
+    return num - remainder;
+  } else {
+    return num + (10 - remainder);
+  }
+}
 
 </script>
 <style scoped>

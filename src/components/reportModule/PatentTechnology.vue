@@ -28,17 +28,13 @@ let chartInstance = null;
 
 const initChart = (formattedData) => {
   const option = {
-    // title:{
-    //         text:'矩形树',
-    //         left: 'center',     // 设置标题水平居中
-    //         top: 20             // 设置标题距离顶部的距离为20像素
-    //     },
-    //     tooltip: {        //浮窗效果
-    //     },
     series: [
       {
-        // name:'11111111',
         type: 'treemap',     //图例样式，矩形树
+        roam: false,
+        breadcrumb: {
+          show: false
+        },
         levels: [
           // 第一个层级的配置
           {
@@ -48,24 +44,7 @@ const initChart = (formattedData) => {
               borderWidth: 4,       // 边框宽度
               gapWidth: 1,          // 矩形之间的间隔宽度
             },
-            // // 设置上方标签的显示方式
-            // upperLabel: {
-            //     show: false,  // 是否显示上方标签
-            // },
           },
-          // 第二个层级的配置
-          // {
-          //     // 设置每个矩形的边框样式
-          //     itemStyle: {
-          //         borderColor: '#ffffff',  // 边框颜色
-          //         borderWidth: 2,       // 边框宽度
-          //         gapWidth: 1,          // 矩形之间的间隔宽度
-          //     },
-          //     // 设置上方标签的显示方式
-          //     upperLabel: {
-          //         show: false,  // 是否显示上方标签
-          //     },
-          // },
         ],
         data: formattedData
       }
@@ -82,7 +61,7 @@ function renderPage(res_content, jsonData) {
 
   if (jsonData) {
     const formattedData = jsonData?.data?.map(item => ({
-      name: item.class + item.num,
+      name: item.name + item.num,
       value: item.num
     }));
 

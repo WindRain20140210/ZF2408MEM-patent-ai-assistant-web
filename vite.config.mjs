@@ -65,7 +65,7 @@ export default defineConfig({
     },
     server: {
         // -----------local debug use -----------
-        port: 3000,
+        port: 8001,
 
         // ----------- Docker image use ----------
         // watch: {
