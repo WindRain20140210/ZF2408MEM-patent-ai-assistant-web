@@ -4,9 +4,8 @@
       <Loading v-show="!content"/>
       <Empty v-show="content === 'errordata'"/>
       <p class="content" v-show="content && content !=='errordata' ">{{ content }}</p>
+      <div v-show="showEchart" ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
     </div>
-
-    <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
 </template>
 
 <script setup>
@@ -16,7 +15,6 @@ import sseFetch from '/src/api/sseFetch';
 import Loading from './Loading.vue';
 import Empty from './Empty.vue';
 
-
 const props = defineProps({
   message: Object,
   detailData: Object,
@@ -25,7 +23,7 @@ const props = defineProps({
 const content = ref(null);
 const echartsRef = ref(null);
 let chartInstance = null;
-
+let showEchart = ref(false);
 
 const initChart = (xAxisData, seriesData) => {
     const option  = {
@@ -60,8 +58,10 @@ function renderPage(res_content, jsonData) {
         grouped[key].push(item[key]);
       }
     });
-
-    initChart(grouped.year, grouped.num);
+    showEchart.value = true;
+    setTimeout(() => {
+      initChart(grouped.year, grouped.num);
+    }, 500);
   }
 }
 
@@ -109,7 +109,6 @@ watch(
 watch(
     () => props.message,
     (newValue)=> {
-      console.log(newValue)
       if(newValue) {
         sseRenderPage(newValue);
       }

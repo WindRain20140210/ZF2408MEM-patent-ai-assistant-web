@@ -1,11 +1,11 @@
 <template>
   <div class="wrap" :id=chartId>
     <p class="title">申请人排名分析</p>
-    <Loading v-show="!content"/>
+      <Loading v-show="!content"/>
       <Empty v-show="content === 'errordata'"/>
       <p class="content" v-show="content && content !=='errordata' ">{{ content }}</p>
+      <div v-show="showEchart" ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
     </div>
-    <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
 </template>
 
 <script setup>
@@ -23,7 +23,7 @@ const props = defineProps({
 const content = ref('');
 const echartsRef = ref(null);
 let chartInstance = null;
-
+let showEchart = ref(false);
 
 const initChart = (yAxisData, seriesData) => {
   const option = {
@@ -76,8 +76,10 @@ function renderPage(res_content, jsonData) {
         grouped[key].push(item[key]);
       }
     });
-
-    initChart(grouped.applicant, grouped.num);
+    showEchart.value = true;
+    setTimeout(() => {
+      initChart(grouped.applicant, grouped.num);
+    }, 500);
   }
 }
 
@@ -126,7 +128,6 @@ watch(
 watch(
   () => props.message,
   (newValue) => {
-    console.log(newValue)
     if (newValue) {
       setTimeout(() => {
         sseRenderPage(newValue);

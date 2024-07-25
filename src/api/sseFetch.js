@@ -4,6 +4,7 @@ const sseFetch = (fetchData, callback) => {
     const url = 'http://110.42.103.198:23837/v1/chat-messages';
     // const apiKey = 'app-K2JCwC36gS4UYILFfw60w256';
     const apiKey = 'app-XOm1EyPKw2EfeWS1vM5xC7bf';
+    // const apiKey = 'app-cvH6spKjtPt4IZx9MwgzK1ER';
     
 const ctrl = new AbortController();
 
@@ -16,7 +17,7 @@ const mockErrorData = {
   jsonData: null
 }
 
-const timeout = 10000;
+const timeout = 90000;
 let isLock = true;
 
 fetchEventSource(url, {

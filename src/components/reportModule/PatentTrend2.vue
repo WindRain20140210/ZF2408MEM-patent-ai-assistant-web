@@ -4,9 +4,8 @@
     <Loading v-show="!content"/>
       <Empty v-show="content === 'errordata'"/>
       <p class="content" v-show="content && content !=='errordata' ">{{ content }}</p>
+      <div v-show="showEchart" ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
     </div>
-
-    <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
 </template>
 
 <script setup>
@@ -25,8 +24,7 @@ const props = defineProps({
 const content = ref('');
 const echartsRef = ref(null);
 let chartInstance = null;
-
-
+let showEchart = ref(false);
 
 const initChart = (result, max, interval) => {
 
@@ -150,7 +148,11 @@ function renderPage(res_content, jsonData) {
     const max = arr[0];
     let interval = max ? max / 10 : 50;
     interval =getClosestMultipleOfTen(interval);
-    initChart(result, max, interval);
+
+    showEchart.value = true;
+    setTimeout(() => {
+      initChart(result, max, interval);
+    }, 500);
 
   }
 }
@@ -197,7 +199,6 @@ watch(
 watch(
     () => props.message,
     (newValue)=> {
-      console.log(newValue)
       if(newValue) {
         setTimeout(() => {
           sseRenderPage(newValue);

@@ -4,8 +4,8 @@
     <Loading v-show="!content"/>
       <Empty v-show="content === 'errordata'"/>
       <p class="content" v-show="content && content !=='errordata' ">{{ content }}</p>
+      <div v-show="showEchart" ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
     </div>
-    <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
 </template>
 
 <script setup>
@@ -24,6 +24,7 @@ const props = defineProps({
 const content = ref('');
 const echartsRef = ref(null);
 let chartInstance = null;
+let showEchart = ref(false);
 
 const initChart = (seriesData) => {
   const option = {
@@ -73,8 +74,10 @@ function renderPage(res_content, jsonData) {
         value: item.num
       };
     });
-
-    initChart(jsonData.data);
+    showEchart.value = true;
+    setTimeout(() => {
+      initChart(jsonData.data);
+    }, 500);
   }
 }
 
