@@ -5,9 +5,9 @@
       <Empty v-show="content === 'errordata'"/>
       <p class="content" v-show="content && content !=='errordata' ">{{ content }}</p>
     </div>
-    <div v-show="echartShow" ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
+    <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
 </template>
-  
+
 <script setup>
 import { defineProps, watch, ref } from 'vue';
 import * as echarts from "echarts";
@@ -15,7 +15,6 @@ import sseFetch from '/src/api/sseFetch';
 import Loading from './Loading.vue';
 import Empty from './Empty.vue';
 
-const echartShow = ref(null);
 
 const props = defineProps({
   message: Object,
@@ -25,7 +24,6 @@ const props = defineProps({
 const content = ref('');
 const echartsRef = ref(null);
 let chartInstance = null;
-
 
 
 const initChart = (seriesData) => {

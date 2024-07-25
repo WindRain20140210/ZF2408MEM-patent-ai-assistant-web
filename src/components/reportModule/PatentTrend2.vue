@@ -5,9 +5,10 @@
       <Empty v-show="content === 'errordata'"/>
       <p class="content" v-show="content && content !=='errordata' ">{{ content }}</p>
     </div>
-    <div v-show="echartShow" ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
+
+    <div ref="echartsRef" :style="{ width: '100%', height: '400px' }"></div>
 </template>
-  
+
 <script setup>
 import { defineProps, watch, ref } from 'vue';
 import * as echarts from "echarts";
@@ -15,7 +16,6 @@ import sseFetch from '/src/api/sseFetch';
 import Loading from './Loading.vue';
 import Empty from './Empty.vue';
 
-const echartShow = ref(null);
 
 const props = defineProps({
   message: Object,
@@ -116,14 +116,14 @@ const initChart = (result) => {
       }
     ]
   };
-  
+
         chartInstance = echarts.init(echartsRef.value);
         chartInstance.setOption(option);
     };
 
 function renderPage(res_content, jsonData) {
   content.value = res_content;
-  
+
   if (jsonData) {
     const data = jsonData.data;
     const years = data?.map(item => item.year);
@@ -137,7 +137,7 @@ function renderPage(res_content, jsonData) {
       } else {
         per = ((num / apply_nums[index]) * 100).toFixed(2);
       }
-      
+
       percent.push(per)
     });
     const result = {
@@ -179,7 +179,7 @@ function sseRenderPage(messageData) {
     });
 }
 
- 
+
 watch(
     () => props.detailData,
     (newValue)=> {
