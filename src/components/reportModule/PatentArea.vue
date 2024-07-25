@@ -71,7 +71,7 @@ function renderPage(res_content, jsonData) {
 
   if (jsonData) {
     const series = [];
-    jsonData.areas.forEach(item => {
+    jsonData?.areas?.forEach(item => {
       series.push({
         name: item.area,
         type: 'line',
@@ -165,7 +165,7 @@ watch(
 //     // {"areas": [{"area": "广东", "data": [0, 0, 3, 2177, 2]}, {"area": "上海", "data": [0, 0, 3, 0, 0]}, {"area": "福建", "data": [0, 3, 0, 0, 0]}, {"area": "江苏", "data": [1, 3, 3, 1820, 0]}, {"area": "安徽", "data": [0, 0, 0, 586, 0]}, {"area": "美国", "data": [4, 4, 0, 0, 0]}, {"area": "日本", "data": [21, 15, 0, 0, 0]}, {"area": "英国", "data": [1, 0, 0, 0, 0]}, {"area": "德国", "data": [1, 0, 0, 0, 0]}, {"area": "山东", "data": [0, 0, 0, 699, 0]}, {"area": "浙江", "data": [0, 5, 2, 1418, 0]}, {"area": "湖南", "data": [0, 0, 2, 0, 0]}], "year": [2017, 2018, 2019, 2020, 2021]}
 //     if (jsonData) {
 //       const series = [];
-//       jsonData.areas.forEach(item => {
+//       jsonData?.areas?.forEach(item => {
 //         series.push({
 //           name: item.area,
 //           type: 'line',
